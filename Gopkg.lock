@@ -120,6 +120,14 @@
   version = "v1.8.4"
 
 [[projects]]
+  digest = "1:047349f9fa59b1c603d6a73f6bf9b03c9e2ac718f64a6ed04959ddc274903efc"
+  name = "github.com/mattn/go-sqlite3"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "baaf8a978416040e7f2d00ac36e345098d0588d8"
+  version = "v2.0.6"
+
+[[projects]]
   digest = "1:5d231480e1c64a726869bc4142d270184c419749d34f167646baa21008eb0a79"
   name = "github.com/mitchellh/go-homedir"
   packages = ["."]
@@ -367,12 +375,22 @@
   version = "v2.4.0"
 
 [[projects]]
-  digest = "1:af819f5aa714c76135d893e4278716c125b55b0025227bd9ab59a8747a3483d0"
+  digest = "1:cb18bbffb995a0c2fd9233e960b4fe5b7c3b0fd63826f65086013085d897c5d3"
+  name = "gorm.io/driver/sqlite"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "4d252d9cb545aecbc3b7e4bdd109ddbe2c10c308"
+  version = "v1.1.4"
+
+[[projects]]
+  digest = "1:f23c1078ab3d0c6d6fe092d42c8cdcbc054c5672ff4d2e131dbcab4e9838f457"
   name = "gorm.io/gorm"
   packages = [
     ".",
+    "callbacks",
     "clause",
     "logger",
+    "migrator",
     "schema",
     "utils",
   ]
@@ -390,6 +408,7 @@
     "github.com/gorilla/mux",
     "github.com/pkg/errors",
     "github.com/vektra/mockery/cmd",
+    "gorm.io/driver/sqlite",
     "gorm.io/gorm",
   ]
   solver-name = "gps-cdcl"
