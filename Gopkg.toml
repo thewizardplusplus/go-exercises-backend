@@ -11,3 +11,7 @@ required = [
 [[constraint]]
   name = "gorm.io/gorm"
   version = "1.21.4"
+
+[[constraint]]
+  name = "github.com/pkg/errors"
+  version = "0.9.1"
