@@ -37,6 +37,25 @@ func (handler TaskHandler) GetTask(
 	writer http.ResponseWriter,
 	request *http.Request,
 ) {
+	idAsStr := mux.Vars(request)["id"]
+	id, err := strconv.ParseUint(idAsStr, 10, 64)
+	if err != nil {
+		err = errors.Wrap(err, "unable to decode the task ID")
+		http.Error(writer, err.Error(), http.StatusBadRequest)
+
+		return
+	}
+
+	task, err := handler.TaskStorage.GetTask(uint(id))
+	if err != nil {
+		err = errors.Wrap(err, "unable to get the task")
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+
+		return
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(writer).Encode(task)
 }
 
 // CreateTask ...
