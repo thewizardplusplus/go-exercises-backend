@@ -45,5 +45,5 @@ func (storage TaskStorage) UpdateTask(id uint, task entities.Task) error {
 
 // DeleteTask ...
 func (storage TaskStorage) DeleteTask(id uint) error {
-	panic("not yet implemented")
+	return storage.db.Delete(&entities.Task{}, id).Error
 }
