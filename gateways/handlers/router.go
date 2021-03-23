@@ -3,12 +3,14 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/go-log/log"
 	"github.com/gorilla/mux"
 )
 
 // RouterDependencies ...
 type RouterDependencies struct {
 	TaskStorage TaskStorage
+	Logger      log.Logger
 }
 
 // NewRouter ...
@@ -17,7 +19,10 @@ func NewRouter(dependencies RouterDependencies) *mux.Router {
 	apiRouter := rootRouter.PathPrefix("/api").Subrouter()
 	apiV1Router := apiRouter.PathPrefix("/v1").Subrouter()
 
-	taskHandler := TaskHandler{TaskStorage: dependencies.TaskStorage}
+	taskHandler := TaskHandler{
+		TaskStorage: dependencies.TaskStorage,
+		Logger:      dependencies.Logger,
+	}
 	tasksAPIV1Router := apiV1Router.PathPrefix("/tasks").Subrouter()
 	tasksAPIV1Router.
 		HandleFunc("/{id}", taskHandler.GetTask).

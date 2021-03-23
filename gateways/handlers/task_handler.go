@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/go-log/log"
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
@@ -23,6 +24,7 @@ type TaskStorage interface {
 // TaskHandler ...
 type TaskHandler struct {
 	TaskStorage TaskStorage
+	Logger      log.Logger
 }
 
 // GetTasks ...
@@ -33,6 +35,7 @@ func (handler TaskHandler) GetTasks(
 	tasks, err := handler.TaskStorage.GetTasks()
 	if err != nil {
 		err = errors.Wrap(err, "unable to get the tasks")
+		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 
 		return
@@ -51,6 +54,7 @@ func (handler TaskHandler) GetTask(
 	id, err := strconv.ParseUint(idAsStr, 10, 64)
 	if err != nil {
 		err = errors.Wrap(err, "unable to decode the task ID")
+		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 
 		return
@@ -59,6 +63,7 @@ func (handler TaskHandler) GetTask(
 	task, err := handler.TaskStorage.GetTask(uint(id))
 	if err != nil {
 		err = errors.Wrap(err, "unable to get the task")
+		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 
 		return
@@ -76,6 +81,7 @@ func (handler TaskHandler) CreateTask(
 	var task entities.Task
 	if err := json.NewDecoder(request.Body).Decode(&task); err != nil {
 		err = errors.Wrap(err, "unable to decode the request body")
+		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 
 		return
@@ -84,6 +90,7 @@ func (handler TaskHandler) CreateTask(
 	id, err := handler.TaskStorage.CreateTask(task)
 	if err != nil {
 		err = errors.Wrap(err, "unable to create a task")
+		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 
 		return
@@ -103,6 +110,7 @@ func (handler TaskHandler) UpdateTask(
 	id, err := strconv.ParseUint(idAsStr, 10, 64)
 	if err != nil {
 		err = errors.Wrap(err, "unable to decode the task ID")
+		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 
 		return
@@ -111,6 +119,7 @@ func (handler TaskHandler) UpdateTask(
 	var task entities.Task
 	if err := json.NewDecoder(request.Body).Decode(&task); err != nil {
 		err = errors.Wrap(err, "unable to decode the request body")
+		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 
 		return
@@ -118,6 +127,7 @@ func (handler TaskHandler) UpdateTask(
 
 	if err := handler.TaskStorage.UpdateTask(uint(id), task); err != nil {
 		err = errors.Wrap(err, "unable to update a task")
+		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 
 		return
@@ -133,6 +143,7 @@ func (handler TaskHandler) DeleteTask(
 	id, err := strconv.ParseUint(idAsStr, 10, 64)
 	if err != nil {
 		err = errors.Wrap(err, "unable to decode the task ID")
+		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 
 		return
@@ -140,6 +151,7 @@ func (handler TaskHandler) DeleteTask(
 
 	if err := handler.TaskStorage.DeleteTask(uint(id)); err != nil {
 		err = errors.Wrap(err, "unable to delete a task")
+		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 
 		return
