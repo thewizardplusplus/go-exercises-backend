@@ -37,7 +37,10 @@ func (storage TaskStorage) CreateTask(task entities.Task) (id uint, err error) {
 
 // UpdateTask ...
 func (storage TaskStorage) UpdateTask(id uint, task entities.Task) error {
-	panic("not yet implemented")
+	task.Model = gorm.Model{} // reset the fields that are filled in automatically
+	return storage.db.
+		Model(&entities.Task{Model: gorm.Model{ID: id}}).
+		Updates(task).Error
 }
 
 // DeleteTask ...
