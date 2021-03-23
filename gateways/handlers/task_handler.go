@@ -100,4 +100,19 @@ func (handler TaskHandler) DeleteTask(
 	writer http.ResponseWriter,
 	request *http.Request,
 ) {
+	idAsStr := mux.Vars(request)["id"]
+	id, err := strconv.ParseUint(idAsStr, 10, 64)
+	if err != nil {
+		err = errors.Wrap(err, "unable to decode the task ID")
+		http.Error(writer, err.Error(), http.StatusBadRequest)
+
+		return
+	}
+
+	if err := handler.TaskStorage.DeleteTask(uint(id)); err != nil {
+		err = errors.Wrap(err, "unable to delete a task")
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+
+		return
+	}
 }
