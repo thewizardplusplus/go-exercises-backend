@@ -22,7 +22,12 @@ func (storage TaskStorage) GetTasks() ([]entities.Task, error) {
 
 // GetTask ...
 func (storage TaskStorage) GetTask(id uint) (entities.Task, error) {
-	panic("not yet implemented")
+	var task entities.Task
+	if err := storage.db.First(&task, id).Error; err != nil {
+		return entities.Task{}, err
+	}
+
+	return task, nil
 }
 
 // CreateTask ...
