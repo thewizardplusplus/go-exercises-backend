@@ -30,6 +30,16 @@ func (handler TaskHandler) GetTasks(
 	writer http.ResponseWriter,
 	request *http.Request,
 ) {
+	tasks, err := handler.TaskStorage.GetTasks()
+	if err != nil {
+		err = errors.Wrap(err, "unable to get the tasks")
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+
+		return
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(writer).Encode(tasks)
 }
 
 // GetTask ...
