@@ -17,7 +17,12 @@ func NewTaskStorage(db *gorm.DB) TaskStorage {
 
 // GetTasks ...
 func (storage TaskStorage) GetTasks() ([]entities.Task, error) {
-	panic("not yet implemented")
+	var tasks []entities.Task
+	if err := storage.db.Find(&tasks).Error; err != nil {
+		return nil, err
+	}
+
+	return tasks, nil
 }
 
 // GetTask ...
