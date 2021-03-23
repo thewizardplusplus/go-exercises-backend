@@ -1,9 +1,12 @@
 package handlers
 
 import (
+	"encoding/json"
 	"net/http"
 
+	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
+	"gorm.io/gorm"
 )
 
 // TaskStorage ...
@@ -39,6 +42,25 @@ func (handler TaskHandler) CreateTask(
 	writer http.ResponseWriter,
 	request *http.Request,
 ) {
+	var task entities.Task
+	if err := json.NewDecoder(request.Body).Decode(&task); err != nil {
+		err = errors.Wrap(err, "unable to decode the request body")
+		http.Error(writer, err.Error(), http.StatusBadRequest)
+
+		return
+	}
+
+	id, err := handler.TaskStorage.CreateTask(task)
+	if err != nil {
+		err = errors.Wrap(err, "unable to create a task")
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+
+		return
+	}
+
+	idAsModel := entities.Task{Model: gorm.Model{ID: id}}
+	writer.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(writer).Encode(idAsModel)
 }
 
 // UpdateTask ...
