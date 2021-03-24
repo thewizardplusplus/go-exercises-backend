@@ -112,6 +112,18 @@
   version = "v1.1.2"
 
 [[projects]]
+  digest = "1:6ba33f676b07a9af41146dc8350a1505e3749e7363581e8f94c9e11608720a2b"
+  name = "github.com/lib/pq"
+  packages = [
+    ".",
+    "oid",
+    "scram",
+  ]
+  pruneopts = "UT"
+  revision = "072e83d238c297c71cab11154695af301010031e"
+  version = "v1.10.0"
+
+[[projects]]
   digest = "1:85a45ff41e6b733d430b653236191d131b707a05e9751f53b469f2c0bb222f01"
   name = "github.com/magiconair/properties"
   packages = ["."]
@@ -375,6 +387,14 @@
   version = "v2.4.0"
 
 [[projects]]
+  digest = "1:cf0eeff871fb146d0a77cfb6eecc38e79f7458fe6d05726ee59654d9799711ca"
+  name = "gorm.io/driver/postgres"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "2591a12c4fdf62e81734996d0361db21fe90ae45"
+  version = "v0.2.4"
+
+[[projects]]
   digest = "1:cb18bbffb995a0c2fd9233e960b4fe5b7c3b0fd63826f65086013085d897c5d3"
   name = "gorm.io/driver/sqlite"
   packages = ["."]
@@ -408,8 +428,10 @@
     "github.com/gorilla/mux",
     "github.com/pkg/errors",
     "github.com/vektra/mockery/cmd",
+    "gorm.io/driver/postgres",
     "gorm.io/driver/sqlite",
     "gorm.io/gorm",
+    "gorm.io/gorm/logger",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
