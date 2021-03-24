@@ -72,6 +72,13 @@
   version = "v0.2.0"
 
 [[projects]]
+  digest = "1:01745416ed734d0dbd8f2a25344536e399ee60319654873da12b107e9e3cb309"
+  name = "github.com/golang/gddo"
+  packages = ["httputil/header"]
+  pruneopts = "UT"
+  revision = "3c2cc9a6329d9842b3bbdaf307a8110d740cf94c"
+
+[[projects]]
   branch = "master"
   digest = "1:ae4407ca7731ceb7b54b059fced30f335d32486a2148e262b19067261f959b42"
   name = "github.com/google/shlex"
@@ -276,6 +283,14 @@
   version = "v1.2.0"
 
 [[projects]]
+  digest = "1:9dc4b31de2509ce8025bfec4659b6f26cd07ac4bb0b39fe71fb8dca2f4894472"
+  name = "github.com/thewizardplusplus/go-http-utils"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "a6478a072eba52b44e3d2ca8a1e04e163f9299b3"
+  version = "v1.1.1"
+
+[[projects]]
   digest = "1:5f23ddb9541511a69abb9cd315a527e336743198bf486c57fc6db7daf66d924a"
   name = "github.com/vektra/mockery"
   packages = [
@@ -441,6 +456,7 @@
     "github.com/gorilla/handlers",
     "github.com/gorilla/mux",
     "github.com/pkg/errors",
+    "github.com/thewizardplusplus/go-http-utils",
     "github.com/vektra/mockery/cmd",
     "gorm.io/driver/postgres",
     "gorm.io/gorm",
