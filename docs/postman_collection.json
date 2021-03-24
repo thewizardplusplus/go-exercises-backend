@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "/api/v1/tasks",
+			"name": "/api/v1/tasks/",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -28,7 +28,7 @@
 			"response": []
 		},
 		{
-			"name": "/api/v1/tasks",
+			"name": "/api/v1/tasks/",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -127,6 +127,85 @@
 						"api",
 						"v1",
 						"tasks",
+						"23"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/v1/tasks/{taskID}/solutions/",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/tasks/23/solutions/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"tasks",
+						"23",
+						"solutions",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/v1/tasks/{taskID}/solutions/",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Code\": \"{{$randomLoremSentences}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/tasks/23/solutions/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"tasks",
+						"23",
+						"solutions",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/v1/solutions/{id}",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/solutions/23",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"solutions",
 						"23"
 					]
 				}
