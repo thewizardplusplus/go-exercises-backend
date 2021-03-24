@@ -31,3 +31,7 @@ required = [
 [[constraint]]
   name = "github.com/caarlos0/env"
   version = "6.5.0"
+
+[[constraint]]
+  name = "github.com/gorilla/handlers"
+  version = "1.5.1"

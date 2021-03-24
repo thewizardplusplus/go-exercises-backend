@@ -45,6 +45,14 @@
   version = "v1.6.0"
 
 [[projects]]
+  digest = "1:3adf0ef092abc82d9beeaa4473a798cb1b8ebae3c68ddb1b30eea52770c86f82"
+  name = "github.com/felixge/httpsnoop"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "33ec42cfe005395fb4cc4b296781f65d7ffef2c3"
+  version = "v1.0.1"
+
+[[projects]]
   digest = "1:80057945464ffb5b0da1f026beb8df0e8dbd098eaf771a349291bed2cd29a83e"
   name = "github.com/fsnotify/fsnotify"
   packages = ["."]
@@ -70,6 +78,14 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "e7afc7fbc51079733e9468cdfd1efcd7d196cd1d"
+
+[[projects]]
+  digest = "1:9ff256c9dfa28d8fe056cce6babbd529862b0c340710c62881b80368b5bd5bbf"
+  name = "github.com/gorilla/handlers"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "d453effd20e6817a8acfd9d278dadd21371da0ba"
+  version = "v1.5.1"
 
 [[projects]]
   digest = "1:6078383dbb7405bfa3ce16957f37564e3b716afa29b6eb45ffdb6674624d1e0d"
@@ -422,6 +438,7 @@
     "github.com/cweill/gotests/gotests",
     "github.com/go-log/log",
     "github.com/go-log/log/print",
+    "github.com/gorilla/handlers",
     "github.com/gorilla/mux",
     "github.com/pkg/errors",
     "github.com/vektra/mockery/cmd",
