@@ -16,28 +16,26 @@ type RouterDependencies struct {
 // NewRouter ...
 func NewRouter(dependencies RouterDependencies) *mux.Router {
 	rootRouter := mux.NewRouter()
-	apiRouter := rootRouter.PathPrefix("/api").Subrouter()
-	apiV1Router := apiRouter.PathPrefix("/v1").Subrouter()
+	apiRouter := rootRouter.PathPrefix("/api/v1").Subrouter()
 
 	taskHandler := TaskHandler{
 		TaskStorage: dependencies.TaskStorage,
 		Logger:      dependencies.Logger,
 	}
-	tasksAPIV1Router := apiV1Router.PathPrefix("/tasks").Subrouter()
-	tasksAPIV1Router.
-		HandleFunc("/{id}", taskHandler.GetTask).
+	apiRouter.
+		HandleFunc("/tasks/{id}", taskHandler.GetTask).
 		Methods(http.MethodGet)
-	tasksAPIV1Router.
-		HandleFunc("/{id}", taskHandler.UpdateTask).
+	apiRouter.
+		HandleFunc("/tasks/{id}", taskHandler.UpdateTask).
 		Methods(http.MethodPut)
-	tasksAPIV1Router.
-		HandleFunc("/{id}", taskHandler.DeleteTask).
+	apiRouter.
+		HandleFunc("/tasks/{id}", taskHandler.DeleteTask).
 		Methods(http.MethodDelete)
-	tasksAPIV1Router.
-		HandleFunc("/", taskHandler.GetTasks).
+	apiRouter.
+		HandleFunc("/tasks/", taskHandler.GetTasks).
 		Methods(http.MethodGet)
-	tasksAPIV1Router.
-		HandleFunc("/", taskHandler.CreateTask).
+	apiRouter.
+		HandleFunc("/tasks/", taskHandler.CreateTask).
 		Methods(http.MethodPost)
 
 	return rootRouter
