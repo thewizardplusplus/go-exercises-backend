@@ -50,7 +50,8 @@ func (storage TaskStorage) UpdateTask(id uint, task entities.Task) error {
 	task.Model = gorm.Model{} // reset the fields that are filled in automatically
 	return storage.db.
 		Model(&entities.Task{Model: gorm.Model{ID: id}}).
-		Updates(task).Error
+		Updates(task).
+		Error
 }
 
 // DeleteTask ...
