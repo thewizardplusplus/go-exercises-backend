@@ -27,3 +27,7 @@ required = [
 [[constraint]]
   name = "gorm.io/driver/postgres"
   version = "0.2.4"
+
+[[constraint]]
+  name = "github.com/caarlos0/env"
+  version = "6.5.0"

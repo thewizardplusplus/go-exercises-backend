@@ -18,6 +18,14 @@
   revision = "ff826a37aa15cdf16e29024a782c790f19aab6c2"
 
 [[projects]]
+  digest = "1:3f3620f51ffff4e4da9af162bb7a597880ae49b6c6e92caf78b85a186da17efb"
+  name = "github.com/caarlos0/env"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "e244b8ab4ce741f29f37ac56f4ddd67acce3fb73"
+  version = "v6.5.0"
+
+[[projects]]
   digest = "1:b1dae1363a13d809e69d35fdd9ec2626e6d11fde1ee4b3ae8774f198e8f153bc"
   name = "github.com/cweill/gotests"
   packages = [
@@ -407,6 +415,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/alecthomas/gometalinter",
+    "github.com/caarlos0/env",
     "github.com/cweill/gotests/gotests",
     "github.com/go-log/log",
     "github.com/gorilla/mux",
