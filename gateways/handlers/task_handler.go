@@ -80,7 +80,7 @@ func (handler TaskHandler) CreateTask(
 ) {
 	var task entities.Task
 	if err := json.NewDecoder(request.Body).Decode(&task); err != nil {
-		err = errors.Wrap(err, "[error] unable to decode the request body")
+		err = errors.Wrap(err, "[error] unable to decode the task data")
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 
@@ -89,7 +89,7 @@ func (handler TaskHandler) CreateTask(
 
 	id, err := handler.TaskStorage.CreateTask(task)
 	if err != nil {
-		err = errors.Wrap(err, "[error] unable to create a task")
+		err = errors.Wrap(err, "[error] unable to create the task")
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 
@@ -118,7 +118,7 @@ func (handler TaskHandler) UpdateTask(
 
 	var task entities.Task
 	if err := json.NewDecoder(request.Body).Decode(&task); err != nil {
-		err = errors.Wrap(err, "[error] unable to decode the request body")
+		err = errors.Wrap(err, "[error] unable to decode the task data")
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 
@@ -126,7 +126,7 @@ func (handler TaskHandler) UpdateTask(
 	}
 
 	if err := handler.TaskStorage.UpdateTask(uint(id), task); err != nil {
-		err = errors.Wrap(err, "[error] unable to update a task")
+		err = errors.Wrap(err, "[error] unable to update the task")
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 
@@ -150,7 +150,7 @@ func (handler TaskHandler) DeleteTask(
 	}
 
 	if err := handler.TaskStorage.DeleteTask(uint(id)); err != nil {
-		err = errors.Wrap(err, "[error] unable to delete a task")
+		err = errors.Wrap(err, "[error] unable to delete the task")
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 
