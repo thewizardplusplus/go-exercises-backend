@@ -25,9 +25,5 @@ required = [
   version = "0.2.0"
 
 [[constraint]]
-  name = "gorm.io/driver/sqlite"
-  version = "1.1.4"
-
-[[constraint]]
   name = "gorm.io/driver/postgres"
   version = "0.2.4"
