@@ -19,7 +19,7 @@ type options struct {
 		Address string `env:"SERVER_ADDRESS" envDefault:":8080"`
 	}
 	Storage struct {
-		Address string `env:"STORAGE_ADDRESS" envDefault:"postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable"`
+		Address string `env:"STORAGE_ADDRESS" envDefault:"postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable"` // nolint: lll
 	}
 }
 

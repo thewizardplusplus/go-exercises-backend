@@ -42,7 +42,7 @@ func (handler TaskHandler) GetTasks(
 	}
 
 	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(tasks)
+	json.NewEncoder(writer).Encode(tasks) // nolint: gosec, errcheck
 }
 
 // GetTask ...
@@ -70,7 +70,7 @@ func (handler TaskHandler) GetTask(
 	}
 
 	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(task)
+	json.NewEncoder(writer).Encode(task) // nolint: gosec, errcheck
 }
 
 // CreateTask ...
@@ -98,7 +98,7 @@ func (handler TaskHandler) CreateTask(
 
 	idAsModel := entities.Task{Model: gorm.Model{ID: id}}
 	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(idAsModel)
+	json.NewEncoder(writer).Encode(idAsModel) // nolint: gosec, errcheck
 }
 
 // UpdateTask ...
