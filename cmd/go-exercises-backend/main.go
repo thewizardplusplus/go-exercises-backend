@@ -37,8 +37,9 @@ func main() {
 	}
 
 	router := handlers.NewRouter(handlers.RouterDependencies{
-		TaskStorage: storages.NewTaskStorage(db),
-		Logger:      print.New(logger),
+		TaskStorage:     storages.NewTaskStorage(db),
+		SolutionStorage: storages.NewSolutionStorage(db),
+		Logger:          print.New(logger),
 	})
 	router.Use(middlewares.RecoveryHandler(middlewares.RecoveryLogger(logger)))
 	router.Use(func(next http.Handler) http.Handler {
