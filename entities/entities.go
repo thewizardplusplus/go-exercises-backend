@@ -13,3 +13,12 @@ type Task struct {
 	BoilerplateCode string
 	TestCases       string
 }
+
+// Solution ...
+type Solution struct {
+	gorm.Model
+
+	TaskID uint
+	Task   Task
+	Code   string
+}
