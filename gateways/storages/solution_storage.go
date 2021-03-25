@@ -56,3 +56,17 @@ func (storage SolutionStorage) CreateSolution(
 
 	return solution.ID, nil
 }
+
+// UpdateSolution ...
+func (storage SolutionStorage) UpdateSolution(
+	id uint,
+	solution entities.Solution,
+) error {
+	// reset the fields that are filled in automatically
+	solution.Model = gorm.Model{}
+
+	return storage.db.
+		Model(&entities.Solution{Model: gorm.Model{ID: id}}).
+		Updates(solution).
+		Error
+}
