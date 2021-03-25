@@ -1,6 +1,7 @@
 package registers
 
 import (
+	"context"
 	"sync"
 
 	"github.com/thewizardplusplus/go-exercises-backend/gateways/handlers"
@@ -8,8 +9,10 @@ import (
 
 // ConcurrentSolutionRegister ...
 type ConcurrentSolutionRegister struct {
-	ids           chan uint
-	innerRegister handlers.SolutionRegister
+	ids               chan uint
+	stoppingCtx       context.Context
+	stoppingCtxCancel context.CancelFunc
+	innerRegister     handlers.SolutionRegister
 }
 
 // NewConcurrentSolutionRegister ...
@@ -17,9 +20,12 @@ func NewConcurrentSolutionRegister(
 	bufferSize int,
 	innerRegister handlers.SolutionRegister,
 ) ConcurrentSolutionRegister {
+	stoppingCtx, stoppingCtxCancel := context.WithCancel(context.Background())
 	return ConcurrentSolutionRegister{
-		ids:           make(chan uint, bufferSize),
-		innerRegister: innerRegister,
+		ids:               make(chan uint, bufferSize),
+		stoppingCtx:       stoppingCtx,
+		stoppingCtxCancel: stoppingCtxCancel,
+		innerRegister:     innerRegister,
 	}
 }
 
@@ -49,9 +55,11 @@ func (register ConcurrentSolutionRegister) StartConcurrently(concurrency int) {
 	}
 
 	waitGroup.Wait()
+	register.stoppingCtxCancel()
 }
 
 // Stop ...
 func (register ConcurrentSolutionRegister) Stop() {
 	close(register.ids)
+	<-register.stoppingCtx.Done()
 }

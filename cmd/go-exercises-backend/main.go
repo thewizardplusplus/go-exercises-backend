@@ -69,16 +69,8 @@ func main() {
 			Logger:          print.New(logger),
 		},
 	)
-	solutionRegisterCtx, solutionRegisterCtxCancel :=
-		context.WithCancel(context.Background())
-	go func() {
-		solutionRegister.StartConcurrently(options.SolutionRegister.Concurrency)
-		solutionRegisterCtxCancel()
-	}()
-	defer func() {
-		solutionRegister.Stop()
-		<-solutionRegisterCtx.Done()
-	}()
+	go solutionRegister.StartConcurrently(options.SolutionRegister.Concurrency)
+	defer solutionRegister.Stop()
 
 	router := handlers.NewRouter(handlers.RouterDependencies{
 		TaskStorage:      storages.NewTaskStorage(db),
