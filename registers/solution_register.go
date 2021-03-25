@@ -14,7 +14,7 @@ type SolutionQueue interface {
 
 // SolutionRegister ...
 type SolutionRegister struct {
-	TaskStorage     handlers.TaskStorage
+	TaskStorage     entities.TaskGetter
 	SolutionStorage handlers.SolutionStorage
 	SolutionQueue   SolutionQueue
 	Logger          log.Logger
