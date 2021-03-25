@@ -9,9 +9,10 @@ import (
 
 // RouterDependencies ...
 type RouterDependencies struct {
-	TaskStorage     TaskStorage
-	SolutionStorage SolutionStorage
-	Logger          log.Logger
+	TaskStorage      TaskStorage
+	SolutionStorage  SolutionStorage
+	SolutionRegister SolutionRegister
+	Logger           log.Logger
 }
 
 // NewRouter ...
@@ -40,8 +41,9 @@ func NewRouter(dependencies RouterDependencies) *mux.Router {
 		Methods(http.MethodPost)
 
 	solutionHandler := SolutionHandler{
-		SolutionStorage: dependencies.SolutionStorage,
-		Logger:          dependencies.Logger,
+		SolutionStorage:  dependencies.SolutionStorage,
+		SolutionRegister: dependencies.SolutionRegister,
+		Logger:           dependencies.Logger,
 	}
 	apiRouter.
 		HandleFunc("/tasks/{taskID}/solutions/", solutionHandler.GetSolutions).

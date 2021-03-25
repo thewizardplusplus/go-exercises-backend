@@ -19,10 +19,16 @@ type SolutionStorage interface {
 	CreateSolution(taskID uint, solution entities.Solution) (id uint, err error)
 }
 
+// SolutionRegister ...
+type SolutionRegister interface {
+	RegisterSolution(id uint)
+}
+
 // SolutionHandler ...
 type SolutionHandler struct {
-	SolutionStorage SolutionStorage
-	Logger          log.Logger
+	SolutionStorage  SolutionStorage
+	SolutionRegister SolutionRegister
+	Logger           log.Logger
 }
 
 // GetSolutions ...
@@ -113,6 +119,8 @@ func (handler SolutionHandler) CreateSolution(
 
 		return
 	}
+
+	handler.SolutionRegister.RegisterSolution(id)
 
 	idAsModel := entities.Solution{Model: gorm.Model{ID: id}}
 	writer.Header().Set("Content-Type", "application/json")
