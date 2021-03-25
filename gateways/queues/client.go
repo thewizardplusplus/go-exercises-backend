@@ -23,15 +23,20 @@ func NewClient(queueDSN string) (Client, error) {
 		return Client{}, errors.Wrap(err, "unable to open the channel")
 	}
 
-	if _, err := channel.QueueDeclare(
-		SolutionQueueName, // queue name
-		true,              // durable
-		false,             // auto-delete
-		false,             // exclusive
-		false,             // no wait
-		nil,               // arguments
-	); err != nil {
-		return Client{}, errors.Wrap(err, "unable to declare the queue")
+	for _, queueName := range []string{
+		SolutionQueueName,
+		SolutionResultQueueName,
+	} {
+		if _, err := channel.QueueDeclare(
+			queueName, // queue name
+			true,      // durable
+			false,     // auto-delete
+			false,     // exclusive
+			false,     // no wait
+			nil,       // arguments
+		); err != nil {
+			return Client{}, errors.Wrapf(err, "unable to declare queue %q", queueName)
+		}
 	}
 
 	client := Client{connection: connection, channel: channel}
