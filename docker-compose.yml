@@ -8,6 +8,14 @@ services:
       MESSAGE_BROKER_ADDRESS: amqp://rabbitmq:rabbitmq@rabbitmq:5672
     ports:
       - 8080:8080
+    command:
+      - /usr/local/bin/wait-for-it.sh
+      - db:5432
+      - --
+      - /usr/local/bin/wait-for-it.sh
+      - rabbitmq:5672
+      - --
+      - /usr/local/bin/go-exercises-backend
 
   db:
     image: postgres:13.2-alpine
