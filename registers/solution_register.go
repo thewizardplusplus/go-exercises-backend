@@ -4,7 +4,6 @@ import (
 	"github.com/go-log/log"
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
-	"github.com/thewizardplusplus/go-exercises-backend/gateways/handlers"
 )
 
 // SolutionQueue ...
@@ -15,7 +14,7 @@ type SolutionQueue interface {
 // SolutionRegister ...
 type SolutionRegister struct {
 	TaskStorage     entities.TaskGetter
-	SolutionStorage handlers.SolutionStorage
+	SolutionStorage entities.SolutionGetter
 	SolutionQueue   SolutionQueue
 	Logger          log.Logger
 }

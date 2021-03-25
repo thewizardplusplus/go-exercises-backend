@@ -14,8 +14,9 @@ import (
 
 // SolutionStorage ...
 type SolutionStorage interface {
+	entities.SolutionGetter
+
 	GetSolutions(taskID uint) ([]entities.Solution, error)
-	GetSolution(id uint) (entities.Solution, error)
 	CreateSolution(taskID uint, solution entities.Solution) (id uint, err error)
 }
 
