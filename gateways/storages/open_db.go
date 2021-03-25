@@ -27,3 +27,17 @@ func OpenDB(dbDSN string, logWriter logger.Writer) (*gorm.DB, error) {
 
 	return db, nil
 }
+
+// CloseDB ...
+func CloseDB(db *gorm.DB) error {
+	innerDB, err := db.DB()
+	if err != nil {
+		return errors.Wrap(err, "unable to get the inner DB")
+	}
+
+	if err := innerDB.Close(); err != nil {
+		return errors.Wrap(err, "unable to close the inner DB")
+	}
+
+	return nil
+}

@@ -35,6 +35,11 @@ func main() {
 	if err != nil {
 		logger.Fatalf("[error] unable to create the storage: %v", err)
 	}
+	defer func() {
+		if err := storages.CloseDB(db); err != nil {
+			logger.Fatalf("[error] unable to close the storage: %v", err)
+		}
+	}()
 
 	router := handlers.NewRouter(handlers.RouterDependencies{
 		TaskStorage:     storages.NewTaskStorage(db),
