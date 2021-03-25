@@ -10,7 +10,9 @@ import (
 	"github.com/go-log/log/print"
 	middlewares "github.com/gorilla/handlers"
 	"github.com/thewizardplusplus/go-exercises-backend/gateways/handlers"
+	"github.com/thewizardplusplus/go-exercises-backend/gateways/queues"
 	"github.com/thewizardplusplus/go-exercises-backend/gateways/storages"
+	"github.com/thewizardplusplus/go-exercises-backend/registers"
 	httputils "github.com/thewizardplusplus/go-http-utils"
 )
 
@@ -20,6 +22,13 @@ type options struct {
 	}
 	Storage struct {
 		Address string `env:"STORAGE_ADDRESS" envDefault:"postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable"` // nolint: lll
+	}
+	MessageBroker struct {
+		Address string `env:"MESSAGE_BROKER_ADDRESS" envDefault:"amqp://rabbitmq:rabbitmq@localhost:5672"` // nolint: lll
+	}
+	SolutionRegister struct {
+		BufferSize  int `env:"SOLUTION_REGISTER_BUFFER_SIZE" envDefault:"1000"`
+		Concurrency int `env:"SOLUTION_REGISTER_CONCURRENCY" envDefault:"1000"`
 	}
 }
 
@@ -41,10 +50,41 @@ func main() {
 		}
 	}()
 
+	messageBrokerClient, err := queues.NewClient(options.MessageBroker.Address)
+	if err != nil {
+		logger.Fatalf("[error] unable to create the message broker client: %v", err)
+	}
+	defer func() {
+		if err := messageBrokerClient.Close(); err != nil {
+			logger.Fatalf("[error] unable to close the message broker client: %v", err)
+		}
+	}()
+
+	solutionRegister := registers.NewConcurrentSolutionRegister(
+		options.SolutionRegister.BufferSize,
+		registers.SolutionRegister{
+			TaskStorage:     storages.NewTaskStorage(db),
+			SolutionStorage: storages.NewSolutionStorage(db),
+			SolutionQueue:   queues.NewSolutionQueue(messageBrokerClient),
+			Logger:          print.New(logger),
+		},
+	)
+	solutionRegisterCtx, solutionRegisterCtxCancel :=
+		context.WithCancel(context.Background())
+	go func() {
+		solutionRegister.StartConcurrently(options.SolutionRegister.Concurrency)
+		solutionRegisterCtxCancel()
+	}()
+	defer func() {
+		solutionRegister.Stop()
+		<-solutionRegisterCtx.Done()
+	}()
+
 	router := handlers.NewRouter(handlers.RouterDependencies{
-		TaskStorage:     storages.NewTaskStorage(db),
-		SolutionStorage: storages.NewSolutionStorage(db),
-		Logger:          print.New(logger),
+		TaskStorage:      storages.NewTaskStorage(db),
+		SolutionStorage:  storages.NewSolutionStorage(db),
+		SolutionRegister: solutionRegister,
+		Logger:           print.New(logger),
 	})
 	router.Use(middlewares.RecoveryHandler(middlewares.RecoveryLogger(logger)))
 	router.Use(func(next http.Handler) http.Handler {
