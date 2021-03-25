@@ -5,6 +5,7 @@ services:
     environment:
       SERVER_ADDRESS: ":8080"
       STORAGE_ADDRESS: postgres://postgres:postgres@db:5432/postgres?sslmode=disable
+      MESSAGE_BROKER_ADDRESS: amqp://rabbitmq:rabbitmq@rabbitmq:5672
     ports:
       - 8080:8080
 
@@ -21,3 +22,12 @@ services:
     image: adminer:4.8.0
     ports:
       - 9090:8080
+
+  rabbitmq:
+    image: rabbitmq:3.8.14-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+    ports:
+      - 5672:5672 # RabbitMQ server
+      - 15672:15672 # RabbitMQ management plugin
