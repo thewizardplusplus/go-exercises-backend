@@ -18,7 +18,9 @@ type Task struct {
 type Solution struct {
 	gorm.Model
 
-	TaskID uint
-	Task   Task
-	Code   string
+	TaskID    uint
+	Task      Task
+	Code      string
+	IsCorrect bool
+	Result    string `gorm:"type:json"`
 }
