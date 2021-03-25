@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/thewizardplusplus/go-exercises-backend/gateways/handlers"
+	"github.com/thewizardplusplus/go-exercises-backend/entities"
 )
 
 // ConcurrentSolutionRegister ...
@@ -12,13 +12,13 @@ type ConcurrentSolutionRegister struct {
 	ids               chan uint
 	stoppingCtx       context.Context
 	stoppingCtxCancel context.CancelFunc
-	innerRegister     handlers.SolutionRegister
+	innerRegister     entities.SolutionRegister
 }
 
 // NewConcurrentSolutionRegister ...
 func NewConcurrentSolutionRegister(
 	bufferSize int,
-	innerRegister handlers.SolutionRegister,
+	innerRegister entities.SolutionRegister,
 ) ConcurrentSolutionRegister {
 	stoppingCtx, stoppingCtxCancel := context.WithCancel(context.Background())
 	return ConcurrentSolutionRegister{

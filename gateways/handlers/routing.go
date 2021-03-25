@@ -5,13 +5,14 @@ import (
 
 	"github.com/go-log/log"
 	"github.com/gorilla/mux"
+	"github.com/thewizardplusplus/go-exercises-backend/entities"
 )
 
 // RouterDependencies ...
 type RouterDependencies struct {
 	TaskStorage      TaskStorage
 	SolutionStorage  SolutionStorage
-	SolutionRegister SolutionRegister
+	SolutionRegister entities.SolutionRegister
 	Logger           log.Logger
 }
 

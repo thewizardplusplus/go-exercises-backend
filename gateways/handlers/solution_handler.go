@@ -19,15 +19,10 @@ type SolutionStorage interface {
 	CreateSolution(taskID uint, solution entities.Solution) (id uint, err error)
 }
 
-// SolutionRegister ...
-type SolutionRegister interface {
-	RegisterSolution(id uint)
-}
-
 // SolutionHandler ...
 type SolutionHandler struct {
 	SolutionStorage  SolutionStorage
-	SolutionRegister SolutionRegister
+	SolutionRegister entities.SolutionRegister
 	Logger           log.Logger
 }
 
