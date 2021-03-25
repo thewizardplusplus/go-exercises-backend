@@ -26,10 +26,10 @@ func (queue SolutionQueue) AddSolution(solution entities.Solution) error {
 	}
 
 	if err := queue.client.channel.Publish(
-		"",               // exchange
-		"solution_queue", // queue name
-		false,            // mandatory
-		false,            // immediate
+		"",                // exchange
+		SolutionQueueName, // queue name
+		false,             // mandatory
+		false,             // immediate
 		amqp.Publishing{
 			ContentType: "application/json",
 			Body:        solutionAsJSON,

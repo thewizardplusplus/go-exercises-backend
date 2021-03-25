@@ -24,12 +24,12 @@ func NewClient(queueDSN string) (Client, error) {
 	}
 
 	if _, err := channel.QueueDeclare(
-		"solution_queue", // queue name
-		true,             // durable
-		false,            // auto-delete
-		false,            // exclusive
-		false,            // no wait
-		nil,              // arguments
+		SolutionQueueName, // queue name
+		true,              // durable
+		false,             // auto-delete
+		false,             // exclusive
+		false,             // no wait
+		nil,               // arguments
 	); err != nil {
 		return Client{}, errors.Wrap(err, "unable to declare the queue")
 	}
