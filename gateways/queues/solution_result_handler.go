@@ -20,10 +20,8 @@ type SolutionResultHandler struct {
 	Logger                 log.Logger
 }
 
-// HandleSolutionResult ...
-func (handler SolutionResultHandler) HandleSolutionResult(
-	message amqp.Delivery,
-) {
+// HandleMessage ...
+func (handler SolutionResultHandler) HandleMessage(message amqp.Delivery) {
 	solution, err := handler.performHandling(message)
 	if err != nil {
 		handler.Logger.Log(errors.Wrapf(
@@ -32,16 +30,15 @@ func (handler SolutionResultHandler) HandleSolutionResult(
 			solution.ID,
 		))
 
-		message.Reject(true)
+		message.Reject(true) // nolint: gosec, errcheck
 		return
 	}
 
 	handler.Logger.
 		Logf("[info] result of solution #%d has been handled", solution.ID)
-	message.Ack(false)
+	message.Ack(false) // nolint: gosec, errcheck
 }
 
-// HandleSolutionResult ...
 func (handler SolutionResultHandler) performHandling(
 	message amqp.Delivery,
 ) (entities.Solution, error) {
