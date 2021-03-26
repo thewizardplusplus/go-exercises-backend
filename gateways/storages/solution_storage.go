@@ -49,6 +49,8 @@ func (storage SolutionStorage) CreateSolution(
 	// reset the fields that are filled in automatically
 	solution.Model = gorm.Model{}
 	solution.TaskID = taskID
+	solution.IsCorrect = false
+	solution.Result = "{}" // empty JSON object
 
 	if err := storage.db.Create(&solution).Error; err != nil {
 		return 0, err
