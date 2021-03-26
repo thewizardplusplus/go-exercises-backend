@@ -12,7 +12,7 @@ type Client struct {
 }
 
 // NewClient ...
-func NewClient(queueDSN string) (Client, error) {
+func NewClient(queueDSN string, queueMaximalSize int) (Client, error) {
 	connection, err := amqp.Dial(queueDSN)
 	if err != nil {
 		return Client{}, errors.Wrap(err, "unable to dial the message broker")
@@ -21,6 +21,10 @@ func NewClient(queueDSN string) (Client, error) {
 	channel, err := connection.Channel()
 	if err != nil {
 		return Client{}, errors.Wrap(err, "unable to open the channel")
+	}
+
+	if err := channel.Qos(queueMaximalSize, 0, false); err != nil {
+		return Client{}, errors.Wrap(err, "unable to set the queue maximal size")
 	}
 
 	for _, queueName := range []string{

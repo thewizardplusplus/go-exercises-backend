@@ -50,7 +50,10 @@ func main() {
 		}
 	}()
 
-	messageBrokerClient, err := queues.NewClient(options.MessageBroker.Address)
+	messageBrokerClient, err := queues.NewClient(
+		options.MessageBroker.Address,
+		options.SolutionRegister.BufferSize,
+	)
 	if err != nil {
 		logger.Fatalf("[error] unable to create the message broker client: %v", err)
 	}
