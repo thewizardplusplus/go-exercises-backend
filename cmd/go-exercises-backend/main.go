@@ -72,6 +72,29 @@ func main() {
 	go solutionRegister.StartConcurrently(options.SolutionRegister.Concurrency)
 	defer solutionRegister.Stop()
 
+	solutionResultConsumer, err := queues.NewSolutionResultConsumer(
+		messageBrokerClient,
+		queues.SolutionResultHandler{
+			SolutionResultRegister: registers.SolutionResultRegister{
+				SolutionUpdater: storages.NewSolutionStorage(db),
+			},
+			Logger: print.New(logger),
+		},
+	)
+	if err != nil {
+		logger.Fatalf(
+			"[error] unable to create the solution result consumer: %v",
+			err,
+		)
+	}
+	go solutionResultConsumer.
+		StartConcurrently(options.SolutionRegister.Concurrency)
+	defer func() {
+		if err := solutionResultConsumer.Stop(); err != nil {
+			logger.Fatalf("[error] unable to stop the solution result consumer: %v", err)
+		}
+	}()
+
 	router := handlers.NewRouter(handlers.RouterDependencies{
 		TaskStorage:      storages.NewTaskStorage(db),
 		SolutionStorage:  storages.NewSolutionStorage(db),
