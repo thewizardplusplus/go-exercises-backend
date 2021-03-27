@@ -34,7 +34,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"Title\": \"{{$randomLoremSentence}}\",\n    \"Description\": \"{{$randomLoremSentences}}\",\n    \"BoilerplateCode\": \"{{$randomLoremSentences}}\",\n    \"TestCases\": \"{{$randomLoremSentences}}\"\n}",
+					"raw": "{\n    \"Title\": \"{{$randomLoremSentence}}\",\n    \"Description\": \"{{$randomLoremSentences}}\",\n    \"BoilerplateCode\": \"{{$randomLoremSentences}}\",\n    \"TestCases\": [\n        {\n            \"Input\": \"{{$randomLoremSentence}}\",\n            \"ExpectedOutput\": \"{{$randomLoremSentence}}\"\n        },\n        {\n            \"Input\": \"{{$randomLoremSentence}}\",\n            \"ExpectedOutput\": \"{{$randomLoremSentence}}\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
