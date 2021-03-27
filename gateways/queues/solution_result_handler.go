@@ -30,7 +30,8 @@ func (handler SolutionResultHandler) HandleMessage(message amqp.Delivery) {
 			solution.ID,
 		))
 
-		message.Reject(true) // nolint: gosec, errcheck
+		// requeue the message only once
+		message.Reject(!message.Redelivered) // nolint: gosec, errcheck
 		return
 	}
 
