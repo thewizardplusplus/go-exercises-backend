@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"github.com/go-gorm/datatypes"
 	"gorm.io/gorm"
 )
 
@@ -11,7 +12,7 @@ type Task struct {
 	Title           string
 	Description     string
 	BoilerplateCode string
-	TestCases       string
+	TestCases       datatypes.JSON
 }
 
 // Solution ...
