@@ -34,6 +34,14 @@
   version = "v1.0.1"
 
 [[projects]]
+  digest = "1:3b140aa9cde608164aeb70ae814d66935e7b825f156885d0b2f8dd9f0a07bb3e"
+  name = "github.com/go-gorm/datatypes"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "3ec999dc6154fcdfc773f993ee44c37dee0c5b57"
+  version = "v1.0.0"
+
+[[projects]]
   digest = "1:85138d5daba3306acc15e3b1c9226a2866e068c4822bbf0875d5143db225face"
   name = "github.com/go-log/log"
   packages = [
@@ -194,6 +202,7 @@
   input-imports = [
     "github.com/alecthomas/gometalinter",
     "github.com/caarlos0/env",
+    "github.com/go-gorm/datatypes",
     "github.com/go-log/log",
     "github.com/go-log/log/print",
     "github.com/gorilla/handlers",

@@ -41,3 +41,7 @@ required = [
 [[constraint]]
   name = "github.com/streadway/amqp"
   version = "1.0.0"
+
+[[constraint]]
+  name = "github.com/go-gorm/datatypes"
+  version = "1.0.0"
