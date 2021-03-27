@@ -23,5 +23,5 @@ type Solution struct {
 	Task      Task
 	Code      string
 	IsCorrect bool
-	Result    string `gorm:"type:json"`
+	Result    datatypes.JSON
 }

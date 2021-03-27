@@ -1,6 +1,7 @@
 package storages
 
 import (
+	"github.com/go-gorm/datatypes"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
 	"gorm.io/gorm"
 )
@@ -50,7 +51,7 @@ func (storage SolutionStorage) CreateSolution(
 	solution.Model = gorm.Model{}
 	solution.TaskID = taskID
 	solution.IsCorrect = false
-	solution.Result = "{}" // empty JSON object
+	solution.Result = datatypes.JSON("{}") // empty JSON object
 
 	if err := storage.db.Create(&solution).Error; err != nil {
 		return 0, err
