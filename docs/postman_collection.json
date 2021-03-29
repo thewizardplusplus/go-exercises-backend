@@ -28,13 +28,44 @@
 			"response": []
 		},
 		{
-			"name": "/api/v1/tasks/",
+			"name": "/api/v1/tasks/ (random)",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"Title\": \"{{$randomLoremSentence}}\",\n    \"Description\": \"{{$randomLoremSentences}}\",\n    \"BoilerplateCode\": \"{{$randomLoremSentences}}\",\n    \"TestCases\": [\n        {\n            \"Input\": \"{{$randomLoremSentence}}\",\n            \"ExpectedOutput\": \"{{$randomLoremSentence}}\"\n        },\n        {\n            \"Input\": \"{{$randomLoremSentence}}\",\n            \"ExpectedOutput\": \"{{$randomLoremSentence}}\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/tasks/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"tasks",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/v1/tasks/ (real)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Title\": \"{{$randomLoremSentence}}\",\n    \"Description\": \"{{$randomLoremSentences}}\",\n    \"BoilerplateCode\": \"{{$randomLoremSentences}}\",\n    \"TestCases\": [\n        {\n            \"Input\": \"5 12\",\n            \"ExpectedOutput\": \"17\\n\"\n        },\n        {\n            \"Input\": \"23 42\",\n            \"ExpectedOutput\": \"65\\n\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -81,13 +112,44 @@
 			"response": []
 		},
 		{
-			"name": "/api/v1/tasks/{id}",
+			"name": "/api/v1/tasks/{id} (random)",
 			"request": {
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"Title\": \"{{$randomLoremSentence}}\",\n    \"Description\": \"{{$randomLoremSentences}}\",\n    \"BoilerplateCode\": \"{{$randomLoremSentences}}\",\n    \"TestCases\": \"{{$randomLoremSentences}}\"\n}",
+					"raw": "{\n    \"Title\": \"{{$randomLoremSentence}}\",\n    \"Description\": \"{{$randomLoremSentences}}\",\n    \"BoilerplateCode\": \"{{$randomLoremSentences}}\",\n    \"TestCases\": [\n        {\n            \"Input\": \"{{$randomLoremSentence}}\",\n            \"ExpectedOutput\": \"{{$randomLoremSentence}}\"\n        },\n        {\n            \"Input\": \"{{$randomLoremSentence}}\",\n            \"ExpectedOutput\": \"{{$randomLoremSentence}}\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/tasks/23",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"tasks",
+						"23"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/v1/tasks/{id} (real)",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Title\": \"{{$randomLoremSentence}}\",\n    \"Description\": \"{{$randomLoremSentences}}\",\n    \"BoilerplateCode\": \"{{$randomLoremSentences}}\",\n    \"TestCases\": [\n        {\n            \"Input\": \"5 12\",\n            \"ExpectedOutput\": \"17\\n\"\n        },\n        {\n            \"Input\": \"23 42\",\n            \"ExpectedOutput\": \"65\\n\"\n        }\n    ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -158,13 +220,46 @@
 			"response": []
 		},
 		{
-			"name": "/api/v1/tasks/{taskID}/solutions/",
+			"name": "/api/v1/tasks/{taskID}/solutions/ (random)",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
 					"raw": "{\n    \"Code\": \"{{$randomLoremSentences}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/tasks/23/solutions/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"tasks",
+						"23",
+						"solutions",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/api/v1/tasks/{taskID}/solutions/ (real)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Code\": \"package main; func main() { var x, y int; fmt.Scan(&x, &y); fmt.Println(x + y) }\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
