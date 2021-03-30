@@ -25,3 +25,12 @@ type Solution struct {
 	IsCorrect bool
 	Result    datatypes.JSON
 }
+
+// User ...
+type User struct {
+	gorm.Model
+
+	Username     string `gorm:"unique"`
+	Password     string `gorm:"-"`
+	PasswordHash string
+}
