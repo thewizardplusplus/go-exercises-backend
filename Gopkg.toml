@@ -49,3 +49,7 @@ required = [
 [[constraint]]
   branch = "master"
   name = "golang.org/x/crypto"
+
+[[constraint]]
+  name = "github.com/alecthomas/kong"
+  version = "0.2.16"

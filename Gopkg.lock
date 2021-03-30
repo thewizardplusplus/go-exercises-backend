@@ -10,6 +10,14 @@
   version = "v3.0.0"
 
 [[projects]]
+  digest = "1:2d3b30335131522586868fd303542368b8f2776775cdac99d51b7af38ad72ee1"
+  name = "github.com/alecthomas/kong"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "456575db97b112641945b4f219495d0509e58fc0"
+  version = "v0.2.16"
+
+[[projects]]
   branch = "master"
   digest = "1:d3197d14cccd4a5d4e5a04661b8a0972d13eb7165472e8051ede8cbb1d1876a2"
   name = "github.com/alecthomas/units"
@@ -212,6 +220,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/alecthomas/gometalinter",
+    "github.com/alecthomas/kong",
     "github.com/caarlos0/env",
     "github.com/go-gorm/datatypes",
     "github.com/go-log/log",
