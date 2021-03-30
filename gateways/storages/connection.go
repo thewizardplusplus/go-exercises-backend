@@ -21,7 +21,11 @@ func OpenDB(dbDSN string, logWriter logger.Writer) (*gorm.DB, error) {
 		return nil, errors.Wrap(err, "unable to open the DB")
 	}
 
-	if err := db.AutoMigrate(&entities.Task{}, &entities.Solution{}); err != nil {
+	if err := db.AutoMigrate(
+		&entities.Task{},
+		&entities.Solution{},
+		&entities.User{},
+	); err != nil {
 		return nil, errors.Wrap(err, "unable to migrate the entities automatically")
 	}
 
