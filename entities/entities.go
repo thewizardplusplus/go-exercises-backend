@@ -37,6 +37,18 @@ type User struct {
 	PasswordHash string
 }
 
+// CheckPassword ...
+func (user User) CheckPassword(passwordHash string) error {
+	if err := bcrypt.CompareHashAndPassword(
+		[]byte(passwordHash),
+		[]byte(user.Password),
+	); err != nil {
+		return errors.Wrap(err, "failed password checking")
+	}
+
+	return nil
+}
+
 // HashPassword ...
 func (user *User) HashPassword(cost int) error {
 	passwordHashBytes, err :=
