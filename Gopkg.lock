@@ -34,6 +34,14 @@
   version = "v6.5.0"
 
 [[projects]]
+  digest = "1:76dc72490af7174349349838f2fe118996381b31ea83243812a97e5a0fd5ed55"
+  name = "github.com/dgrijalva/jwt-go"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
+  version = "v3.2.0"
+
+[[projects]]
   digest = "1:3adf0ef092abc82d9beeaa4473a798cb1b8ebae3c68ddb1b30eea52770c86f82"
   name = "github.com/felixge/httpsnoop"
   packages = ["."]
@@ -230,6 +238,7 @@
     "github.com/alecthomas/gometalinter",
     "github.com/alecthomas/kong",
     "github.com/caarlos0/env",
+    "github.com/dgrijalva/jwt-go",
     "github.com/go-gorm/datatypes",
     "github.com/go-log/log",
     "github.com/go-log/log/print",
