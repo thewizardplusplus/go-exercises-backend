@@ -149,6 +149,14 @@
   version = "v0.9.1"
 
 [[projects]]
+  digest = "1:0e04dd87e4bd7a9251ffc6df4460fecc9d1199da1575483757fff9fd268b264a"
+  name = "github.com/sethvargo/go-password"
+  packages = ["password"]
+  pruneopts = "UT"
+  revision = "848e38a39fccae9c1f2981b561157ce48c91e7dc"
+  version = "v0.2.0"
+
+[[projects]]
   digest = "1:5ca236e4ecfeb92a57b7a4c7f139023384e7f726640f61b17820473cc82dfb77"
   name = "github.com/streadway/amqp"
   packages = ["."]
@@ -228,6 +236,7 @@
     "github.com/gorilla/handlers",
     "github.com/gorilla/mux",
     "github.com/pkg/errors",
+    "github.com/sethvargo/go-password/password",
     "github.com/streadway/amqp",
     "github.com/thewizardplusplus/go-http-utils",
     "golang.org/x/crypto/bcrypt",
