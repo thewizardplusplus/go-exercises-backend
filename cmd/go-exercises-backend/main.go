@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/caarlos0/env"
 	"github.com/go-log/log/print"
@@ -29,6 +30,10 @@ type options struct {
 	SolutionRegister struct {
 		BufferSize  int `env:"SOLUTION_REGISTER_BUFFER_SIZE" envDefault:"1000"`
 		Concurrency int `env:"SOLUTION_REGISTER_CONCURRENCY" envDefault:"1000"`
+	}
+	Authorization struct {
+		TokenSigningKey string        `env:"AUTHORIZATION_TOKEN_SIGNING_KEY" envDefault:"token-signing-key"`
+		TokenTTL        time.Duration `env:"AUTHORIZATION_TOKEN_TTL" envDefault:"24h"`
 	}
 }
 
@@ -98,10 +103,12 @@ func main() {
 		}
 	}()
 
-	router := handlers.NewRouter(handlers.RouterDependencies{
+	routerOptions := handlers.RouterOptions(options.Authorization)
+	router := handlers.NewRouter(routerOptions, handlers.RouterDependencies{
 		TaskStorage:      storages.NewTaskStorage(db),
 		SolutionStorage:  storages.NewSolutionStorage(db),
 		SolutionRegister: solutionRegister,
+		UserGetter:       storages.NewUserStorage(db, 0),
 		Logger:           print.New(logger),
 	})
 	router.Use(middlewares.RecoveryHandler(middlewares.RecoveryLogger(logger)))
