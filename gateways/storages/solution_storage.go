@@ -18,11 +18,12 @@ func NewSolutionStorage(db *gorm.DB) SolutionStorage {
 
 // GetSolutions ...
 func (storage SolutionStorage) GetSolutions(
+	userID uint,
 	taskID uint,
 ) ([]entities.Solution, error) {
 	var solutions []entities.Solution
 	err := storage.db.
-		Where(&entities.Solution{TaskID: taskID}).
+		Where(&entities.Solution{UserID: userID, TaskID: taskID}).
 		Find(&solutions).
 		Error
 	if err != nil {
