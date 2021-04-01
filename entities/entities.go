@@ -60,3 +60,8 @@ func (user *User) HashPassword(cost int) error {
 	user.PasswordHash = string(passwordHashBytes)
 	return nil
 }
+
+// Credentials ...
+type Credentials struct {
+	AccessToken string
+}
