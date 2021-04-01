@@ -16,7 +16,7 @@ import (
 type SolutionStorage interface {
 	entities.SolutionGetter
 
-	GetSolutions(taskID uint) ([]entities.Solution, error)
+	GetSolutions(userID uint, taskID uint) ([]entities.Solution, error)
 	CreateSolution(taskID uint, solution entities.Solution) (id uint, err error)
 }
 
@@ -42,7 +42,8 @@ func (handler SolutionHandler) GetSolutions(
 		return
 	}
 
-	solutions, err := handler.SolutionStorage.GetSolutions(uint(taskID))
+	user := request.Context().Value(userContextKey{}).(entities.User)
+	solutions, err := handler.SolutionStorage.GetSolutions(user.ID, uint(taskID))
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to get the solutions")
 		handler.Logger.Log(err)
@@ -67,6 +68,10 @@ func (handler SolutionHandler) GetSolution(
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 
+		return
+	}
+
+	if ok := handler.checkAccessToSolution(writer, request, uint(id)); !ok {
 		return
 	}
 
@@ -107,6 +112,9 @@ func (handler SolutionHandler) CreateSolution(
 		return
 	}
 
+	user := request.Context().Value(userContextKey{}).(entities.User)
+	solution.UserID = user.ID
+
 	id, err := handler.SolutionStorage.CreateSolution(uint(taskID), solution)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to create the solution")
@@ -121,4 +129,30 @@ func (handler SolutionHandler) CreateSolution(
 	idAsModel := entities.Solution{Model: gorm.Model{ID: id}}
 	writer.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(writer).Encode(idAsModel) // nolint: gosec, errcheck
+}
+
+func (handler SolutionHandler) checkAccessToSolution(
+	writer http.ResponseWriter,
+	request *http.Request,
+	id uint,
+) bool {
+	solution, err := handler.SolutionStorage.GetSolution(id)
+	if err != nil {
+		err = errors.Wrap(err, "[error] unable to get the solution")
+		handler.Logger.Log(err)
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+
+		return false
+	}
+
+	user := request.Context().Value(userContextKey{}).(entities.User)
+	if user.ID != solution.UserID {
+		const errMessage = "[error] access to the solution is denied"
+		handler.Logger.Log(errMessage)
+		http.Error(writer, errMessage, http.StatusForbidden)
+
+		return false
+	}
+
+	return true
 }
