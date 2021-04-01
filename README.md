@@ -40,11 +40,16 @@ $ go-exercises-backend
 
 Environment variables:
 
-- `SERVER_ADDRESS` &mdash; server URI (default: `:8080`);
-- `STORAGE_ADDRESS` &mdash; [PostgreSQL](https://www.postgresql.org/) connection URI (default: `postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable`);
-- `MESSAGE_BROKER_ADDRESS` &mdash; [RabbitMQ](https://www.rabbitmq.com/) connection URI (default: `amqp://rabbitmq:rabbitmq@localhost:5672`);
-- `SOLUTION_REGISTER_BUFFER_SIZE` &mdash; solution registration channel capacity (default: `1000`);
-- `SOLUTION_REGISTER_CONCURRENCY` &mdash; amount of solution registration threads (default: `1000`).
+- addresses:
+  - `SERVER_ADDRESS` &mdash; server URI (default: `:8080`);
+  - `STORAGE_ADDRESS` &mdash; [PostgreSQL](https://www.postgresql.org/) connection URI (default: `postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable`);
+  - `MESSAGE_BROKER_ADDRESS` &mdash; [RabbitMQ](https://www.rabbitmq.com/) connection URI (default: `amqp://rabbitmq:rabbitmq@localhost:5672`);
+- solution registration:
+  - `SOLUTION_REGISTER_BUFFER_SIZE` &mdash; solution registration channel capacity (default: `1000`);
+  - `SOLUTION_REGISTER_CONCURRENCY` &mdash; amount of solution registration threads (default: `1000`);
+- authorization:
+  - `AUTHORIZATION_TOKEN_SIGNING_KEY` &mdash; authorization token signing key (is generated automatically if empty; default: empty);
+  - `AUTHORIZATION_TOKEN_TTL` &mdash; authorization token TTL (default: `24h`).
 
 ## API Description
 
