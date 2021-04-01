@@ -17,10 +17,10 @@ type RouterOptions struct {
 
 // RouterDependencies ...
 type RouterDependencies struct {
+	UserGetter       UserGetter
 	TaskStorage      TaskStorage
 	SolutionStorage  SolutionStorage
 	SolutionRegister entities.SolutionRegister
-	UserGetter       UserGetter
 	Logger           log.Logger
 }
 
@@ -36,6 +36,16 @@ func NewRouter(
 	authorizationMiddleware :=
 		AuthorizationMiddleware(options.TokenSigningKey, dependencies.Logger)
 	apiRouterWithAuthorization.Use(authorizationMiddleware)
+
+	tokenHandler := TokenHandler{
+		TokenSigningKey: options.TokenSigningKey,
+		TokenTTL:        options.TokenTTL,
+		UserGetter:      dependencies.UserGetter,
+		Logger:          dependencies.Logger,
+	}
+	apiRouter.
+		HandleFunc("/tokens/", tokenHandler.CreateToken).
+		Methods(http.MethodPost)
 
 	taskHandler := TaskHandler{
 		TaskStorage: dependencies.TaskStorage,
@@ -71,16 +81,6 @@ func NewRouter(
 	apiRouterWithAuthorization.
 		HandleFunc("/solutions/{id}", solutionHandler.GetSolution).
 		Methods(http.MethodGet)
-
-	tokenHandler := TokenHandler{
-		TokenSigningKey: options.TokenSigningKey,
-		TokenTTL:        options.TokenTTL,
-		UserGetter:      dependencies.UserGetter,
-		Logger:          dependencies.Logger,
-	}
-	apiRouter.
-		HandleFunc("/tokens/", tokenHandler.CreateToken).
-		Methods(http.MethodPost)
 
 	return rootRouter
 }
