@@ -1,6 +1,7 @@
 package entities
 
 import (
+	"github.com/dgrijalva/jwt-go"
 	"github.com/go-gorm/datatypes"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
@@ -64,4 +65,11 @@ func (user *User) HashPassword(cost int) error {
 // Credentials ...
 type Credentials struct {
 	AccessToken string
+}
+
+// AccessTokenClaims ...
+type AccessTokenClaims struct {
+	jwt.StandardClaims
+
+	User User
 }
