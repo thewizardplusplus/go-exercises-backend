@@ -12,6 +12,8 @@ import (
 type Task struct {
 	gorm.Model
 
+	UserID          uint
+	User            User
 	Title           string
 	Description     string
 	BoilerplateCode string
