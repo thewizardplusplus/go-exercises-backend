@@ -88,6 +88,9 @@ func (handler TaskHandler) CreateTask(
 		return
 	}
 
+	user := request.Context().Value(userContextKey{}).(entities.User)
+	task.UserID = user.ID
+
 	id, err := handler.TaskStorage.CreateTask(task)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to create the task")
@@ -114,6 +117,10 @@ func (handler TaskHandler) UpdateTask(
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
 
+		return
+	}
+
+	if ok := handler.checkAccessToTask(writer, request, uint(id)); !ok {
 		return
 	}
 
@@ -150,6 +157,10 @@ func (handler TaskHandler) DeleteTask(
 		return
 	}
 
+	if ok := handler.checkAccessToTask(writer, request, uint(id)); !ok {
+		return
+	}
+
 	if err := handler.TaskStorage.DeleteTask(uint(id)); err != nil {
 		err = errors.Wrap(err, "[error] unable to delete the task")
 		handler.Logger.Log(err)
@@ -157,4 +168,30 @@ func (handler TaskHandler) DeleteTask(
 
 		return
 	}
+}
+
+func (handler TaskHandler) checkAccessToTask(
+	writer http.ResponseWriter,
+	request *http.Request,
+	id uint,
+) bool {
+	task, err := handler.TaskStorage.GetTask(id)
+	if err != nil {
+		err = errors.Wrap(err, "[error] unable to get the task")
+		handler.Logger.Log(err)
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+
+		return false
+	}
+
+	user := request.Context().Value(userContextKey{}).(entities.User)
+	if user.ID != task.UserID {
+		const errMessage = "[error] managerial access to the task is denied"
+		handler.Logger.Log(errMessage)
+		http.Error(writer, errMessage, http.StatusForbidden)
+
+		return false
+	}
+
+	return true
 }
