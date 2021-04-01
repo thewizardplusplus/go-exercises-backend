@@ -10,6 +10,7 @@ import (
 	"github.com/caarlos0/env"
 	"github.com/go-log/log/print"
 	middlewares "github.com/gorilla/handlers"
+	"github.com/sethvargo/go-password/password"
 	"github.com/thewizardplusplus/go-exercises-backend/gateways/handlers"
 	"github.com/thewizardplusplus/go-exercises-backend/gateways/queues"
 	"github.com/thewizardplusplus/go-exercises-backend/gateways/storages"
@@ -32,7 +33,7 @@ type options struct {
 		Concurrency int `env:"SOLUTION_REGISTER_CONCURRENCY" envDefault:"1000"`
 	}
 	Authorization struct {
-		TokenSigningKey string        `env:"AUTHORIZATION_TOKEN_SIGNING_KEY" envDefault:"token-signing-key"`
+		TokenSigningKey string        `env:"AUTHORIZATION_TOKEN_SIGNING_KEY"`
 		TokenTTL        time.Duration `env:"AUTHORIZATION_TOKEN_TTL" envDefault:"24h"`
 	}
 }
@@ -43,6 +44,26 @@ func main() {
 	var options options
 	if err := env.Parse(&options); err != nil {
 		logger.Fatalf("[error] unable to parse the options: %v", err)
+	}
+
+	if options.Authorization.TokenSigningKey == "" {
+		tokenSigningKey, err := password.Generate(
+			23,    // length
+			0,     // number of digits
+			0,     // number of symbols
+			false, // no upper case
+			true,  // allow repeat
+		)
+		if err != nil {
+			logger.Fatalf("[error] unable to generate the token signing key: %v", err)
+		}
+
+		logger.Printf(
+			"[info] token signing key has been generated: %s",
+			tokenSigningKey,
+		)
+
+		options.Authorization.TokenSigningKey = tokenSigningKey
 	}
 
 	db, err := storages.OpenDB(options.Storage.Address, logger)
