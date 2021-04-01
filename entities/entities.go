@@ -24,6 +24,8 @@ type Task struct {
 type Solution struct {
 	gorm.Model
 
+	UserID    uint
+	User      User
 	TaskID    uint
 	Task      Task
 	Code      string
