@@ -31,24 +31,29 @@ func NewRouter(
 ) *mux.Router {
 	rootRouter := mux.NewRouter()
 	apiRouter := rootRouter.PathPrefix("/api/v1").Subrouter()
+	apiRouterWithAuthorization := apiRouter.NewRoute().Subrouter()
+
+	authorizationMiddleware :=
+		AuthorizationMiddleware(options.TokenSigningKey, dependencies.Logger)
+	apiRouterWithAuthorization.Use(authorizationMiddleware)
 
 	taskHandler := TaskHandler{
 		TaskStorage: dependencies.TaskStorage,
 		Logger:      dependencies.Logger,
 	}
-	apiRouter.
+	apiRouterWithAuthorization.
 		HandleFunc("/tasks/{id}", taskHandler.GetTask).
 		Methods(http.MethodGet)
-	apiRouter.
+	apiRouterWithAuthorization.
 		HandleFunc("/tasks/{id}", taskHandler.UpdateTask).
 		Methods(http.MethodPut)
-	apiRouter.
+	apiRouterWithAuthorization.
 		HandleFunc("/tasks/{id}", taskHandler.DeleteTask).
 		Methods(http.MethodDelete)
-	apiRouter.
+	apiRouterWithAuthorization.
 		HandleFunc("/tasks/", taskHandler.GetTasks).
 		Methods(http.MethodGet)
-	apiRouter.
+	apiRouterWithAuthorization.
 		HandleFunc("/tasks/", taskHandler.CreateTask).
 		Methods(http.MethodPost)
 
@@ -57,13 +62,13 @@ func NewRouter(
 		SolutionRegister: dependencies.SolutionRegister,
 		Logger:           dependencies.Logger,
 	}
-	apiRouter.
+	apiRouterWithAuthorization.
 		HandleFunc("/tasks/{taskID}/solutions/", solutionHandler.GetSolutions).
 		Methods(http.MethodGet)
-	apiRouter.
+	apiRouterWithAuthorization.
 		HandleFunc("/tasks/{taskID}/solutions/", solutionHandler.CreateSolution).
 		Methods(http.MethodPost)
-	apiRouter.
+	apiRouterWithAuthorization.
 		HandleFunc("/solutions/{id}", solutionHandler.GetSolution).
 		Methods(http.MethodGet)
 
