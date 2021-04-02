@@ -20,7 +20,8 @@ import (
 
 type options struct {
 	Server struct {
-		Address string `env:"SERVER_ADDRESS" envDefault:":8080"`
+		Address        string `env:"SERVER_ADDRESS" envDefault:":8080"`
+		StaticFilePath string `env:"SERVER_STATIC_FILE_PATH" envDefault:"./static"`
 	}
 	Storage struct {
 		Address string `env:"STORAGE_ADDRESS" envDefault:"postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable"` // nolint: lll
@@ -125,7 +126,11 @@ func main() {
 		}
 	}()
 
-	routerOptions := handlers.RouterOptions(options.Authorization)
+	routerOptions := handlers.RouterOptions{
+		StaticFilePath:  options.Server.StaticFilePath,
+		TokenSigningKey: options.Authorization.TokenSigningKey,
+		TokenTTL:        options.Authorization.TokenTTL,
+	}
 	router := handlers.NewRouter(routerOptions, handlers.RouterDependencies{
 		TaskStorage:      storages.NewTaskStorage(db),
 		SolutionStorage:  storages.NewSolutionStorage(db),
