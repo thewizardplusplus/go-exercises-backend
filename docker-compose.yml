@@ -4,10 +4,13 @@ services:
     build: .
     environment:
       SERVER_ADDRESS: ":8080"
+      SERVER_STATIC_FILE_PATH: /var/www/go-exercises-backend
       STORAGE_ADDRESS: postgres://postgres:postgres@db:5432/postgres?sslmode=disable
       MESSAGE_BROKER_ADDRESS: amqp://rabbitmq:rabbitmq@rabbitmq:5672
     ports:
       - 8080:8080
+    volumes:
+      - ./static:/var/www/go-exercises-backend
     command:
       - /usr/local/bin/wait-for-it.sh
       - db:5432
