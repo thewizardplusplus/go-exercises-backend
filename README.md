@@ -40,6 +40,7 @@ $ go-exercises-backend
 
 Environment variables:
 
+- `SERVER_STATIC_FILE_PATH` &mdash; path to static files (default: `./static`);
 - addresses:
   - `SERVER_ADDRESS` &mdash; server URI (default: `:8080`);
   - `STORAGE_ADDRESS` &mdash; [PostgreSQL](https://www.postgresql.org/) connection URI (default: `postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable`);
