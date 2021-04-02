@@ -7,10 +7,12 @@ import (
 	"github.com/go-log/log"
 	"github.com/gorilla/mux"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
+	httputils "github.com/thewizardplusplus/go-http-utils"
 )
 
 // RouterOptions ...
 type RouterOptions struct {
+	StaticFilePath  string
 	TokenSigningKey string
 	TokenTTL        time.Duration
 }
@@ -36,6 +38,14 @@ func NewRouter(
 	authorizationMiddleware :=
 		AuthorizationMiddleware(options.TokenSigningKey, dependencies.Logger)
 	apiRouterWithAuthorization.Use(authorizationMiddleware)
+
+	staticFileHandler := httputils.StaticAssetHandler(
+		http.Dir(options.StaticFilePath),
+		dependencies.Logger,
+	)
+	rootRouter.
+		PathPrefix("/").Handler(staticFileHandler).
+		Methods(http.MethodGet)
 
 	tokenHandler := TokenHandler{
 		TokenSigningKey: options.TokenSigningKey,
