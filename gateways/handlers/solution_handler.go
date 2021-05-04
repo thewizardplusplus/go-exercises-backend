@@ -84,6 +84,8 @@ func (handler SolutionHandler) GetSolution(
 		return
 	}
 
+	solution.User.PasswordHash = ""
+
 	writer.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(writer).Encode(solution) // nolint: gosec, errcheck
 }

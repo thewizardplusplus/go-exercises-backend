@@ -36,7 +36,7 @@ func (storage SolutionStorage) GetSolutions(
 // GetSolution ...
 func (storage SolutionStorage) GetSolution(id uint) (entities.Solution, error) {
 	var solution entities.Solution
-	if err := storage.db.First(&solution, id).Error; err != nil {
+	if err := storage.db.Joins("User").First(&solution, id).Error; err != nil {
 		return entities.Solution{}, err
 	}
 
