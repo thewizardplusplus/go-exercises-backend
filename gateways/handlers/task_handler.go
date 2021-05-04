@@ -70,6 +70,8 @@ func (handler TaskHandler) GetTask(
 		return
 	}
 
+	task.User.PasswordHash = ""
+
 	writer.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(writer).Encode(task) // nolint: gosec, errcheck
 }

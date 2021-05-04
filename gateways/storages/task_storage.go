@@ -28,7 +28,7 @@ func (storage TaskStorage) GetTasks() ([]entities.Task, error) {
 // GetTask ...
 func (storage TaskStorage) GetTask(id uint) (entities.Task, error) {
 	var task entities.Task
-	if err := storage.db.First(&task, id).Error; err != nil {
+	if err := storage.db.Joins("User").First(&task, id).Error; err != nil {
 		return entities.Task{}, err
 	}
 
