@@ -52,6 +52,10 @@ func (handler SolutionHandler) GetSolutions(
 		return
 	}
 
+	for index := range solutions {
+		solutions[index].User.PasswordHash = ""
+	}
+
 	writer.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(writer).Encode(solutions) // nolint: gosec, errcheck
 }

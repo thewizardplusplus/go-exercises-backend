@@ -23,6 +23,7 @@ func (storage SolutionStorage) GetSolutions(
 ) ([]entities.Solution, error) {
 	var solutions []entities.Solution
 	err := storage.db.
+		Joins("User").
 		Where(&entities.Solution{UserID: userID, TaskID: taskID}).
 		Find(&solutions).
 		Error
