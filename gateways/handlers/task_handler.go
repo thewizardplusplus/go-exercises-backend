@@ -42,6 +42,10 @@ func (handler TaskHandler) GetTasks(
 		return
 	}
 
+	for index := range tasks {
+		tasks[index].User.PasswordHash = ""
+	}
+
 	writer.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(writer).Encode(tasks) // nolint: gosec, errcheck
 }
