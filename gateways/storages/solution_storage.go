@@ -25,6 +25,7 @@ func (storage SolutionStorage) GetSolutions(
 	err := storage.db.
 		Joins("User").
 		Where(&entities.Solution{UserID: userID, TaskID: taskID}).
+		Order("created_at DESC").
 		Find(&solutions).
 		Error
 	if err != nil {
