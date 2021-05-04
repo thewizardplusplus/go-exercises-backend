@@ -18,7 +18,12 @@ func NewTaskStorage(db *gorm.DB) TaskStorage {
 // GetTasks ...
 func (storage TaskStorage) GetTasks() ([]entities.Task, error) {
 	var tasks []entities.Task
-	if err := storage.db.Joins("User").Find(&tasks).Error; err != nil {
+	err := storage.db.
+		Joins("User").
+		Order("created_at DESC").
+		Find(&tasks).
+		Error
+	if err != nil {
 		return nil, err
 	}
 
