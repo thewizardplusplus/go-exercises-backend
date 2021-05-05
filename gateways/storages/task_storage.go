@@ -16,14 +16,17 @@ func NewTaskStorage(db *gorm.DB) TaskStorage {
 }
 
 // GetTasks ...
-func (storage TaskStorage) GetTasks() ([]entities.Task, error) {
+func (storage TaskStorage) GetTasks(pagination entities.Pagination) (
+	[]entities.Task,
+	error,
+) {
+	query := storage.db.Joins("User").Order("created_at DESC")
+	if !pagination.IsZero() {
+		query = query.Offset(pagination.Offset()).Limit(pagination.PageSize)
+	}
+
 	var tasks []entities.Task
-	err := storage.db.
-		Joins("User").
-		Order("created_at DESC").
-		Find(&tasks).
-		Error
-	if err != nil {
+	if err := query.Find(&tasks).Error; err != nil {
 		return nil, err
 	}
 
