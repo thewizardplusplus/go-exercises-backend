@@ -88,3 +88,8 @@ type Pagination struct {
 func (pagination Pagination) IsZero() bool {
 	return pagination == Pagination{}
 }
+
+// Offset ...
+func (pagination Pagination) Offset() int {
+	return pagination.PageSize * (pagination.Page - 1)
+}
