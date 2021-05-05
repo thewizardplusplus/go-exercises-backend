@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-log/log"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/schema"
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
 	"gorm.io/gorm"
@@ -16,7 +17,10 @@ import (
 type SolutionStorage interface {
 	entities.SolutionGetter
 
-	GetSolutions(userID uint, taskID uint) ([]entities.Solution, error)
+	GetSolutions(userID uint, taskID uint, pagination entities.Pagination) (
+		[]entities.Solution,
+		error,
+	)
 	CreateSolution(taskID uint, solution entities.Solution) (id uint, err error)
 }
 
@@ -42,8 +46,19 @@ func (handler SolutionHandler) GetSolutions(
 		return
 	}
 
+	var pagination entities.Pagination
+	err = schema.NewDecoder().Decode(&pagination, request.URL.Query())
+	if err != nil {
+		err = errors.Wrap(err, "[error] unable to decode the pagination parameters")
+		handler.Logger.Log(err)
+		http.Error(writer, err.Error(), http.StatusBadRequest)
+
+		return
+	}
+
 	user := request.Context().Value(userContextKey{}).(entities.User)
-	solutions, err := handler.SolutionStorage.GetSolutions(user.ID, uint(taskID))
+	solutions, err :=
+		handler.SolutionStorage.GetSolutions(user.ID, uint(taskID), pagination)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to get the solutions")
 		handler.Logger.Log(err)
