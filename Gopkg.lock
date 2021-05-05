@@ -100,6 +100,14 @@
   version = "v1.8.0"
 
 [[projects]]
+  digest = "1:eeab1bbd366bdbe90ecb5ae485d37beb81ac617f769ad457e75e015f4e449fe8"
+  name = "github.com/gorilla/schema"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "7f62815760ef565b05f7d37c136e568d8a8dca68"
+  version = "v1.2.0"
+
+[[projects]]
   digest = "1:01ed62f8f4f574d8aff1d88caee113700a2b44c42351943fa73cc1808f736a50"
   name = "github.com/jinzhu/inflection"
   packages = ["."]
@@ -244,6 +252,7 @@
     "github.com/go-log/log/print",
     "github.com/gorilla/handlers",
     "github.com/gorilla/mux",
+    "github.com/gorilla/schema",
     "github.com/pkg/errors",
     "github.com/sethvargo/go-password/password",
     "github.com/streadway/amqp",
