@@ -26,6 +26,7 @@ type SolutionStorage interface {
 
 // SolutionHandler ...
 type SolutionHandler struct {
+	TaskStorage      TaskStorage
 	SolutionStorage  SolutionStorage
 	SolutionRegister entities.SolutionRegister
 	Logger           log.Logger
@@ -166,8 +167,17 @@ func (handler SolutionHandler) checkAccessToSolution(
 		return false
 	}
 
+	task, err := handler.TaskStorage.GetTask(solution.TaskID)
+	if err != nil {
+		err = errors.Wrap(err, "[error] unable to get the task")
+		handler.Logger.Log(err)
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+
+		return false
+	}
+
 	user := request.Context().Value(userContextKey{}).(entities.User)
-	if user.ID != solution.UserID {
+	if user.ID != solution.UserID && user.ID != task.UserID {
 		const errMessage = "[error] access to the solution is denied"
 		handler.Logger.Log(errMessage)
 		http.Error(writer, errMessage, http.StatusForbidden)

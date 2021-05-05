@@ -78,6 +78,7 @@ func NewRouter(
 		Methods(http.MethodPost)
 
 	solutionHandler := SolutionHandler{
+		TaskStorage:      dependencies.TaskStorage,
 		SolutionStorage:  dependencies.SolutionStorage,
 		SolutionRegister: dependencies.SolutionRegister,
 		Logger:           dependencies.Logger,
