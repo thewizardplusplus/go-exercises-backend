@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-log/log"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/schema"
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
 	"gorm.io/gorm"
@@ -16,7 +17,7 @@ import (
 type TaskStorage interface {
 	entities.TaskGetter
 
-	GetTasks() ([]entities.Task, error)
+	GetTasks(pagination entities.Pagination) ([]entities.Task, error)
 	CreateTask(task entities.Task) (id uint, err error)
 	UpdateTask(id uint, task entities.Task) error
 	DeleteTask(id uint) error
@@ -33,7 +34,17 @@ func (handler TaskHandler) GetTasks(
 	writer http.ResponseWriter,
 	request *http.Request,
 ) {
-	tasks, err := handler.TaskStorage.GetTasks()
+	var pagination entities.Pagination
+	err := schema.NewDecoder().Decode(&pagination, request.URL.Query())
+	if err != nil {
+		err = errors.Wrap(err, "[error] unable to decode the pagination parameters")
+		handler.Logger.Log(err)
+		http.Error(writer, err.Error(), http.StatusBadRequest)
+
+		return
+	}
+
+	tasks, err := handler.TaskStorage.GetTasks(pagination)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to get the tasks")
 		handler.Logger.Log(err)
