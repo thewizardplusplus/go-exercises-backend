@@ -24,7 +24,16 @@ func (storage SolutionStorage) GetSolutions(
 ) ([]entities.Solution, error) {
 	query := storage.db.
 		Joins("User").
-		Where(&entities.Solution{UserID: userID, TaskID: taskID}).
+		Joins("Task").
+		Where(
+			storage.db.
+				Where(&entities.Solution{TaskID: taskID}).
+				Where(
+					storage.db.
+						Where(&entities.Solution{UserID: userID}).
+						Or(map[string]interface{}{"Task.user_id": userID}),
+				),
+		).
 		Order("created_at DESC")
 	if !pagination.IsZero() {
 		query = query.Offset(pagination.Offset()).Limit(pagination.PageSize)
