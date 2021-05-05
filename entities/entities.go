@@ -77,3 +77,9 @@ type AccessTokenClaims struct {
 
 	User User
 }
+
+// Pagination ...
+type Pagination struct {
+	PageSize int
+	Page     int
+}
