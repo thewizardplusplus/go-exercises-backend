@@ -20,15 +20,18 @@ func NewSolutionStorage(db *gorm.DB) SolutionStorage {
 func (storage SolutionStorage) GetSolutions(
 	userID uint,
 	taskID uint,
+	pagination entities.Pagination,
 ) ([]entities.Solution, error) {
-	var solutions []entities.Solution
-	err := storage.db.
+	query := storage.db.
 		Joins("User").
 		Where(&entities.Solution{UserID: userID, TaskID: taskID}).
-		Order("created_at DESC").
-		Find(&solutions).
-		Error
-	if err != nil {
+		Order("created_at DESC")
+	if !pagination.IsZero() {
+		query = query.Offset(pagination.Offset()).Limit(pagination.PageSize)
+	}
+
+	var solutions []entities.Solution
+	if err := query.Find(&solutions).Error; err != nil {
 		return nil, err
 	}
 
