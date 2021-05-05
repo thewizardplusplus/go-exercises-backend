@@ -83,3 +83,8 @@ type Pagination struct {
 	PageSize int
 	Page     int
 }
+
+// IsZero ...
+func (pagination Pagination) IsZero() bool {
+	return pagination == Pagination{}
+}
