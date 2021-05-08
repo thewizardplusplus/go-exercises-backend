@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"go/format"
 	"net/http"
 	"strconv"
 
@@ -151,6 +152,35 @@ func (handler SolutionHandler) CreateSolution(
 	idAsModel := entities.Solution{Model: gorm.Model{ID: id}}
 	writer.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(writer).Encode(idAsModel) // nolint: gosec, errcheck
+}
+
+// FormatSolution ...
+func (handler SolutionHandler) FormatSolution(
+	writer http.ResponseWriter,
+	request *http.Request,
+) {
+	var solution entities.Solution
+	if err := json.NewDecoder(request.Body).Decode(&solution); err != nil {
+		err = errors.Wrap(err, "[error] unable to decode the solution data")
+		handler.Logger.Log(err)
+		http.Error(writer, err.Error(), http.StatusBadRequest)
+
+		return
+	}
+
+	code, err := format.Source([]byte(solution.Code))
+	if err != nil {
+		err = errors.Wrap(err, "[error] unable to format the solution code")
+		handler.Logger.Log(err)
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+
+		return
+	}
+
+	solution.Code = string(code)
+
+	writer.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(writer).Encode(solution) // nolint: gosec, errcheck
 }
 
 func (handler SolutionHandler) checkAccessToSolution(
