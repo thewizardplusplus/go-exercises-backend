@@ -1,6 +1,6 @@
-SELECT tasks.*, statuses.status
+SELECT tasks.*, COALESCE(statuses.status, 0) AS status
 FROM tasks
-JOIN (
+LEFT JOIN (
   SELECT tasks.id AS tasks_id, MAX(CASE
     WHEN is_correct THEN 2
     WHEN NOT is_correct AND result != '{}' THEN 1
