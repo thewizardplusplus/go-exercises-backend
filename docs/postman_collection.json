@@ -479,6 +479,47 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "/api/v1/solutions/format",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Code\": \"package main; func main() { var x, y int; fmt.Scan(&x, &y); fmt.Println(x + y) }\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/solutions/format",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"solutions",
+						"format"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
