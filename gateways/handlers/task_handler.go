@@ -17,7 +17,7 @@ import (
 type TaskStorage interface {
 	entities.TaskGetter
 
-	GetTasks(pagination entities.Pagination) ([]entities.Task, error)
+	GetTasks(userID uint, pagination entities.Pagination) ([]entities.Task, error)
 	CreateTask(task entities.Task) (id uint, err error)
 	UpdateTask(id uint, task entities.Task) error
 	DeleteTask(id uint) error
@@ -44,7 +44,8 @@ func (handler TaskHandler) GetTasks(
 		return
 	}
 
-	tasks, err := handler.TaskStorage.GetTasks(pagination)
+	user := request.Context().Value(userContextKey{}).(entities.User)
+	tasks, err := handler.TaskStorage.GetTasks(user.ID, pagination)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to get the tasks")
 		handler.Logger.Log(err)
@@ -76,7 +77,8 @@ func (handler TaskHandler) GetTask(
 		return
 	}
 
-	task, err := handler.TaskStorage.GetTask(uint(id))
+	user := request.Context().Value(userContextKey{}).(entities.User)
+	task, err := handler.TaskStorage.GetTask(user.ID, uint(id))
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to get the task")
 		handler.Logger.Log(err)
@@ -192,7 +194,7 @@ func (handler TaskHandler) checkAccessToTask(
 	request *http.Request,
 	id uint,
 ) bool {
-	task, err := handler.TaskStorage.GetTask(id)
+	task, err := handler.TaskStorage.GetTask(0, id)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to get the task")
 		handler.Logger.Log(err)

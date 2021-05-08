@@ -37,7 +37,7 @@ func (register SolutionRegister) performRegistration(id uint) error {
 		return errors.Wrap(err, "unable to get the solution")
 	}
 
-	task, err := register.TaskStorage.GetTask(solution.TaskID)
+	task, err := register.TaskStorage.GetTask(0, solution.TaskID)
 	if err != nil {
 		return errors.Wrap(err, "unable to get the task")
 	}

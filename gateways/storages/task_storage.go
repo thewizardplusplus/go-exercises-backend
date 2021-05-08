@@ -16,11 +16,14 @@ func NewTaskStorage(db *gorm.DB) TaskStorage {
 }
 
 // GetTasks ...
-func (storage TaskStorage) GetTasks(pagination entities.Pagination) (
+func (storage TaskStorage) GetTasks(
+	userID uint,
+	pagination entities.Pagination,
+) (
 	[]entities.Task,
 	error,
 ) {
-	query := storage.makeTaskQuery().Order("created_at DESC")
+	query := storage.makeTaskQuery(userID).Order("created_at DESC")
 	if !pagination.IsZero() {
 		query = query.Offset(pagination.Offset()).Limit(pagination.PageSize)
 	}
@@ -34,9 +37,16 @@ func (storage TaskStorage) GetTasks(pagination entities.Pagination) (
 }
 
 // GetTask ...
-func (storage TaskStorage) GetTask(id uint) (entities.Task, error) {
+func (storage TaskStorage) GetTask(userID uint, taskID uint) (
+	entities.Task,
+	error,
+) {
 	var task entities.Task
-	if err := storage.makeTaskQuery().First(&task, id).Error; err != nil {
+	err := storage.
+		makeTaskQuery(userID).
+		First(&task, taskID).
+		Error
+	if err != nil {
 		return entities.Task{}, err
 	}
 
@@ -67,12 +77,12 @@ func (storage TaskStorage) DeleteTask(id uint) error {
 	return storage.db.Delete(&entities.Task{}, id).Error
 }
 
-func (storage TaskStorage) makeTaskQuery() *gorm.DB {
+func (storage TaskStorage) makeTaskQuery(userID uint) *gorm.DB {
 	return storage.db.
-		Select("tasks.*", "statuses.status").
+		Select("tasks.*", "COALESCE(statuses.status, 0) AS status").
 		Joins("User").
 		Joins(
-			"JOIN (?) statuses ON statuses.tasks_id = tasks.id",
+			"LEFT JOIN (?) statuses ON statuses.tasks_id = tasks.id",
 			storage.db.
 				Model(&entities.Task{}).
 				Select(
@@ -84,6 +94,7 @@ func (storage TaskStorage) makeTaskQuery() *gorm.DB {
 					END) AS status`,
 				).
 				Joins("LEFT JOIN solutions ON solutions.task_id = tasks.id").
+				Where(map[string]interface{}{"solutions.user_id": userID}).
 				Group("tasks.id"),
 		)
 }

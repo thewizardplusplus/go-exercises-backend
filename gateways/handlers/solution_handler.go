@@ -167,7 +167,7 @@ func (handler SolutionHandler) checkAccessToSolution(
 		return false
 	}
 
-	task, err := handler.TaskStorage.GetTask(solution.TaskID)
+	task, err := handler.TaskStorage.GetTask(0, solution.TaskID)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to get the task")
 		handler.Logger.Log(err)

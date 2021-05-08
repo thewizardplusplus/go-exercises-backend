@@ -2,7 +2,7 @@ package entities
 
 // TaskGetter ...
 type TaskGetter interface {
-	GetTask(id uint) (Task, error)
+	GetTask(userID uint, taskID uint) (Task, error)
 }
 
 // SolutionGetter ...
