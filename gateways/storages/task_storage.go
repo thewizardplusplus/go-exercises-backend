@@ -20,25 +20,7 @@ func (storage TaskStorage) GetTasks(pagination entities.Pagination) (
 	[]entities.Task,
 	error,
 ) {
-	query := storage.db.
-		Select("tasks.*", "statuses.status").
-		Joins("User").
-		Joins(
-			"JOIN (?) statuses ON statuses.tasks_id = tasks.id",
-			storage.db.
-				Model(&entities.Task{}).
-				Select(
-					"tasks.id AS tasks_id",
-					`MAX(CASE
-						WHEN is_correct THEN 2
-						WHEN NOT is_correct AND result != '{}' THEN 1
-						ELSE 0
-					END) AS status`,
-				).
-				Joins("LEFT JOIN solutions ON solutions.task_id = tasks.id").
-				Group("tasks.id"),
-		).
-		Order("created_at DESC")
+	query := storage.makeTaskQuery().Order("created_at DESC")
 	if !pagination.IsZero() {
 		query = query.Offset(pagination.Offset()).Limit(pagination.PageSize)
 	}
@@ -54,27 +36,7 @@ func (storage TaskStorage) GetTasks(pagination entities.Pagination) (
 // GetTask ...
 func (storage TaskStorage) GetTask(id uint) (entities.Task, error) {
 	var task entities.Task
-	err := storage.db.
-		Select("tasks.*", "statuses.status").
-		Joins("User").
-		Joins(
-			"JOIN (?) statuses ON statuses.tasks_id = tasks.id",
-			storage.db.
-				Model(&entities.Task{}).
-				Select(
-					"tasks.id AS tasks_id",
-					`MAX(CASE
-						WHEN is_correct THEN 2
-						WHEN NOT is_correct AND result != '{}' THEN 1
-						ELSE 0
-					END) AS status`,
-				).
-				Joins("LEFT JOIN solutions ON solutions.task_id = tasks.id").
-				Group("tasks.id"),
-		).
-		First(&task, id).
-		Error
-	if err != nil {
+	if err := storage.makeTaskQuery().First(&task, id).Error; err != nil {
 		return entities.Task{}, err
 	}
 
@@ -103,4 +65,25 @@ func (storage TaskStorage) UpdateTask(id uint, task entities.Task) error {
 // DeleteTask ...
 func (storage TaskStorage) DeleteTask(id uint) error {
 	return storage.db.Delete(&entities.Task{}, id).Error
+}
+
+func (storage TaskStorage) makeTaskQuery() *gorm.DB {
+	return storage.db.
+		Select("tasks.*", "statuses.status").
+		Joins("User").
+		Joins(
+			"JOIN (?) statuses ON statuses.tasks_id = tasks.id",
+			storage.db.
+				Model(&entities.Task{}).
+				Select(
+					"tasks.id AS tasks_id",
+					`MAX(CASE
+						WHEN is_correct THEN 2
+						WHEN NOT is_correct AND result != '{}' THEN 1
+						ELSE 0
+					END) AS status`,
+				).
+				Joins("LEFT JOIN solutions ON solutions.task_id = tasks.id").
+				Group("tasks.id"),
+		)
 }
