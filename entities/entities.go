@@ -18,6 +18,7 @@ type Task struct {
 	Description     string
 	BoilerplateCode string
 	TestCases       datatypes.JSON
+	Status          int `gorm:"->"`
 }
 
 // Solution ...
