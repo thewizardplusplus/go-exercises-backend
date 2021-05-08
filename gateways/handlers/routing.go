@@ -92,6 +92,9 @@ func NewRouter(
 	apiRouterWithAuthorization.
 		HandleFunc("/solutions/{id}", solutionHandler.GetSolution).
 		Methods(http.MethodGet)
+	apiRouterWithAuthorization.
+		HandleFunc("/solutions/format", solutionHandler.FormatSolution).
+		Methods(http.MethodPost)
 
 	return rootRouter
 }
