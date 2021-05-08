@@ -20,7 +20,25 @@ func (storage TaskStorage) GetTasks(pagination entities.Pagination) (
 	[]entities.Task,
 	error,
 ) {
-	query := storage.db.Joins("User").Order("created_at DESC")
+	query := storage.db.
+		Select("tasks.*", "statuses.status").
+		Joins("User").
+		Joins(
+			"JOIN (?) statuses ON statuses.tasks_id = tasks.id",
+			storage.db.
+				Model(&entities.Task{}).
+				Select(
+					"tasks.id AS tasks_id",
+					`MAX(CASE
+						WHEN is_correct THEN 2
+						WHEN NOT is_correct AND result != '{}' THEN 1
+						ELSE 0
+					END) AS status`,
+				).
+				Joins("LEFT JOIN solutions ON solutions.task_id = tasks.id").
+				Group("tasks.id"),
+		).
+		Order("created_at DESC")
 	if !pagination.IsZero() {
 		query = query.Offset(pagination.Offset()).Limit(pagination.PageSize)
 	}
