@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"go/format"
 	"net/http"
 	"strconv"
 
@@ -168,16 +167,12 @@ func (handler SolutionHandler) FormatSolution(
 		return
 	}
 
-	code, err := format.Source([]byte(solution.Code))
-	if err != nil {
-		err = errors.Wrap(err, "[error] unable to format the solution code")
+	if err := solution.FormatCode(); err != nil {
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusInternalServerError)
 
 		return
 	}
-
-	solution.Code = string(code)
 
 	writer.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(writer).Encode(solution) // nolint: gosec, errcheck

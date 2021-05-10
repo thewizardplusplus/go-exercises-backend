@@ -1,6 +1,8 @@
 package entities
 
 import (
+	"go/format"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-gorm/datatypes"
 	"github.com/pkg/errors"
@@ -32,6 +34,17 @@ type Solution struct {
 	Code      string
 	IsCorrect bool
 	Result    datatypes.JSON
+}
+
+// FormatCode ...
+func (solution *Solution) FormatCode() error {
+	code, err := format.Source([]byte(solution.Code))
+	if err != nil {
+		return errors.Wrap(err, "unable to format the solution code")
+	}
+
+	solution.Code = string(code)
+	return nil
 }
 
 // User ...
