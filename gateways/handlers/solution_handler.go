@@ -136,6 +136,12 @@ func (handler SolutionHandler) CreateSolution(
 
 	user := request.Context().Value(userContextKey{}).(entities.User)
 	solution.UserID = user.ID
+	if err := solution.FormatCode(); err != nil {
+		handler.Logger.Log(err)
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+
+		return
+	}
 
 	id, err := handler.SolutionStorage.CreateSolution(uint(taskID), solution)
 	if err != nil {
