@@ -1,5 +1,7 @@
 # Change Log
 
+## [v1.4](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.4) (2021-05-10)
+
 ## [v1.3](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.3) (2021-05-08)
 
 ## [v1.2](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.2) (2021-04-02)
