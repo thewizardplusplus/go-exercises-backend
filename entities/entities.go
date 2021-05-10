@@ -23,6 +23,17 @@ type Task struct {
 	Status          int `gorm:"->"`
 }
 
+// FormatBoilerplateCode ...
+func (task *Task) FormatBoilerplateCode() error {
+	boilerplateCode, err := format.Source([]byte(task.BoilerplateCode))
+	if err != nil {
+		return errors.Wrap(err, "unable to format the task boilerplate code")
+	}
+
+	task.BoilerplateCode = string(boilerplateCode)
+	return nil
+}
+
 // Solution ...
 type Solution struct {
 	gorm.Model
