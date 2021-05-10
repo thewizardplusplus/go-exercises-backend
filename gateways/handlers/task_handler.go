@@ -158,6 +158,13 @@ func (handler TaskHandler) UpdateTask(
 		return
 	}
 
+	if err := task.FormatBoilerplateCode(); err != nil {
+		handler.Logger.Log(err)
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+
+		return
+	}
+
 	if err := handler.TaskStorage.UpdateTask(uint(id), task); err != nil {
 		err = errors.Wrap(err, "[error] unable to update the task")
 		handler.Logger.Log(err)
