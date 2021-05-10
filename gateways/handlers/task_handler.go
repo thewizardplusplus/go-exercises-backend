@@ -109,6 +109,12 @@ func (handler TaskHandler) CreateTask(
 
 	user := request.Context().Value(userContextKey{}).(entities.User)
 	task.UserID = user.ID
+	if err := task.FormatBoilerplateCode(); err != nil {
+		handler.Logger.Log(err)
+		http.Error(writer, err.Error(), http.StatusInternalServerError)
+
+		return
+	}
 
 	id, err := handler.TaskStorage.CreateTask(task)
 	if err != nil {
