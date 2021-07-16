@@ -2,10 +2,8 @@ package handlers
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/go-log/log"
-	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
@@ -66,9 +64,8 @@ func (handler TaskHandler) GetTask(
 	writer http.ResponseWriter,
 	request *http.Request,
 ) {
-	idAsStr := mux.Vars(request)["id"]
-	id, err := strconv.ParseUint(idAsStr, 10, 64)
-	if err != nil {
+	var id uint
+	if err := httputils.ParsePathParameter(request, "id", &id); err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the task ID")
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
@@ -132,9 +129,8 @@ func (handler TaskHandler) UpdateTask(
 	writer http.ResponseWriter,
 	request *http.Request,
 ) {
-	idAsStr := mux.Vars(request)["id"]
-	id, err := strconv.ParseUint(idAsStr, 10, 64)
-	if err != nil {
+	var id uint
+	if err := httputils.ParsePathParameter(request, "id", &id); err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the task ID")
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
@@ -176,9 +172,8 @@ func (handler TaskHandler) DeleteTask(
 	writer http.ResponseWriter,
 	request *http.Request,
 ) {
-	idAsStr := mux.Vars(request)["id"]
-	id, err := strconv.ParseUint(idAsStr, 10, 64)
-	if err != nil {
+	var id uint
+	if err := httputils.ParsePathParameter(request, "id", &id); err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the task ID")
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)

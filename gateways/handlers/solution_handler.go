@@ -2,10 +2,8 @@ package handlers
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/go-log/log"
-	"github.com/gorilla/mux"
 	"github.com/gorilla/schema"
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
@@ -37,8 +35,8 @@ func (handler SolutionHandler) GetSolutions(
 	writer http.ResponseWriter,
 	request *http.Request,
 ) {
-	taskIDAsStr := mux.Vars(request)["taskID"]
-	taskID, err := strconv.ParseUint(taskIDAsStr, 10, 64)
+	var taskID uint
+	err := httputils.ParsePathParameter(request, "taskID", &taskID)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the task ID")
 		handler.Logger.Log(err)
@@ -80,9 +78,8 @@ func (handler SolutionHandler) GetSolution(
 	writer http.ResponseWriter,
 	request *http.Request,
 ) {
-	idAsStr := mux.Vars(request)["id"]
-	id, err := strconv.ParseUint(idAsStr, 10, 64)
-	if err != nil {
+	var id uint
+	if err := httputils.ParsePathParameter(request, "id", &id); err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the solution ID")
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
@@ -113,8 +110,8 @@ func (handler SolutionHandler) CreateSolution(
 	writer http.ResponseWriter,
 	request *http.Request,
 ) {
-	taskIDAsStr := mux.Vars(request)["taskID"]
-	taskID, err := strconv.ParseUint(taskIDAsStr, 10, 64)
+	var taskID uint
+	err := httputils.ParsePathParameter(request, "taskID", &taskID)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the task ID")
 		handler.Logger.Log(err)
