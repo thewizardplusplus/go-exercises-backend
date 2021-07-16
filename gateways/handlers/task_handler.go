@@ -10,6 +10,7 @@ import (
 	"github.com/gorilla/schema"
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
+	httputils "github.com/thewizardplusplus/go-http-utils"
 	"gorm.io/gorm"
 )
 
@@ -99,7 +100,7 @@ func (handler TaskHandler) CreateTask(
 	request *http.Request,
 ) {
 	var task entities.Task
-	if err := json.NewDecoder(request.Body).Decode(&task); err != nil {
+	if err := httputils.ReadJSON(request.Body, &task); err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the task data")
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
@@ -150,7 +151,7 @@ func (handler TaskHandler) UpdateTask(
 	}
 
 	var task entities.Task
-	if err := json.NewDecoder(request.Body).Decode(&task); err != nil {
+	if err := httputils.ReadJSON(request.Body, &task); err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the task data")
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)

@@ -10,6 +10,7 @@ import (
 	"github.com/gorilla/schema"
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
+	httputils "github.com/thewizardplusplus/go-http-utils"
 	"gorm.io/gorm"
 )
 
@@ -126,7 +127,7 @@ func (handler SolutionHandler) CreateSolution(
 	}
 
 	var solution entities.Solution
-	if err := json.NewDecoder(request.Body).Decode(&solution); err != nil {
+	if err := httputils.ReadJSON(request.Body, &solution); err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the solution data")
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)
@@ -165,7 +166,7 @@ func (handler SolutionHandler) FormatSolution(
 	request *http.Request,
 ) {
 	var solution entities.Solution
-	if err := json.NewDecoder(request.Body).Decode(&solution); err != nil {
+	if err := httputils.ReadJSON(request.Body, &solution); err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the solution data")
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)

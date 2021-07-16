@@ -9,6 +9,7 @@ import (
 	"github.com/go-log/log"
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
+	httputils "github.com/thewizardplusplus/go-http-utils"
 )
 
 // UserGetter ...
@@ -30,7 +31,7 @@ func (handler TokenHandler) CreateToken(
 	request *http.Request,
 ) {
 	var user entities.User
-	if err := json.NewDecoder(request.Body).Decode(&user); err != nil {
+	if err := httputils.ReadJSON(request.Body, &user); err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the user data")
 		handler.Logger.Log(err)
 		http.Error(writer, err.Error(), http.StatusBadRequest)

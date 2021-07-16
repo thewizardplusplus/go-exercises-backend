@@ -1,12 +1,13 @@
 package queues
 
 import (
-	"encoding/json"
+	"bytes"
 
 	"github.com/go-log/log"
 	"github.com/pkg/errors"
 	"github.com/streadway/amqp"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
+	httputils "github.com/thewizardplusplus/go-http-utils"
 )
 
 // SolutionResultRegister ...
@@ -44,7 +45,8 @@ func (handler SolutionResultHandler) performHandling(
 	message amqp.Delivery,
 ) (entities.Solution, error) {
 	var solution entities.Solution
-	if err := json.Unmarshal(message.Body, &solution); err != nil {
+	reader := bytes.NewReader(message.Body)
+	if err := httputils.ReadJSON(reader, &solution); err != nil {
 		return solution, errors.Wrap(err, "unable to unmarshal the solution")
 	}
 
