@@ -16,6 +16,7 @@ import (
 	"github.com/thewizardplusplus/go-exercises-backend/gateways/storages"
 	"github.com/thewizardplusplus/go-exercises-backend/registers"
 	httputils "github.com/thewizardplusplus/go-http-utils"
+	rabbitmqutils "github.com/thewizardplusplus/go-rabbitmq-utils"
 )
 
 type options struct {
@@ -78,9 +79,13 @@ func main() {
 		}
 	}()
 
-	messageBrokerClient, err := queues.NewClient(
+	messageBrokerClient, err := rabbitmqutils.NewClient(
 		options.MessageBroker.Address,
-		options.SolutionRegister.BufferSize,
+		rabbitmqutils.WithMaximalQueueSize(options.SolutionRegister.BufferSize),
+		rabbitmqutils.WithQueues([]string{
+			queues.SolutionQueueName,
+			queues.SolutionResultQueueName,
+		}),
 	)
 	if err != nil {
 		logger.Fatalf("[error] unable to create the message broker client: %v", err)
