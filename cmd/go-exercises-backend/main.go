@@ -113,9 +113,11 @@ func main() {
 		queues.SolutionResultQueueName,
 		rabbitmqutils.Acknowledger{
 			MessageHandling: rabbitmqutils.TwiceMessageHandling,
-			MessageHandler: queues.SolutionResultHandler{
-				SolutionResultRegister: registers.SolutionResultRegister{
-					SolutionUpdater: storages.NewSolutionStorage(db),
+			MessageHandler: rabbitmqutils.JSONMessageHandler{
+				MessageHandler: queues.SolutionResultHandler{
+					SolutionResultRegister: registers.SolutionResultRegister{
+						SolutionUpdater: storages.NewSolutionStorage(db),
+					},
 				},
 			},
 			Logger: print.New(logger),
