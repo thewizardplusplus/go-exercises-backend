@@ -39,8 +39,7 @@ func (handler SolutionHandler) GetSolutions(
 	err := httputils.ParsePathParameter(request, "taskID", &taskID)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the task ID")
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
@@ -49,8 +48,7 @@ func (handler SolutionHandler) GetSolutions(
 	err = schema.NewDecoder().Decode(&pagination, request.URL.Query())
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the pagination parameters")
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
@@ -60,8 +58,8 @@ func (handler SolutionHandler) GetSolutions(
 		handler.SolutionStorage.GetSolutions(user.ID, uint(taskID), pagination)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to get the solutions")
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		const statusCode = http.StatusInternalServerError
+		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
 	}
@@ -81,8 +79,7 @@ func (handler SolutionHandler) GetSolution(
 	var id uint
 	if err := httputils.ParsePathParameter(request, "id", &id); err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the solution ID")
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
@@ -94,8 +91,8 @@ func (handler SolutionHandler) GetSolution(
 	solution, err := handler.SolutionStorage.GetSolution(uint(id))
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to get the solution")
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		const statusCode = http.StatusInternalServerError
+		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
 	}
@@ -114,8 +111,7 @@ func (handler SolutionHandler) CreateSolution(
 	err := httputils.ParsePathParameter(request, "taskID", &taskID)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the task ID")
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
@@ -123,8 +119,7 @@ func (handler SolutionHandler) CreateSolution(
 	var solution entities.Solution
 	if err := httputils.ReadJSON(request.Body, &solution); err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the solution data")
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
@@ -132,8 +127,8 @@ func (handler SolutionHandler) CreateSolution(
 	user := request.Context().Value(userContextKey{}).(entities.User)
 	solution.UserID = user.ID
 	if err := solution.FormatCode(); err != nil {
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		const statusCode = http.StatusInternalServerError
+		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
 	}
@@ -141,8 +136,8 @@ func (handler SolutionHandler) CreateSolution(
 	id, err := handler.SolutionStorage.CreateSolution(uint(taskID), solution)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to create the solution")
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		const statusCode = http.StatusInternalServerError
+		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
 	}
@@ -161,15 +156,14 @@ func (handler SolutionHandler) FormatSolution(
 	var solution entities.Solution
 	if err := httputils.ReadJSON(request.Body, &solution); err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the solution data")
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
 
 	if err := solution.FormatCode(); err != nil {
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		const statusCode = http.StatusInternalServerError
+		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
 	}
@@ -185,8 +179,8 @@ func (handler SolutionHandler) checkAccessToSolution(
 	solution, err := handler.SolutionStorage.GetSolution(id)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to get the solution")
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		const statusCode = http.StatusInternalServerError
+		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return false
 	}
@@ -194,8 +188,8 @@ func (handler SolutionHandler) checkAccessToSolution(
 	task, err := handler.TaskStorage.GetTask(0, solution.TaskID)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to get the task")
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		const statusCode = http.StatusInternalServerError
+		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return false
 	}
@@ -203,8 +197,7 @@ func (handler SolutionHandler) checkAccessToSolution(
 	user := request.Context().Value(userContextKey{}).(entities.User)
 	if user.ID != solution.UserID && user.ID != task.UserID {
 		const errMessage = "[error] access to the solution is denied"
-		handler.Logger.Log(errMessage)
-		http.Error(writer, errMessage, http.StatusForbidden)
+		httputils.LoggingError(handler.Logger, writer, err, http.StatusForbidden)
 
 		return false
 	}

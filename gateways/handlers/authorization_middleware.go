@@ -10,6 +10,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
+	httputils "github.com/thewizardplusplus/go-http-utils"
 )
 
 type userContextKey struct{}
@@ -35,8 +36,7 @@ func AuthorizationMiddleware(
 			)
 			if err != nil {
 				err = errors.Wrap(err, "[error] failed token checking")
-				logger.Log(err)
-				http.Error(writer, err.Error(), http.StatusUnauthorized)
+				httputils.LoggingError(logger, writer, err, http.StatusUnauthorized)
 
 				return
 			}

@@ -32,8 +32,7 @@ func (handler TokenHandler) CreateToken(
 	var user entities.User
 	if err := httputils.ReadJSON(request.Body, &user); err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the user data")
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusBadRequest)
+		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
@@ -41,16 +40,14 @@ func (handler TokenHandler) CreateToken(
 	foundUser, err := handler.UserGetter.GetUser(user.Username)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to get the user")
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		const statusCode = http.StatusInternalServerError
+		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
 	}
 
 	if err := user.CheckPassword(foundUser.PasswordHash); err != nil {
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusUnauthorized)
-
+		httputils.LoggingError(handler.Logger, writer, err, http.StatusUnauthorized)
 		return
 	}
 
@@ -64,8 +61,8 @@ func (handler TokenHandler) CreateToken(
 	signedToken, err := token.SignedString([]byte(handler.TokenSigningKey))
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to create the token")
-		handler.Logger.Log(err)
-		http.Error(writer, err.Error(), http.StatusInternalServerError)
+		const statusCode = http.StatusInternalServerError
+		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
 	}
