@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -59,8 +58,7 @@ func (handler TaskHandler) GetTasks(
 		tasks[index].User.PasswordHash = ""
 	}
 
-	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(tasks) // nolint: gosec, errcheck
+	httputils.WriteJSON(writer, http.StatusOK, tasks)
 }
 
 // GetTask ...
@@ -90,8 +88,7 @@ func (handler TaskHandler) GetTask(
 
 	task.User.PasswordHash = ""
 
-	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(task) // nolint: gosec, errcheck
+	httputils.WriteJSON(writer, http.StatusOK, task)
 }
 
 // CreateTask ...
@@ -127,8 +124,7 @@ func (handler TaskHandler) CreateTask(
 	}
 
 	idAsModel := entities.Task{Model: gorm.Model{ID: id}}
-	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(idAsModel) // nolint: gosec, errcheck
+	httputils.WriteJSON(writer, http.StatusOK, idAsModel)
 }
 
 // UpdateTask ...

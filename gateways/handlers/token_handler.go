@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"net/http"
 	"time"
 
@@ -72,6 +71,5 @@ func (handler TokenHandler) CreateToken(
 	}
 
 	credentials := entities.Credentials{AccessToken: signedToken}
-	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(credentials) // nolint: gosec, errcheck
+	httputils.WriteJSON(writer, http.StatusOK, credentials)
 }

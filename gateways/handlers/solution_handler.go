@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"net/http"
 	"strconv"
 
@@ -73,8 +72,7 @@ func (handler SolutionHandler) GetSolutions(
 		solutions[index].User.PasswordHash = ""
 	}
 
-	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(solutions) // nolint: gosec, errcheck
+	httputils.WriteJSON(writer, http.StatusOK, solutions)
 }
 
 // GetSolution ...
@@ -107,8 +105,7 @@ func (handler SolutionHandler) GetSolution(
 
 	solution.User.PasswordHash = ""
 
-	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(solution) // nolint: gosec, errcheck
+	httputils.WriteJSON(writer, http.StatusOK, solution)
 }
 
 // CreateSolution ...
@@ -156,8 +153,7 @@ func (handler SolutionHandler) CreateSolution(
 	handler.SolutionRegister.RegisterSolution(id)
 
 	idAsModel := entities.Solution{Model: gorm.Model{ID: id}}
-	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(idAsModel) // nolint: gosec, errcheck
+	httputils.WriteJSON(writer, http.StatusOK, idAsModel)
 }
 
 // FormatSolution ...
@@ -181,8 +177,7 @@ func (handler SolutionHandler) FormatSolution(
 		return
 	}
 
-	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(solution) // nolint: gosec, errcheck
+	httputils.WriteJSON(writer, http.StatusOK, solution)
 }
 
 func (handler SolutionHandler) checkAccessToSolution(
