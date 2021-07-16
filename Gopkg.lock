@@ -34,6 +34,14 @@
   version = "v6.5.0"
 
 [[projects]]
+  digest = "1:e47d51dab652d26c3fba6f8cba403f922d02757a82abdc77e90df7948daf296e"
+  name = "github.com/deckarep/golang-set"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "cbaa98ba5575e67703b32b4b19f73c91f3c4159e"
+  version = "v1.7.1"
+
+[[projects]]
   digest = "1:76dc72490af7174349349838f2fe118996381b31ea83243812a97e5a0fd5ed55"
   name = "github.com/dgrijalva/jwt-go"
   packages = ["."]
@@ -82,6 +90,14 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "e7afc7fbc51079733e9468cdfd1efcd7d196cd1d"
+
+[[projects]]
+  digest = "1:bbba45b09b3b502dc39afb36c3e9f89b9c2832b1f6d673277c97eade8875e462"
+  name = "github.com/google/uuid"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "44b5fee7c49cf3bcdf723f106b36d56ef13ccc88"
+  version = "v1.3.0"
 
 [[projects]]
   digest = "1:9ff256c9dfa28d8fe056cce6babbd529862b0c340710c62881b80368b5bd5bbf"
@@ -189,6 +205,14 @@
   version = "v1.2"
 
 [[projects]]
+  digest = "1:20cc919fd2c027e50b0386df92a43245303efeb7252e20c090f5ea5a078f8189"
+  name = "github.com/thewizardplusplus/go-rabbitmq-utils"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "826b64f879369000bc428b36c67a4ab7e8b86d0f"
+  version = "v1.1.2"
+
+[[projects]]
   branch = "master"
   digest = "1:9d5b5d543996dd584da1db1e0de1926f3e4c3a8dba0fa2f8db70f3ebee2342e0"
   name = "golang.org/x/crypto"
@@ -257,6 +281,7 @@
     "github.com/sethvargo/go-password/password",
     "github.com/streadway/amqp",
     "github.com/thewizardplusplus/go-http-utils",
+    "github.com/thewizardplusplus/go-rabbitmq-utils",
     "golang.org/x/crypto/bcrypt",
     "gorm.io/driver/postgres",
     "gorm.io/gorm",
