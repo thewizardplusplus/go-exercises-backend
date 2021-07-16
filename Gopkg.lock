@@ -181,12 +181,12 @@
   version = "v1.0.0"
 
 [[projects]]
-  digest = "1:9dc4b31de2509ce8025bfec4659b6f26cd07ac4bb0b39fe71fb8dca2f4894472"
+  digest = "1:487897849d879c4c6b1a6147796af7a43a87ba79e15886031f4e0e2953dd90ba"
   name = "github.com/thewizardplusplus/go-http-utils"
   packages = ["."]
   pruneopts = "UT"
-  revision = "a6478a072eba52b44e3d2ca8a1e04e163f9299b3"
-  version = "v1.1.1"
+  revision = "4834fe2e218a744dd63be1cef090ebd75e974d91"
+  version = "v1.2"
 
 [[projects]]
   branch = "master"
