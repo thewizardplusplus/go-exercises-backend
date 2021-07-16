@@ -111,9 +111,12 @@ func main() {
 	solutionResultConsumer, err := rabbitmqutils.NewMessageConsumer(
 		messageBrokerClient,
 		queues.SolutionResultQueueName,
-		queues.SolutionResultHandler{
-			SolutionResultRegister: registers.SolutionResultRegister{
-				SolutionUpdater: storages.NewSolutionStorage(db),
+		rabbitmqutils.Acknowledger{
+			MessageHandling: rabbitmqutils.TwiceMessageHandling,
+			MessageHandler: queues.SolutionResultHandler{
+				SolutionResultRegister: registers.SolutionResultRegister{
+					SolutionUpdater: storages.NewSolutionStorage(db),
+				},
 			},
 			Logger: print.New(logger),
 		},
