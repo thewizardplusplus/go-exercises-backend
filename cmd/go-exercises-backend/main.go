@@ -108,8 +108,9 @@ func main() {
 	go solutionRegister.StartConcurrently(options.SolutionRegister.Concurrency)
 	defer solutionRegister.Stop()
 
-	solutionResultConsumer, err := queues.NewSolutionResultConsumer(
+	solutionResultConsumer, err := rabbitmqutils.NewMessageConsumer(
 		messageBrokerClient,
+		queues.SolutionResultQueueName,
 		queues.SolutionResultHandler{
 			SolutionResultRegister: registers.SolutionResultRegister{
 				SolutionUpdater: storages.NewSolutionStorage(db),
