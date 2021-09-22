@@ -64,6 +64,12 @@ func (solution *Solution) FormatCode() error {
 	return nil
 }
 
+// SolutionGroup ...
+type SolutionGroup struct {
+	Solutions  []Solution
+	TotalCount int64
+}
+
 // User ...
 type User struct {
 	gorm.Model
