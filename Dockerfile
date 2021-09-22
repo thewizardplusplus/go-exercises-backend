@@ -17,6 +17,7 @@ FROM alpine:3.13.2
 RUN apk update && apk add --no-cache bash
 
 COPY --from=builder /go/bin/go-exercises-backend /usr/local/bin/go-exercises-backend
+COPY --from=builder /go/bin/go-exercises-manager /usr/local/bin/go-exercises-manager
 COPY tools/wait-for-it.sh /usr/local/bin/wait-for-it.sh
 
 CMD ["/usr/local/bin/go-exercises-backend"]
