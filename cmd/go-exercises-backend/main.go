@@ -103,7 +103,7 @@ func main() {
 			SolutionStorage: storages.NewSolutionStorage(db),
 			SolutionQueue: queues.SolutionQueue{
 				SolutionQueueName: queues.SolutionQueueName,
-				Client:            messageBrokerClient,
+				MessagePublisher:  messageBrokerClient,
 			},
 			Logger: print.New(logger),
 		},
