@@ -22,18 +22,9 @@ func (storage SolutionStorage) GetSolutions(
 	taskID uint,
 	pagination entities.Pagination,
 ) ([]entities.Solution, error) {
-	query := storage.db.
+	query := storage.
+		makeSolutionQuery(userID, taskID).
 		Joins("User").
-		Joins("Task").
-		Where(
-			storage.db.
-				Where(&entities.Solution{TaskID: taskID}).
-				Where(
-					storage.db.
-						Where(&entities.Solution{UserID: userID}).
-						Or(map[string]interface{}{"Task.user_id": userID}),
-				),
-		).
 		Order("created_at DESC")
 	if !pagination.IsZero() {
 		query = query.Offset(pagination.Offset()).Limit(pagination.PageSize)
@@ -53,19 +44,7 @@ func (storage SolutionStorage) CountSolutions(
 	taskID uint,
 ) (int64, error) {
 	var count int64
-	err := storage.db.
-		Model(&entities.Solution{}).
-		Joins("Task").
-		Where(
-			storage.db.
-				Where(&entities.Solution{TaskID: taskID}).
-				Where(
-					storage.db.
-						Where(&entities.Solution{UserID: userID}).
-						Or(map[string]interface{}{"Task.user_id": userID}),
-				),
-		).
-		Count(&count).Error
+	err := storage.makeSolutionQuery(userID, taskID).Count(&count).Error
 	if err != nil {
 		return 0, err
 	}
@@ -113,4 +92,22 @@ func (storage SolutionStorage) UpdateSolution(
 		Model(&entities.Solution{Model: gorm.Model{ID: id}}).
 		Updates(solution).
 		Error
+}
+
+func (storage SolutionStorage) makeSolutionQuery(
+	userID uint,
+	taskID uint,
+) *gorm.DB {
+	return storage.db.
+		Model(&entities.Solution{}).
+		Joins("Task").
+		Where(
+			storage.db.
+				Where(&entities.Solution{TaskID: taskID}).
+				Where(
+					storage.db.
+						Where(&entities.Solution{UserID: userID}).
+						Or(map[string]interface{}{"Task.user_id": userID}),
+				),
+		)
 }
