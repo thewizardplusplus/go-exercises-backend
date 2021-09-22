@@ -36,6 +36,16 @@ func (storage TaskStorage) GetTasks(
 	return tasks, nil
 }
 
+// CountTasks ...
+func (storage TaskStorage) CountTasks() (int64, error) {
+	var count int64
+	if err := storage.db.Model(&entities.Task{}).Count(&count).Error; err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}
+
 // GetTask ...
 func (storage TaskStorage) GetTask(userID uint, taskID uint) (
 	entities.Task,
