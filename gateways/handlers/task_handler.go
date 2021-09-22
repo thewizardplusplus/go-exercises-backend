@@ -16,6 +16,7 @@ type TaskStorage interface {
 	entities.TaskGetter
 
 	GetTasks(userID uint, pagination entities.Pagination) ([]entities.Task, error)
+	CountTasks() (int64, error)
 	CreateTask(task entities.Task) (id uint, err error)
 	UpdateTask(id uint, task entities.Task) error
 	DeleteTask(id uint) error
@@ -51,11 +52,21 @@ func (handler TaskHandler) GetTasks(
 		return
 	}
 
-	for index := range tasks {
-		tasks[index].User.PasswordHash = ""
+	taskCount, err := handler.TaskStorage.CountTasks()
+	if err != nil {
+		err = errors.Wrap(err, "[error] unable to count the tasks")
+		const statusCode = http.StatusInternalServerError
+		httputils.LoggingError(handler.Logger, writer, err, statusCode)
+
+		return
 	}
 
-	httputils.WriteJSON(writer, http.StatusOK, tasks)
+	taskGroup := entities.TaskGroup{Tasks: tasks, TotalCount: taskCount}
+	for index := range taskGroup.Tasks {
+		taskGroup.Tasks[index].User.PasswordHash = ""
+	}
+
+	httputils.WriteJSON(writer, http.StatusOK, taskGroup)
 }
 
 // GetTask ...
