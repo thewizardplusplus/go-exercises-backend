@@ -40,6 +40,11 @@ type options struct {
 	}
 }
 
+const (
+	solutionQueueName       = "solution_queue"
+	solutionResultQueueName = "solution_result_queue"
+)
+
 // nolint: gocyclo
 func main() {
 	logger := log.New(os.Stderr, "", log.Ldate|log.Ltime|log.Lmicroseconds)
@@ -83,8 +88,8 @@ func main() {
 		options.MessageBroker.Address,
 		rabbitmqutils.WithMaximalQueueSize(options.SolutionRegister.BufferSize),
 		rabbitmqutils.WithQueues([]string{
-			queues.SolutionQueueName,
-			queues.SolutionResultQueueName,
+			solutionQueueName,
+			solutionResultQueueName,
 		}),
 	)
 	if err != nil {
@@ -102,7 +107,7 @@ func main() {
 			TaskStorage:     storages.NewTaskStorage(db),
 			SolutionStorage: storages.NewSolutionStorage(db),
 			SolutionQueue: queues.SolutionQueue{
-				SolutionQueueName: queues.SolutionQueueName,
+				SolutionQueueName: solutionQueueName,
 				MessagePublisher:  messageBrokerClient,
 			},
 			Logger: print.New(logger),
@@ -113,7 +118,7 @@ func main() {
 
 	solutionResultConsumer, err := rabbitmqutils.NewMessageConsumer(
 		messageBrokerClient,
-		queues.SolutionResultQueueName,
+		solutionResultQueueName,
 		rabbitmqutils.Acknowledger{
 			MessageHandling: rabbitmqutils.TwiceMessageHandling,
 			MessageHandler: rabbitmqutils.JSONMessageHandler{
