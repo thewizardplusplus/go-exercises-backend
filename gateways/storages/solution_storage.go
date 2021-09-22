@@ -47,6 +47,32 @@ func (storage SolutionStorage) GetSolutions(
 	return solutions, nil
 }
 
+// CountSolutions ...
+func (storage SolutionStorage) CountSolutions(
+	userID uint,
+	taskID uint,
+) (int64, error) {
+	var count int64
+	err := storage.db.
+		Model(&entities.Solution{}).
+		Joins("Task").
+		Where(
+			storage.db.
+				Where(&entities.Solution{TaskID: taskID}).
+				Where(
+					storage.db.
+						Where(&entities.Solution{UserID: userID}).
+						Or(map[string]interface{}{"Task.user_id": userID}),
+				),
+		).
+		Count(&count).Error
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}
+
 // GetSolution ...
 func (storage SolutionStorage) GetSolution(id uint) (entities.Solution, error) {
 	var solution entities.Solution
