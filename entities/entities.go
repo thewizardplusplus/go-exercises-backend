@@ -34,6 +34,12 @@ func (task *Task) FormatBoilerplateCode() error {
 	return nil
 }
 
+// TaskGroup ...
+type TaskGroup struct {
+	Tasks      []Task
+	TotalCount int64
+}
+
 // Solution ...
 type Solution struct {
 	gorm.Model
