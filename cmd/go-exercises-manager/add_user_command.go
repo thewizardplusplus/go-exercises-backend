@@ -16,7 +16,7 @@ const minimalPasswordLength = 6
 type addUserCommand struct {
 	Username       string `kong:"required,short='u',help='Username.'"`
 	Password       string `kong:"short='p',help='User password.'"`
-	HashingCost    int    `kong:"short='c',name='cost',default='10',help='Cost of user password hashing (range: [4, 31]).'"`            // nolint: lll
+	HashingCost    int    `kong:"short='c',name='cost',default='10',help='Cost of the user password hashing (range: [4, 31]).'"`        // nolint: lll
 	PasswordLength int    `kong:"short='l',name='length',default='6',help='Length of the user password to be generated (minimum: 6).'"` // nolint: lll
 }
 
