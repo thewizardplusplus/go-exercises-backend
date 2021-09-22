@@ -21,7 +21,7 @@ type commandContext struct {
 }
 
 type cli struct {
-	Add addCommand `kong:"cmd,help='Add the user.'"`
+	AddUser addUserCommand `kong:"cmd,help='Add the user.'"`
 }
 
 func main() {
