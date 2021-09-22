@@ -19,6 +19,7 @@ type SolutionStorage interface {
 		[]entities.Solution,
 		error,
 	)
+	CountSolutions(userID uint, taskID uint) (int64, error)
 	CreateSolution(taskID uint, solution entities.Solution) (id uint, err error)
 }
 
@@ -64,11 +65,23 @@ func (handler SolutionHandler) GetSolutions(
 		return
 	}
 
-	for index := range solutions {
-		solutions[index].User.PasswordHash = ""
+	solutionCount, err :=
+		handler.SolutionStorage.CountSolutions(user.ID, uint(taskID))
+	if err != nil {
+		err = errors.Wrap(err, "[error] unable to count the solutions")
+		const statusCode = http.StatusInternalServerError
+		httputils.LoggingError(handler.Logger, writer, err, statusCode)
+
+		return
 	}
 
-	httputils.WriteJSON(writer, http.StatusOK, solutions)
+	solutionGroup :=
+		entities.SolutionGroup{Solutions: solutions, TotalCount: solutionCount}
+	for index := range solutionGroup.Solutions {
+		solutionGroup.Solutions[index].User.PasswordHash = ""
+	}
+
+	httputils.WriteJSON(writer, http.StatusOK, solutionGroup)
 }
 
 // GetSolution ...
