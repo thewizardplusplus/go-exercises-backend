@@ -101,8 +101,11 @@ func main() {
 		registers.SolutionRegister{
 			TaskStorage:     storages.NewTaskStorage(db),
 			SolutionStorage: storages.NewSolutionStorage(db),
-			SolutionQueue:   queues.NewSolutionQueue(messageBrokerClient),
-			Logger:          print.New(logger),
+			SolutionQueue: queues.SolutionQueue{
+				SolutionQueueName: queues.SolutionQueueName,
+				Client:            messageBrokerClient,
+			},
+			Logger: print.New(logger),
 		},
 	)
 	go solutionRegister.StartConcurrently(options.SolutionRegister.Concurrency)

@@ -8,17 +8,13 @@ import (
 
 // SolutionQueue ...
 type SolutionQueue struct {
-	client rabbitmqutils.Client
-}
-
-// NewSolutionQueue ...
-func NewSolutionQueue(client rabbitmqutils.Client) SolutionQueue {
-	return SolutionQueue{client: client}
+	SolutionQueueName string
+	Client            rabbitmqutils.Client
 }
 
 // AddSolution ...
 func (queue SolutionQueue) AddSolution(solution entities.Solution) error {
-	err := queue.client.PublishMessage(SolutionQueueName, "", solution)
+	err := queue.Client.PublishMessage(queue.SolutionQueueName, "", solution)
 	if err != nil {
 		return errors.Wrap(err, "unable to publish the solution")
 	}
