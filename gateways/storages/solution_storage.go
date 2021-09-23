@@ -55,7 +55,8 @@ func (storage SolutionStorage) CountSolutions(
 // GetSolution ...
 func (storage SolutionStorage) GetSolution(id uint) (entities.Solution, error) {
 	var solution entities.Solution
-	if err := storage.db.Joins("User").First(&solution, id).Error; err != nil {
+	err := storage.db.Joins("Task").Joins("User").First(&solution, id).Error
+	if err != nil {
 		return entities.Solution{}, err
 	}
 
