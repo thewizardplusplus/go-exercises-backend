@@ -7,6 +7,7 @@ import (
 	"github.com/go-log/log"
 	"github.com/gorilla/mux"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
+	"github.com/thewizardplusplus/go-exercises-backend/usecases"
 	httputils "github.com/thewizardplusplus/go-http-utils"
 )
 
@@ -20,7 +21,7 @@ type RouterOptions struct {
 // RouterDependencies ...
 type RouterDependencies struct {
 	UserGetter       UserGetter
-	TaskStorage      TaskStorage
+	TaskStorage      usecases.TaskStorage
 	SolutionStorage  SolutionStorage
 	SolutionRegister entities.SolutionRegister
 	Logger           log.Logger
@@ -58,8 +59,10 @@ func NewRouter(
 		Methods(http.MethodPost)
 
 	taskHandler := TaskHandler{
-		TaskStorage: dependencies.TaskStorage,
-		Logger:      dependencies.Logger,
+		TaskUsecase: usecases.TaskUsecase{
+			TaskStorage: dependencies.TaskStorage,
+		},
+		Logger: dependencies.Logger,
 	}
 	apiRouterWithAuthorization.
 		HandleFunc("/tasks/{id}", taskHandler.GetTask).

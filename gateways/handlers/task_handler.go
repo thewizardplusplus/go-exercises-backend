@@ -8,23 +8,24 @@ import (
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
 	httputils "github.com/thewizardplusplus/go-http-utils"
-	"gorm.io/gorm"
 )
 
-// TaskStorage ...
-type TaskStorage interface {
+// TaskUsecase ...
+type TaskUsecase interface {
 	entities.TaskGetter
 
-	GetTasks(userID uint, pagination entities.Pagination) ([]entities.Task, error)
-	CountTasks() (int64, error)
-	CreateTask(task entities.Task) (id uint, err error)
-	UpdateTask(id uint, task entities.Task) error
-	DeleteTask(id uint) error
+	GetTasks(userID uint, pagination entities.Pagination) (
+		entities.TaskGroup,
+		error,
+	)
+	CreateTask(userID uint, task entities.Task) (entities.Task, error)
+	UpdateTask(userID uint, taskID uint, task entities.Task) error
+	DeleteTask(userID uint, taskID uint) error
 }
 
 // TaskHandler ...
 type TaskHandler struct {
-	TaskStorage TaskStorage
+	TaskUsecase TaskUsecase
 	Logger      log.Logger
 }
 
@@ -43,27 +44,13 @@ func (handler TaskHandler) GetTasks(
 	}
 
 	user := request.Context().Value(userContextKey{}).(entities.User)
-	tasks, err := handler.TaskStorage.GetTasks(user.ID, pagination)
+	taskGroup, err := handler.TaskUsecase.GetTasks(user.ID, pagination)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to get the tasks")
 		const statusCode = http.StatusInternalServerError
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
-	}
-
-	taskCount, err := handler.TaskStorage.CountTasks()
-	if err != nil {
-		err = errors.Wrap(err, "[error] unable to count the tasks")
-		const statusCode = http.StatusInternalServerError
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
-
-		return
-	}
-
-	taskGroup := entities.TaskGroup{Tasks: tasks, TotalCount: taskCount}
-	for index := range taskGroup.Tasks {
-		taskGroup.Tasks[index].User.PasswordHash = ""
 	}
 
 	httputils.WriteJSON(writer, http.StatusOK, taskGroup)
@@ -83,7 +70,7 @@ func (handler TaskHandler) GetTask(
 	}
 
 	user := request.Context().Value(userContextKey{}).(entities.User)
-	task, err := handler.TaskStorage.GetTask(user.ID, uint(id))
+	task, err := handler.TaskUsecase.GetTask(user.ID, uint(id))
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to get the task")
 		const statusCode = http.StatusInternalServerError
@@ -91,8 +78,6 @@ func (handler TaskHandler) GetTask(
 
 		return
 	}
-
-	task.User.PasswordHash = ""
 
 	httputils.WriteJSON(writer, http.StatusOK, task)
 }
@@ -111,15 +96,7 @@ func (handler TaskHandler) CreateTask(
 	}
 
 	user := request.Context().Value(userContextKey{}).(entities.User)
-	task.UserID = user.ID
-	if err := task.FormatBoilerplateCode(); err != nil {
-		const statusCode = http.StatusInternalServerError
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
-
-		return
-	}
-
-	id, err := handler.TaskStorage.CreateTask(task)
+	idAsModel, err := handler.TaskUsecase.CreateTask(user.ID, task)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to create the task")
 		const statusCode = http.StatusInternalServerError
@@ -128,7 +105,6 @@ func (handler TaskHandler) CreateTask(
 		return
 	}
 
-	idAsModel := entities.Task{Model: gorm.Model{ID: id}}
 	httputils.WriteJSON(writer, http.StatusOK, idAsModel)
 }
 
@@ -145,10 +121,6 @@ func (handler TaskHandler) UpdateTask(
 		return
 	}
 
-	if ok := handler.checkAccessToTask(writer, request, uint(id)); !ok {
-		return
-	}
-
 	var task entities.Task
 	if err := httputils.ReadJSON(request.Body, &task); err != nil {
 		err = errors.Wrap(err, "[error] unable to decode the task data")
@@ -157,16 +129,14 @@ func (handler TaskHandler) UpdateTask(
 		return
 	}
 
-	if err := task.FormatBoilerplateCode(); err != nil {
-		const statusCode = http.StatusInternalServerError
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
+	user := request.Context().Value(userContextKey{}).(entities.User)
+	if err := handler.TaskUsecase.UpdateTask(user.ID, uint(id), task); err != nil {
+		statusCode := http.StatusInternalServerError
+		if errors.Is(err, entities.ErrManagerialAccessIsDenied) {
+			statusCode = http.StatusForbidden
+		}
 
-		return
-	}
-
-	if err := handler.TaskStorage.UpdateTask(uint(id), task); err != nil {
 		err = errors.Wrap(err, "[error] unable to update the task")
-		const statusCode = http.StatusInternalServerError
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
@@ -186,40 +156,16 @@ func (handler TaskHandler) DeleteTask(
 		return
 	}
 
-	if ok := handler.checkAccessToTask(writer, request, uint(id)); !ok {
-		return
-	}
-
-	if err := handler.TaskStorage.DeleteTask(uint(id)); err != nil {
-		err = errors.Wrap(err, "[error] unable to delete the task")
-		const statusCode = http.StatusInternalServerError
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
-
-		return
-	}
-}
-
-func (handler TaskHandler) checkAccessToTask(
-	writer http.ResponseWriter,
-	request *http.Request,
-	id uint,
-) bool {
-	task, err := handler.TaskStorage.GetTask(0, id)
-	if err != nil {
-		err = errors.Wrap(err, "[error] unable to get the task")
-		const statusCode = http.StatusInternalServerError
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
-
-		return false
-	}
-
 	user := request.Context().Value(userContextKey{}).(entities.User)
-	if user.ID != task.UserID {
-		const errMessage = "[error] managerial access to the task is denied"
-		httputils.LoggingError(handler.Logger, writer, err, http.StatusForbidden)
+	if err := handler.TaskUsecase.DeleteTask(user.ID, uint(id)); err != nil {
+		statusCode := http.StatusInternalServerError
+		if errors.Is(err, entities.ErrManagerialAccessIsDenied) {
+			statusCode = http.StatusForbidden
+		}
 
-		return false
+		err = errors.Wrap(err, "[error] unable to delete the task")
+		httputils.LoggingError(handler.Logger, writer, err, statusCode)
+
+		return
 	}
-
-	return true
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/schema"
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
+	"github.com/thewizardplusplus/go-exercises-backend/usecases"
 	httputils "github.com/thewizardplusplus/go-http-utils"
 	"gorm.io/gorm"
 )
@@ -25,7 +26,7 @@ type SolutionStorage interface {
 
 // SolutionHandler ...
 type SolutionHandler struct {
-	TaskStorage      TaskStorage
+	TaskStorage      usecases.TaskStorage
 	SolutionStorage  SolutionStorage
 	SolutionRegister entities.SolutionRegister
 	Logger           log.Logger
