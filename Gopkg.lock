@@ -124,6 +124,22 @@
   version = "v1.2.0"
 
 [[projects]]
+  digest = "1:d06fbb4c29d4266211e7fa20d29b61469db346e6df1bea40a70cea066cf25019"
+  name = "github.com/hashicorp/errwrap"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "7b00e5db719c64d14dd0caaacbd13e76254d02c0"
+  version = "v1.1.0"
+
+[[projects]]
+  digest = "1:71c646a40ec9bcfcc93ce31cde043356cb95670203d219c7edede05779081fe4"
+  name = "github.com/hashicorp/go-multierror"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "9974e9ec57696378079ecc3accd3d6f29401b3a0"
+  version = "v1.1.1"
+
+[[projects]]
   digest = "1:01ed62f8f4f574d8aff1d88caee113700a2b44c42351943fa73cc1808f736a50"
   name = "github.com/jinzhu/inflection"
   packages = ["."]
@@ -285,6 +301,7 @@
     "github.com/gorilla/handlers",
     "github.com/gorilla/mux",
     "github.com/gorilla/schema",
+    "github.com/hashicorp/go-multierror",
     "github.com/pkg/errors",
     "github.com/sethvargo/go-password/password",
     "github.com/thewizardplusplus/go-http-utils",
