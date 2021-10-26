@@ -7,29 +7,27 @@ import (
 	"github.com/gorilla/schema"
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
-	"github.com/thewizardplusplus/go-exercises-backend/usecases"
 	httputils "github.com/thewizardplusplus/go-http-utils"
-	"gorm.io/gorm"
 )
 
-// SolutionStorage ...
-type SolutionStorage interface {
-	entities.SolutionGetter
-
+// SolutionUsecase ...
+type SolutionUsecase interface {
 	GetSolutions(userID uint, taskID uint, pagination entities.Pagination) (
-		[]entities.Solution,
+		entities.SolutionGroup,
 		error,
 	)
-	CountSolutions(userID uint, taskID uint) (int64, error)
-	CreateSolution(taskID uint, solution entities.Solution) (id uint, err error)
+	GetSolution(userID uint, solutionID uint) (entities.Solution, error)
+	CreateSolution(userID uint, taskID uint, solution entities.Solution) (
+		entities.Solution,
+		error,
+	)
+	FormatSolution(solution entities.Solution) (entities.Solution, error)
 }
 
 // SolutionHandler ...
 type SolutionHandler struct {
-	TaskStorage      usecases.TaskStorage
-	SolutionStorage  SolutionStorage
-	SolutionRegister entities.SolutionRegister
-	Logger           log.Logger
+	SolutionUsecase SolutionUsecase
+	Logger          log.Logger
 }
 
 // GetSolutions ...
@@ -56,30 +54,14 @@ func (handler SolutionHandler) GetSolutions(
 	}
 
 	user := request.Context().Value(userContextKey{}).(entities.User)
-	solutions, err :=
-		handler.SolutionStorage.GetSolutions(user.ID, uint(taskID), pagination)
+	solutionGroup, err :=
+		handler.SolutionUsecase.GetSolutions(user.ID, uint(taskID), pagination)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to get the solutions")
 		const statusCode = http.StatusInternalServerError
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
-	}
-
-	solutionCount, err :=
-		handler.SolutionStorage.CountSolutions(user.ID, uint(taskID))
-	if err != nil {
-		err = errors.Wrap(err, "[error] unable to count the solutions")
-		const statusCode = http.StatusInternalServerError
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
-
-		return
-	}
-
-	solutionGroup :=
-		entities.SolutionGroup{Solutions: solutions, TotalCount: solutionCount}
-	for index := range solutionGroup.Solutions {
-		solutionGroup.Solutions[index].User.PasswordHash = ""
 	}
 
 	httputils.WriteJSON(writer, http.StatusOK, solutionGroup)
@@ -98,20 +80,19 @@ func (handler SolutionHandler) GetSolution(
 		return
 	}
 
-	if ok := handler.checkAccessToSolution(writer, request, uint(id)); !ok {
-		return
-	}
-
-	solution, err := handler.SolutionStorage.GetSolution(uint(id))
+	user := request.Context().Value(userContextKey{}).(entities.User)
+	solution, err := handler.SolutionUsecase.GetSolution(user.ID, uint(id))
 	if err != nil {
+		statusCode := http.StatusInternalServerError
+		if errors.Is(err, entities.ErrManagerialAccessIsDenied) {
+			statusCode = http.StatusForbidden
+		}
+
 		err = errors.Wrap(err, "[error] unable to get the solution")
-		const statusCode = http.StatusInternalServerError
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
 	}
-
-	solution.User.PasswordHash = ""
 
 	httputils.WriteJSON(writer, http.StatusOK, solution)
 }
@@ -139,15 +120,8 @@ func (handler SolutionHandler) CreateSolution(
 	}
 
 	user := request.Context().Value(userContextKey{}).(entities.User)
-	solution.UserID = user.ID
-	if err := solution.FormatCode(); err != nil {
-		const statusCode = http.StatusInternalServerError
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
-
-		return
-	}
-
-	id, err := handler.SolutionStorage.CreateSolution(uint(taskID), solution)
+	idAsModel, err :=
+		handler.SolutionUsecase.CreateSolution(user.ID, uint(taskID), solution)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to create the solution")
 		const statusCode = http.StatusInternalServerError
@@ -156,9 +130,6 @@ func (handler SolutionHandler) CreateSolution(
 		return
 	}
 
-	handler.SolutionRegister.RegisterSolution(id)
-
-	idAsModel := entities.Solution{Model: gorm.Model{ID: id}}
 	httputils.WriteJSON(writer, http.StatusOK, idAsModel)
 }
 
@@ -175,7 +146,8 @@ func (handler SolutionHandler) FormatSolution(
 		return
 	}
 
-	if err := solution.FormatCode(); err != nil {
+	solution, err := handler.SolutionUsecase.FormatSolution(solution)
+	if err != nil {
 		const statusCode = http.StatusInternalServerError
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
@@ -183,38 +155,4 @@ func (handler SolutionHandler) FormatSolution(
 	}
 
 	httputils.WriteJSON(writer, http.StatusOK, solution)
-}
-
-func (handler SolutionHandler) checkAccessToSolution(
-	writer http.ResponseWriter,
-	request *http.Request,
-	id uint,
-) bool {
-	solution, err := handler.SolutionStorage.GetSolution(id)
-	if err != nil {
-		err = errors.Wrap(err, "[error] unable to get the solution")
-		const statusCode = http.StatusInternalServerError
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
-
-		return false
-	}
-
-	task, err := handler.TaskStorage.GetTask(0, solution.TaskID)
-	if err != nil {
-		err = errors.Wrap(err, "[error] unable to get the task")
-		const statusCode = http.StatusInternalServerError
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
-
-		return false
-	}
-
-	user := request.Context().Value(userContextKey{}).(entities.User)
-	if user.ID != solution.UserID && user.ID != task.UserID {
-		const errMessage = "[error] access to the solution is denied"
-		httputils.LoggingError(handler.Logger, writer, err, http.StatusForbidden)
-
-		return false
-	}
-
-	return true
 }

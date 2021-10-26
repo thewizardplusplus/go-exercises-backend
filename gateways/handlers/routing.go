@@ -22,7 +22,7 @@ type RouterOptions struct {
 type RouterDependencies struct {
 	UserGetter       UserGetter
 	TaskStorage      usecases.TaskStorage
-	SolutionStorage  SolutionStorage
+	SolutionStorage  usecases.SolutionStorage
 	SolutionRegister entities.SolutionRegister
 	Logger           log.Logger
 }
@@ -81,10 +81,12 @@ func NewRouter(
 		Methods(http.MethodPost)
 
 	solutionHandler := SolutionHandler{
-		TaskStorage:      dependencies.TaskStorage,
-		SolutionStorage:  dependencies.SolutionStorage,
-		SolutionRegister: dependencies.SolutionRegister,
-		Logger:           dependencies.Logger,
+		SolutionUsecase: usecases.SolutionUsecase{
+			TaskGetter:       dependencies.TaskStorage,
+			SolutionStorage:  dependencies.SolutionStorage,
+			SolutionRegister: dependencies.SolutionRegister,
+		},
+		Logger: dependencies.Logger,
 	}
 	apiRouterWithAuthorization.
 		HandleFunc("/tasks/{taskID}/solutions/", solutionHandler.GetSolutions).
