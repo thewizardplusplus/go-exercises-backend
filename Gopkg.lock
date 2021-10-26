@@ -205,12 +205,12 @@
   version = "v1.2"
 
 [[projects]]
-  digest = "1:20cc919fd2c027e50b0386df92a43245303efeb7252e20c090f5ea5a078f8189"
+  digest = "1:6ebe660242fab3e7709dd364b24e5271e633c8b977cbb9e0a7e0f48e04fbb59d"
   name = "github.com/thewizardplusplus/go-rabbitmq-utils"
   packages = ["."]
   pruneopts = "UT"
-  revision = "826b64f879369000bc428b36c67a4ab7e8b86d0f"
-  version = "v1.1.2"
+  revision = "c698e6ca0f4e828dd45aca689f4bb798a4046c9d"
+  version = "v1.1.3"
 
 [[projects]]
   branch = "master"
@@ -279,7 +279,6 @@
     "github.com/gorilla/schema",
     "github.com/pkg/errors",
     "github.com/sethvargo/go-password/password",
-    "github.com/streadway/amqp",
     "github.com/thewizardplusplus/go-http-utils",
     "github.com/thewizardplusplus/go-rabbitmq-utils",
     "golang.org/x/crypto/bcrypt",
