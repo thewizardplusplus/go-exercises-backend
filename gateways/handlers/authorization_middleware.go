@@ -7,7 +7,6 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
-	httputils "github.com/thewizardplusplus/go-http-utils"
 )
 
 // TokenParser ...
@@ -28,9 +27,8 @@ func AuthorizationMiddleware(
 			authorizationHeader := request.Header.Get("Authorization")
 			tokenClaims, err := tokenParser.ParseToken(authorizationHeader)
 			if err != nil {
-				err = errors.Wrap(err, "[error] unable to parse the token")
-				statusCode := getStatusCodeFromError(err)
-				httputils.LoggingError(logger, writer, err, statusCode)
+				err = errors.Wrap(err, "unable to parse the token")
+				logError(logger, writer, err, autodetectedStatusCode)
 
 				return
 			}

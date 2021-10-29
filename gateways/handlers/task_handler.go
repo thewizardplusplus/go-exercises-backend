@@ -37,8 +37,8 @@ func (handler TaskHandler) GetTasks(
 	var pagination entities.Pagination
 	err := schema.NewDecoder().Decode(&pagination, request.URL.Query())
 	if err != nil {
-		err = errors.Wrap(err, "[error] unable to decode the pagination parameters")
-		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
+		err = errors.Wrap(err, "unable to decode the pagination parameters")
+		logError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
@@ -46,9 +46,8 @@ func (handler TaskHandler) GetTasks(
 	user := getUserFromRequest(request)
 	taskGroup, err := handler.TaskUsecase.GetTasks(user.ID, pagination)
 	if err != nil {
-		err = errors.Wrap(err, "[error] unable to get the tasks")
-		const statusCode = http.StatusInternalServerError
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
+		err = errors.Wrap(err, "unable to get the tasks")
+		logError(handler.Logger, writer, err, autodetectedStatusCode)
 
 		return
 	}
@@ -63,8 +62,8 @@ func (handler TaskHandler) GetTask(
 ) {
 	var id uint
 	if err := httputils.ParsePathParameter(request, "id", &id); err != nil {
-		err = errors.Wrap(err, "[error] unable to decode the task ID")
-		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
+		err = errors.Wrap(err, "unable to decode the task ID")
+		logError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
@@ -72,9 +71,8 @@ func (handler TaskHandler) GetTask(
 	user := getUserFromRequest(request)
 	task, err := handler.TaskUsecase.GetTask(user.ID, uint(id))
 	if err != nil {
-		err = errors.Wrap(err, "[error] unable to get the task")
-		statusCode := getStatusCodeFromError(err)
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
+		err = errors.Wrap(err, "unable to get the task")
+		logError(handler.Logger, writer, err, autodetectedStatusCode)
 
 		return
 	}
@@ -89,8 +87,8 @@ func (handler TaskHandler) CreateTask(
 ) {
 	var task entities.Task
 	if err := httputils.ReadJSON(request.Body, &task); err != nil {
-		err = errors.Wrap(err, "[error] unable to decode the task data")
-		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
+		err = errors.Wrap(err, "unable to decode the task data")
+		logError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
@@ -98,9 +96,8 @@ func (handler TaskHandler) CreateTask(
 	user := getUserFromRequest(request)
 	idAsModel, err := handler.TaskUsecase.CreateTask(user.ID, task)
 	if err != nil {
-		err = errors.Wrap(err, "[error] unable to create the task")
-		statusCode := getStatusCodeFromError(err)
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
+		err = errors.Wrap(err, "unable to create the task")
+		logError(handler.Logger, writer, err, autodetectedStatusCode)
 
 		return
 	}
@@ -115,25 +112,24 @@ func (handler TaskHandler) UpdateTask(
 ) {
 	var id uint
 	if err := httputils.ParsePathParameter(request, "id", &id); err != nil {
-		err = errors.Wrap(err, "[error] unable to decode the task ID")
-		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
+		err = errors.Wrap(err, "unable to decode the task ID")
+		logError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
 
 	var task entities.Task
 	if err := httputils.ReadJSON(request.Body, &task); err != nil {
-		err = errors.Wrap(err, "[error] unable to decode the task data")
-		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
+		err = errors.Wrap(err, "unable to decode the task data")
+		logError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
 
 	user := getUserFromRequest(request)
 	if err := handler.TaskUsecase.UpdateTask(user.ID, uint(id), task); err != nil {
-		err = errors.Wrap(err, "[error] unable to update the task")
-		statusCode := getStatusCodeFromError(err)
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
+		err = errors.Wrap(err, "unable to update the task")
+		logError(handler.Logger, writer, err, autodetectedStatusCode)
 
 		return
 	}
@@ -146,17 +142,16 @@ func (handler TaskHandler) DeleteTask(
 ) {
 	var id uint
 	if err := httputils.ParsePathParameter(request, "id", &id); err != nil {
-		err = errors.Wrap(err, "[error] unable to decode the task ID")
-		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
+		err = errors.Wrap(err, "unable to decode the task ID")
+		logError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
 
 	user := getUserFromRequest(request)
 	if err := handler.TaskUsecase.DeleteTask(user.ID, uint(id)); err != nil {
-		err = errors.Wrap(err, "[error] unable to delete the task")
-		statusCode := getStatusCodeFromError(err)
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
+		err = errors.Wrap(err, "unable to delete the task")
+		logError(handler.Logger, writer, err, autodetectedStatusCode)
 
 		return
 	}

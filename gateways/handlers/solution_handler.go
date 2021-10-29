@@ -38,8 +38,8 @@ func (handler SolutionHandler) GetSolutions(
 	var taskID uint
 	err := httputils.ParsePathParameter(request, "taskID", &taskID)
 	if err != nil {
-		err = errors.Wrap(err, "[error] unable to decode the task ID")
-		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
+		err = errors.Wrap(err, "unable to decode the task ID")
+		logError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
@@ -47,8 +47,8 @@ func (handler SolutionHandler) GetSolutions(
 	var pagination entities.Pagination
 	err = schema.NewDecoder().Decode(&pagination, request.URL.Query())
 	if err != nil {
-		err = errors.Wrap(err, "[error] unable to decode the pagination parameters")
-		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
+		err = errors.Wrap(err, "unable to decode the pagination parameters")
+		logError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
@@ -57,9 +57,8 @@ func (handler SolutionHandler) GetSolutions(
 	solutionGroup, err :=
 		handler.SolutionUsecase.GetSolutions(user.ID, uint(taskID), pagination)
 	if err != nil {
-		err = errors.Wrap(err, "[error] unable to get the solutions")
-		const statusCode = http.StatusInternalServerError
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
+		err = errors.Wrap(err, "unable to get the solutions")
+		logError(handler.Logger, writer, err, autodetectedStatusCode)
 
 		return
 	}
@@ -74,8 +73,8 @@ func (handler SolutionHandler) GetSolution(
 ) {
 	var id uint
 	if err := httputils.ParsePathParameter(request, "id", &id); err != nil {
-		err = errors.Wrap(err, "[error] unable to decode the solution ID")
-		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
+		err = errors.Wrap(err, "unable to decode the solution ID")
+		logError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
@@ -83,9 +82,8 @@ func (handler SolutionHandler) GetSolution(
 	user := getUserFromRequest(request)
 	solution, err := handler.SolutionUsecase.GetSolution(user.ID, uint(id))
 	if err != nil {
-		err = errors.Wrap(err, "[error] unable to get the solution")
-		statusCode := getStatusCodeFromError(err)
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
+		err = errors.Wrap(err, "unable to get the solution")
+		logError(handler.Logger, writer, err, autodetectedStatusCode)
 
 		return
 	}
@@ -101,16 +99,16 @@ func (handler SolutionHandler) CreateSolution(
 	var taskID uint
 	err := httputils.ParsePathParameter(request, "taskID", &taskID)
 	if err != nil {
-		err = errors.Wrap(err, "[error] unable to decode the task ID")
-		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
+		err = errors.Wrap(err, "unable to decode the task ID")
+		logError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
 
 	var solution entities.Solution
 	if err := httputils.ReadJSON(request.Body, &solution); err != nil {
-		err = errors.Wrap(err, "[error] unable to decode the solution data")
-		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
+		err = errors.Wrap(err, "unable to decode the solution data")
+		logError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
@@ -119,9 +117,8 @@ func (handler SolutionHandler) CreateSolution(
 	idAsModel, err :=
 		handler.SolutionUsecase.CreateSolution(user.ID, uint(taskID), solution)
 	if err != nil {
-		err = errors.Wrap(err, "[error] unable to create the solution")
-		statusCode := getStatusCodeFromError(err)
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
+		err = errors.Wrap(err, "unable to create the solution")
+		logError(handler.Logger, writer, err, autodetectedStatusCode)
 
 		return
 	}
@@ -136,17 +133,16 @@ func (handler SolutionHandler) FormatSolution(
 ) {
 	var solution entities.Solution
 	if err := httputils.ReadJSON(request.Body, &solution); err != nil {
-		err = errors.Wrap(err, "[error] unable to decode the solution data")
-		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
+		err = errors.Wrap(err, "unable to decode the solution data")
+		logError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
 
 	solution, err := handler.SolutionUsecase.FormatSolution(solution)
 	if err != nil {
-		err = errors.Wrap(err, "[error] unable to format the solution")
-		statusCode := getStatusCodeFromError(err)
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
+		err = errors.Wrap(err, "unable to format the solution")
+		logError(handler.Logger, writer, err, autodetectedStatusCode)
 
 		return
 	}

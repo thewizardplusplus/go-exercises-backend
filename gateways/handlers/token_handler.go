@@ -27,17 +27,16 @@ func (handler TokenHandler) CreateToken(
 ) {
 	var user entities.User
 	if err := httputils.ReadJSON(request.Body, &user); err != nil {
-		err = errors.Wrap(err, "[error] unable to decode the user data")
-		httputils.LoggingError(handler.Logger, writer, err, http.StatusBadRequest)
+		err = errors.Wrap(err, "unable to decode the user data")
+		logError(handler.Logger, writer, err, http.StatusBadRequest)
 
 		return
 	}
 
 	credentials, err := handler.TokenCreator.CreateToken(user)
 	if err != nil {
-		err = errors.Wrap(err, "[error] unable to create the token")
-		statusCode := getStatusCodeFromError(err)
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
+		err = errors.Wrap(err, "unable to create the token")
+		logError(handler.Logger, writer, err, autodetectedStatusCode)
 
 		return
 	}
