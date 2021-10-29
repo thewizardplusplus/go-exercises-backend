@@ -5,6 +5,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-gorm/datatypes"
+	"github.com/hashicorp/go-multierror"
 	"github.com/pkg/errors"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -85,7 +86,7 @@ func (user User) CheckPassword(passwordHash string) error {
 		[]byte(passwordHash),
 		[]byte(user.Password),
 	); err != nil {
-		return errors.Wrap(err, "failed password checking")
+		return multierror.Append(err, ErrFailedPasswordChecking)
 	}
 
 	return nil

@@ -155,6 +155,7 @@ func main() {
 		SolutionStorage:  storages.NewSolutionStorage(db),
 		SolutionRegister: solutionRegister,
 		UserGetter:       storages.NewUserStorage(db, 0),
+		Clock:            time.Now,
 		Logger:           print.New(logger),
 	})
 	router.Use(middlewares.RecoveryHandler(middlewares.RecoveryLogger(logger)))

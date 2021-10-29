@@ -3,9 +3,7 @@ package handlers
 import (
 	"context"
 	"net/http"
-	"strings"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/go-log/log"
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
@@ -13,11 +11,16 @@ import (
 	httputils "github.com/thewizardplusplus/go-http-utils"
 )
 
+// TokenParser ...
+type TokenParser interface {
+	ParseToken(authorizationHeader string) (*entities.AccessTokenClaims, error)
+}
+
 type userContextKey struct{}
 
 // AuthorizationMiddleware ...
 func AuthorizationMiddleware(
-	tokenSigningKey string,
+	tokenParser TokenParser,
 	logger log.Logger,
 ) mux.MiddlewareFunc {
 	return func(next http.Handler) http.Handler {
@@ -25,23 +28,20 @@ func AuthorizationMiddleware(
 			writer http.ResponseWriter,
 			request *http.Request,
 		) {
-			tokenAsStr :=
-				strings.TrimPrefix(request.Header.Get("Authorization"), "Bearer ")
-			token, err := jwt.ParseWithClaims(
-				tokenAsStr,
-				&entities.AccessTokenClaims{},
-				func(token *jwt.Token) (interface{}, error) {
-					return []byte(tokenSigningKey), nil
-				},
-			)
+			authorizationHeader := request.Header.Get("Authorization")
+			tokenClaims, err := tokenParser.ParseToken(authorizationHeader)
 			if err != nil {
-				err = errors.Wrap(err, "[error] failed token checking")
-				httputils.LoggingError(logger, writer, err, http.StatusUnauthorized)
+				statusCode := http.StatusInternalServerError
+				if errors.Is(err, entities.ErrFailedTokenChecking) {
+					statusCode = http.StatusUnauthorized
+				}
+
+				err = errors.Wrap(err, "[error] unable to parse the token")
+				httputils.LoggingError(logger, writer, err, statusCode)
 
 				return
 			}
 
-			tokenClaims := token.Claims.(*entities.AccessTokenClaims)
 			request = request.WithContext(context.WithValue(
 				request.Context(),
 				userContextKey{},

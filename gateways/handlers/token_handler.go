@@ -2,26 +2,22 @@ package handlers
 
 import (
 	"net/http"
-	"time"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/go-log/log"
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
 	httputils "github.com/thewizardplusplus/go-http-utils"
 )
 
-// UserGetter ...
-type UserGetter interface {
-	GetUser(username string) (entities.User, error)
+// TokenCreator ...
+type TokenCreator interface {
+	CreateToken(user entities.User) (entities.Credentials, error)
 }
 
 // TokenHandler ...
 type TokenHandler struct {
-	TokenSigningKey string
-	TokenTTL        time.Duration
-	UserGetter      UserGetter
-	Logger          log.Logger
+	TokenCreator TokenCreator
+	Logger       log.Logger
 }
 
 // CreateToken ...
@@ -37,36 +33,18 @@ func (handler TokenHandler) CreateToken(
 		return
 	}
 
-	foundUser, err := handler.UserGetter.GetUser(user.Username)
+	credentials, err := handler.TokenCreator.CreateToken(user)
 	if err != nil {
-		err = errors.Wrap(err, "[error] unable to get the user")
-		const statusCode = http.StatusInternalServerError
-		httputils.LoggingError(handler.Logger, writer, err, statusCode)
+		statusCode := http.StatusInternalServerError
+		if errors.Is(err, entities.ErrFailedPasswordChecking) {
+			statusCode = http.StatusUnauthorized
+		}
 
-		return
-	}
-
-	if err := user.CheckPassword(foundUser.PasswordHash); err != nil {
-		httputils.LoggingError(handler.Logger, writer, err, http.StatusUnauthorized)
-		return
-	}
-
-	foundUser.PasswordHash = ""
-
-	tokenExpirationTime := time.Now().Add(handler.TokenTTL).Unix()
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, entities.AccessTokenClaims{
-		StandardClaims: jwt.StandardClaims{ExpiresAt: tokenExpirationTime},
-		User:           foundUser,
-	})
-	signedToken, err := token.SignedString([]byte(handler.TokenSigningKey))
-	if err != nil {
 		err = errors.Wrap(err, "[error] unable to create the token")
-		const statusCode = http.StatusInternalServerError
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
 	}
 
-	credentials := entities.Credentials{AccessToken: signedToken}
 	httputils.WriteJSON(writer, http.StatusOK, credentials)
 }

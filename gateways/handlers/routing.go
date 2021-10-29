@@ -20,10 +20,11 @@ type RouterOptions struct {
 
 // RouterDependencies ...
 type RouterDependencies struct {
-	UserGetter       UserGetter
+	UserGetter       usecases.UserGetter
 	TaskStorage      usecases.TaskStorage
 	SolutionStorage  usecases.SolutionStorage
 	SolutionRegister entities.SolutionRegister
+	Clock            usecases.Clock
 	Logger           log.Logger
 }
 
@@ -36,8 +37,14 @@ func NewRouter(
 	apiRouter := rootRouter.PathPrefix("/api/v1").Subrouter()
 	apiRouterWithAuthorization := apiRouter.NewRoute().Subrouter()
 
+	tokenUsecase := usecases.TokenUsecase{
+		TokenSigningKey: options.TokenSigningKey,
+		TokenTTL:        options.TokenTTL,
+		UserGetter:      dependencies.UserGetter,
+		Clock:           dependencies.Clock,
+	}
 	authorizationMiddleware :=
-		AuthorizationMiddleware(options.TokenSigningKey, dependencies.Logger)
+		AuthorizationMiddleware(tokenUsecase, dependencies.Logger)
 	apiRouterWithAuthorization.Use(authorizationMiddleware)
 
 	staticFileHandler := httputils.StaticAssetHandler(
@@ -49,10 +56,8 @@ func NewRouter(
 		Methods(http.MethodGet)
 
 	tokenHandler := TokenHandler{
-		TokenSigningKey: options.TokenSigningKey,
-		TokenTTL:        options.TokenTTL,
-		UserGetter:      dependencies.UserGetter,
-		Logger:          dependencies.Logger,
+		TokenCreator: tokenUsecase,
+		Logger:       dependencies.Logger,
 	}
 	apiRouter.
 		HandleFunc("/tokens/", tokenHandler.CreateToken).
