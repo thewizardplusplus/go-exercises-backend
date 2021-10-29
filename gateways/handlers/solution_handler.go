@@ -123,8 +123,12 @@ func (handler SolutionHandler) CreateSolution(
 	idAsModel, err :=
 		handler.SolutionUsecase.CreateSolution(user.ID, uint(taskID), solution)
 	if err != nil {
+		statusCode := http.StatusInternalServerError
+		if errors.Is(err, entities.ErrUnableToFormatCode) {
+			statusCode = http.StatusBadRequest
+		}
+
 		err = errors.Wrap(err, "[error] unable to create the solution")
-		const statusCode = http.StatusInternalServerError
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
@@ -148,7 +152,12 @@ func (handler SolutionHandler) FormatSolution(
 
 	solution, err := handler.SolutionUsecase.FormatSolution(solution)
 	if err != nil {
-		const statusCode = http.StatusInternalServerError
+		statusCode := http.StatusInternalServerError
+		if errors.Is(err, entities.ErrUnableToFormatCode) {
+			statusCode = http.StatusBadRequest
+		}
+
+		err = errors.Wrap(err, "[error] unable to format the solution")
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return

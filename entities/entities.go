@@ -28,7 +28,7 @@ type Task struct {
 func (task *Task) FormatBoilerplateCode() error {
 	boilerplateCode, err := format.Source([]byte(task.BoilerplateCode))
 	if err != nil {
-		return errors.Wrap(err, "unable to format the task boilerplate code")
+		return multierror.Append(err, ErrUnableToFormatCode)
 	}
 
 	task.BoilerplateCode = string(boilerplateCode)
@@ -58,7 +58,7 @@ type Solution struct {
 func (solution *Solution) FormatCode() error {
 	code, err := format.Source([]byte(solution.Code))
 	if err != nil {
-		return errors.Wrap(err, "unable to format the solution code")
+		return multierror.Append(err, ErrUnableToFormatCode)
 	}
 
 	solution.Code = string(code)

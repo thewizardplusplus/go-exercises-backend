@@ -98,8 +98,12 @@ func (handler TaskHandler) CreateTask(
 	user := request.Context().Value(userContextKey{}).(entities.User)
 	idAsModel, err := handler.TaskUsecase.CreateTask(user.ID, task)
 	if err != nil {
+		statusCode := http.StatusInternalServerError
+		if errors.Is(err, entities.ErrUnableToFormatCode) {
+			statusCode = http.StatusBadRequest
+		}
+
 		err = errors.Wrap(err, "[error] unable to create the task")
-		const statusCode = http.StatusInternalServerError
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
@@ -134,6 +138,9 @@ func (handler TaskHandler) UpdateTask(
 		statusCode := http.StatusInternalServerError
 		if errors.Is(err, entities.ErrManagerialAccessIsDenied) {
 			statusCode = http.StatusForbidden
+		}
+		if errors.Is(err, entities.ErrUnableToFormatCode) {
+			statusCode = http.StatusBadRequest
 		}
 
 		err = errors.Wrap(err, "[error] unable to update the task")
