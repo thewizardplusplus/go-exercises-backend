@@ -43,7 +43,7 @@ func (handler TaskHandler) GetTasks(
 		return
 	}
 
-	user := request.Context().Value(userContextKey{}).(entities.User)
+	user := getUserFromRequest(request)
 	taskGroup, err := handler.TaskUsecase.GetTasks(user.ID, pagination)
 	if err != nil {
 		err = errors.Wrap(err, "[error] unable to get the tasks")
@@ -69,7 +69,7 @@ func (handler TaskHandler) GetTask(
 		return
 	}
 
-	user := request.Context().Value(userContextKey{}).(entities.User)
+	user := getUserFromRequest(request)
 	task, err := handler.TaskUsecase.GetTask(user.ID, uint(id))
 	if err != nil {
 		statusCode := http.StatusInternalServerError
@@ -99,7 +99,7 @@ func (handler TaskHandler) CreateTask(
 		return
 	}
 
-	user := request.Context().Value(userContextKey{}).(entities.User)
+	user := getUserFromRequest(request)
 	idAsModel, err := handler.TaskUsecase.CreateTask(user.ID, task)
 	if err != nil {
 		statusCode := http.StatusInternalServerError
@@ -137,7 +137,7 @@ func (handler TaskHandler) UpdateTask(
 		return
 	}
 
-	user := request.Context().Value(userContextKey{}).(entities.User)
+	user := getUserFromRequest(request)
 	if err := handler.TaskUsecase.UpdateTask(user.ID, uint(id), task); err != nil {
 		statusCode := http.StatusInternalServerError
 		if errors.Is(err, entities.ErrManagerialAccessIsDenied) {
@@ -167,7 +167,7 @@ func (handler TaskHandler) DeleteTask(
 		return
 	}
 
-	user := request.Context().Value(userContextKey{}).(entities.User)
+	user := getUserFromRequest(request)
 	if err := handler.TaskUsecase.DeleteTask(user.ID, uint(id)); err != nil {
 		statusCode := http.StatusInternalServerError
 		if errors.Is(err, entities.ErrManagerialAccessIsDenied) {

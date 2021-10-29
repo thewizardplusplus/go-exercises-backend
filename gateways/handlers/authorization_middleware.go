@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/go-log/log"
@@ -15,8 +14,6 @@ import (
 type TokenParser interface {
 	ParseToken(authorizationHeader string) (*entities.AccessTokenClaims, error)
 }
-
-type userContextKey struct{}
 
 // AuthorizationMiddleware ...
 func AuthorizationMiddleware(
@@ -42,12 +39,7 @@ func AuthorizationMiddleware(
 				return
 			}
 
-			request = request.WithContext(context.WithValue(
-				request.Context(),
-				userContextKey{},
-				tokenClaims.User,
-			))
-
+			request = setUserToRequest(request, tokenClaims.User)
 			next.ServeHTTP(writer, request)
 		})
 	}

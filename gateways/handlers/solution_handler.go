@@ -53,7 +53,7 @@ func (handler SolutionHandler) GetSolutions(
 		return
 	}
 
-	user := request.Context().Value(userContextKey{}).(entities.User)
+	user := getUserFromRequest(request)
 	solutionGroup, err :=
 		handler.SolutionUsecase.GetSolutions(user.ID, uint(taskID), pagination)
 	if err != nil {
@@ -80,7 +80,7 @@ func (handler SolutionHandler) GetSolution(
 		return
 	}
 
-	user := request.Context().Value(userContextKey{}).(entities.User)
+	user := getUserFromRequest(request)
 	solution, err := handler.SolutionUsecase.GetSolution(user.ID, uint(id))
 	if err != nil {
 		statusCode := http.StatusInternalServerError
@@ -122,7 +122,7 @@ func (handler SolutionHandler) CreateSolution(
 		return
 	}
 
-	user := request.Context().Value(userContextKey{}).(entities.User)
+	user := getUserFromRequest(request)
 	idAsModel, err :=
 		handler.SolutionUsecase.CreateSolution(user.ID, uint(taskID), solution)
 	if err != nil {
