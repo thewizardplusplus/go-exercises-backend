@@ -83,15 +83,8 @@ func (handler SolutionHandler) GetSolution(
 	user := getUserFromRequest(request)
 	solution, err := handler.SolutionUsecase.GetSolution(user.ID, uint(id))
 	if err != nil {
-		statusCode := http.StatusInternalServerError
-		if errors.Is(err, entities.ErrManagerialAccessIsDenied) {
-			statusCode = http.StatusForbidden
-		}
-		if errors.Is(err, entities.ErrNotFound) {
-			statusCode = http.StatusNotFound
-		}
-
 		err = errors.Wrap(err, "[error] unable to get the solution")
+		statusCode := getStatusCodeFromError(err)
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
@@ -126,12 +119,8 @@ func (handler SolutionHandler) CreateSolution(
 	idAsModel, err :=
 		handler.SolutionUsecase.CreateSolution(user.ID, uint(taskID), solution)
 	if err != nil {
-		statusCode := http.StatusInternalServerError
-		if errors.Is(err, entities.ErrUnableToFormatCode) {
-			statusCode = http.StatusBadRequest
-		}
-
 		err = errors.Wrap(err, "[error] unable to create the solution")
+		statusCode := getStatusCodeFromError(err)
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
@@ -155,12 +144,8 @@ func (handler SolutionHandler) FormatSolution(
 
 	solution, err := handler.SolutionUsecase.FormatSolution(solution)
 	if err != nil {
-		statusCode := http.StatusInternalServerError
-		if errors.Is(err, entities.ErrUnableToFormatCode) {
-			statusCode = http.StatusBadRequest
-		}
-
 		err = errors.Wrap(err, "[error] unable to format the solution")
+		statusCode := getStatusCodeFromError(err)
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return

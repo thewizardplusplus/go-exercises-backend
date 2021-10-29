@@ -28,12 +28,8 @@ func AuthorizationMiddleware(
 			authorizationHeader := request.Header.Get("Authorization")
 			tokenClaims, err := tokenParser.ParseToken(authorizationHeader)
 			if err != nil {
-				statusCode := http.StatusInternalServerError
-				if errors.Is(err, entities.ErrFailedTokenChecking) {
-					statusCode = http.StatusUnauthorized
-				}
-
 				err = errors.Wrap(err, "[error] unable to parse the token")
+				statusCode := getStatusCodeFromError(err)
 				httputils.LoggingError(logger, writer, err, statusCode)
 
 				return

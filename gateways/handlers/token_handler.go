@@ -35,15 +35,8 @@ func (handler TokenHandler) CreateToken(
 
 	credentials, err := handler.TokenCreator.CreateToken(user)
 	if err != nil {
-		statusCode := http.StatusInternalServerError
-		if errors.Is(err, entities.ErrFailedPasswordChecking) {
-			statusCode = http.StatusUnauthorized
-		}
-		if errors.Is(err, entities.ErrNotFound) {
-			statusCode = http.StatusNotFound
-		}
-
 		err = errors.Wrap(err, "[error] unable to create the token")
+		statusCode := getStatusCodeFromError(err)
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return

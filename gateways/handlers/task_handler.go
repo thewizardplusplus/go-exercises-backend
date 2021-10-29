@@ -72,12 +72,8 @@ func (handler TaskHandler) GetTask(
 	user := getUserFromRequest(request)
 	task, err := handler.TaskUsecase.GetTask(user.ID, uint(id))
 	if err != nil {
-		statusCode := http.StatusInternalServerError
-		if errors.Is(err, entities.ErrNotFound) {
-			statusCode = http.StatusNotFound
-		}
-
 		err = errors.Wrap(err, "[error] unable to get the task")
+		statusCode := getStatusCodeFromError(err)
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
@@ -102,12 +98,8 @@ func (handler TaskHandler) CreateTask(
 	user := getUserFromRequest(request)
 	idAsModel, err := handler.TaskUsecase.CreateTask(user.ID, task)
 	if err != nil {
-		statusCode := http.StatusInternalServerError
-		if errors.Is(err, entities.ErrUnableToFormatCode) {
-			statusCode = http.StatusBadRequest
-		}
-
 		err = errors.Wrap(err, "[error] unable to create the task")
+		statusCode := getStatusCodeFromError(err)
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
@@ -139,15 +131,8 @@ func (handler TaskHandler) UpdateTask(
 
 	user := getUserFromRequest(request)
 	if err := handler.TaskUsecase.UpdateTask(user.ID, uint(id), task); err != nil {
-		statusCode := http.StatusInternalServerError
-		if errors.Is(err, entities.ErrManagerialAccessIsDenied) {
-			statusCode = http.StatusForbidden
-		}
-		if errors.Is(err, entities.ErrUnableToFormatCode) {
-			statusCode = http.StatusBadRequest
-		}
-
 		err = errors.Wrap(err, "[error] unable to update the task")
+		statusCode := getStatusCodeFromError(err)
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
@@ -169,12 +154,8 @@ func (handler TaskHandler) DeleteTask(
 
 	user := getUserFromRequest(request)
 	if err := handler.TaskUsecase.DeleteTask(user.ID, uint(id)); err != nil {
-		statusCode := http.StatusInternalServerError
-		if errors.Is(err, entities.ErrManagerialAccessIsDenied) {
-			statusCode = http.StatusForbidden
-		}
-
 		err = errors.Wrap(err, "[error] unable to delete the task")
+		statusCode := getStatusCodeFromError(err)
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return
