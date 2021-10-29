@@ -72,8 +72,12 @@ func (handler TaskHandler) GetTask(
 	user := request.Context().Value(userContextKey{}).(entities.User)
 	task, err := handler.TaskUsecase.GetTask(user.ID, uint(id))
 	if err != nil {
+		statusCode := http.StatusInternalServerError
+		if errors.Is(err, entities.ErrNotFound) {
+			statusCode = http.StatusNotFound
+		}
+
 		err = errors.Wrap(err, "[error] unable to get the task")
-		const statusCode = http.StatusInternalServerError
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
 
 		return

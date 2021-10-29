@@ -1,6 +1,8 @@
 package storages
 
 import (
+	"errors"
+
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
 	"gorm.io/gorm"
 )
@@ -57,6 +59,9 @@ func (storage TaskStorage) GetTask(userID uint, taskID uint) (
 		First(&task, taskID).
 		Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = entities.ErrNotFound
+		}
 		return entities.Task{}, err
 	}
 

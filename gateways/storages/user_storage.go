@@ -1,6 +1,8 @@
 package storages
 
 import (
+	"errors"
+
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
 	"gorm.io/gorm"
 )
@@ -24,6 +26,9 @@ func (storage UserStorage) GetUser(username string) (entities.User, error) {
 		First(&user).
 		Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = entities.ErrNotFound
+		}
 		return entities.User{}, err
 	}
 

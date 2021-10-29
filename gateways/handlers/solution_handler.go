@@ -87,6 +87,9 @@ func (handler SolutionHandler) GetSolution(
 		if errors.Is(err, entities.ErrManagerialAccessIsDenied) {
 			statusCode = http.StatusForbidden
 		}
+		if errors.Is(err, entities.ErrNotFound) {
+			statusCode = http.StatusNotFound
+		}
 
 		err = errors.Wrap(err, "[error] unable to get the solution")
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)

@@ -1,6 +1,8 @@
 package storages
 
 import (
+	"errors"
+
 	"github.com/go-gorm/datatypes"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
 	"gorm.io/gorm"
@@ -57,6 +59,9 @@ func (storage SolutionStorage) GetSolution(id uint) (entities.Solution, error) {
 	var solution entities.Solution
 	err := storage.db.Joins("Task").Joins("User").First(&solution, id).Error
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			err = entities.ErrNotFound
+		}
 		return entities.Solution{}, err
 	}
 

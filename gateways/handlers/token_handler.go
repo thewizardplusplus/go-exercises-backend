@@ -39,6 +39,9 @@ func (handler TokenHandler) CreateToken(
 		if errors.Is(err, entities.ErrFailedPasswordChecking) {
 			statusCode = http.StatusUnauthorized
 		}
+		if errors.Is(err, entities.ErrNotFound) {
+			statusCode = http.StatusNotFound
+		}
 
 		err = errors.Wrap(err, "[error] unable to create the token")
 		httputils.LoggingError(handler.Logger, writer, err, statusCode)
