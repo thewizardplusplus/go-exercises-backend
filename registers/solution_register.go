@@ -13,10 +13,10 @@ type SolutionQueue interface {
 
 // SolutionRegister ...
 type SolutionRegister struct {
-	TaskStorage     entities.TaskGetter
-	SolutionStorage entities.SolutionGetter
-	SolutionQueue   SolutionQueue
-	Logger          log.Logger
+	TaskGetter     entities.TaskGetter
+	SolutionGetter entities.SolutionGetter
+	SolutionQueue  SolutionQueue
+	Logger         log.Logger
 }
 
 // RegisterSolution ...
@@ -32,12 +32,12 @@ func (register SolutionRegister) RegisterSolution(id uint) {
 }
 
 func (register SolutionRegister) performRegistration(id uint) error {
-	solution, err := register.SolutionStorage.GetSolution(id)
+	solution, err := register.SolutionGetter.GetSolution(id)
 	if err != nil {
 		return errors.Wrap(err, "unable to get the solution")
 	}
 
-	task, err := register.TaskStorage.GetTask(0, solution.TaskID)
+	task, err := register.TaskGetter.GetTask(0, solution.TaskID)
 	if err != nil {
 		return errors.Wrap(err, "unable to get the task")
 	}
