@@ -9,10 +9,12 @@ import (
 
 // ConcurrentSolutionRegister ...
 type ConcurrentSolutionRegister struct {
-	ids               chan uint
-	stoppingCtx       context.Context
-	stoppingCtxCancel context.CancelFunc
-	innerRegister     entities.SolutionRegister
+	innerRegister entities.SolutionRegister
+
+	startMode            *startModeHolder
+	stoppingCtx          context.Context
+	stoppingCtxCanceller context.CancelFunc
+	ids                  chan uint
 }
 
 // NewConcurrentSolutionRegister ...
@@ -20,12 +22,15 @@ func NewConcurrentSolutionRegister(
 	bufferSize int,
 	innerRegister entities.SolutionRegister,
 ) ConcurrentSolutionRegister {
-	stoppingCtx, stoppingCtxCancel := context.WithCancel(context.Background())
+	startMode := &startModeHolder{}
+	stoppingCtx, stoppingCtxCanceller := context.WithCancel(context.Background())
 	return ConcurrentSolutionRegister{
-		ids:               make(chan uint, bufferSize),
-		stoppingCtx:       stoppingCtx,
-		stoppingCtxCancel: stoppingCtxCancel,
-		innerRegister:     innerRegister,
+		innerRegister: innerRegister,
+
+		startMode:            startMode,
+		stoppingCtx:          stoppingCtx,
+		stoppingCtxCanceller: stoppingCtxCanceller,
+		ids:                  make(chan uint, bufferSize),
 	}
 }
 
@@ -36,30 +41,46 @@ func (register ConcurrentSolutionRegister) RegisterSolution(id uint) {
 
 // Start ...
 func (register ConcurrentSolutionRegister) Start() {
-	for id := range register.ids {
-		register.innerRegister.RegisterSolution(id)
-	}
+	register.basicRun(started, func() {
+		for id := range register.ids {
+			register.innerRegister.RegisterSolution(id)
+		}
+	})
 }
 
 // StartConcurrently ...
 func (register ConcurrentSolutionRegister) StartConcurrently(concurrency int) {
-	var waitGroup sync.WaitGroup
-	waitGroup.Add(concurrency)
+	register.basicRun(startedConcurrently, func() {
+		var waitGroup sync.WaitGroup
+		waitGroup.Add(concurrency)
 
-	for i := 0; i < concurrency; i++ {
-		go func() {
-			defer waitGroup.Done()
+		for threadID := 0; threadID < concurrency; threadID++ {
+			go func() {
+				defer waitGroup.Done()
 
-			register.Start()
-		}()
-	}
+				register.Start()
+			}()
+		}
 
-	waitGroup.Wait()
-	register.stoppingCtxCancel()
+		waitGroup.Wait()
+	})
 }
 
 // Stop ...
 func (register ConcurrentSolutionRegister) Stop() {
 	close(register.ids)
 	<-register.stoppingCtx.Done()
+}
+
+func (register ConcurrentSolutionRegister) basicRun(
+	mode startMode,
+	runHandler func(),
+) {
+	register.startMode.setStartModeOnce(mode)
+
+	runHandler()
+
+	if register.startMode.getStartMode() == mode {
+		register.stoppingCtxCanceller()
+	}
 }
