@@ -42,3 +42,23 @@ services:
     ports:
       - 5672:5672 # RabbitMQ server
       - 15672:15672 # RabbitMQ management plugin
+
+  asyncapi-generator:
+    image: asyncapi/generator:1.9.0
+    command:
+      - --debug
+      - --install
+      - --output=/app/async-api
+      - --force-write
+      - /app/async_api.yaml
+      - "@asyncapi/html-template@0.24.8"
+    volumes:
+      - ./docs/async_api.yaml:/app/async_api.yaml
+      - ./docs/async-api:/app/async-api
+
+  asyncapi:
+    image: nginx:1.21.1-alpine
+    ports:
+      - 9091:80
+    volumes:
+      - ./docs/async-api:/usr/share/nginx/html

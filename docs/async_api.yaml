@@ -1,0 +1,85 @@
+asyncapi: 2.1.0
+info:
+  title: go-exercises-backend API
+  version: 1.5.2
+  license:
+    name: MIT
+channels:
+  solution_queue:
+    subscribe:
+      message:
+        $ref: "#/components/messages/Solution"
+  solution_result_queue:
+    publish:
+      message:
+        $ref: "#/components/messages/SolutionResult"
+components:
+  messages:
+    Solution:
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/entities.Solution"
+    SolutionResult:
+      contentType: application/json
+      payload:
+        $ref: "#/components/schemas/entities.SolutionResult"
+  schemas:
+    entities.Solution:
+      type: object
+      properties:
+        ID:
+          type: integer
+        Task:
+          $ref: "#/components/schemas/entities.Task"
+        Code:
+          type: string
+    entities.Task:
+      type: object
+      properties:
+        TestCases:
+          type: array
+          items:
+            $ref: "#/components/schemas/testrunner.TestCase"
+    testrunner.TestCase:
+      type: object
+      properties:
+        Input:
+          type: string
+        ExpectedOutput:
+          type: string
+    entities.SolutionResult:
+      type: object
+      properties:
+        ID:
+          type: integer
+        IsCorrect:
+          type: boolean
+        Result:
+          oneOf:
+            - type: object
+            - $ref: "#/components/schemas/runners.ErrFailedCompiling"
+            - $ref: "#/components/schemas/testrunner.ErrFailedRunning"
+            - $ref: "#/components/schemas/testrunner.ErrUnexpectedOutput"
+    runners.ErrFailedCompiling:
+      type: object
+      properties:
+        ErrMessage:
+          type: string
+    testrunner.ErrFailedRunning:
+      type: object
+      properties:
+        Input:
+          type: string
+        ExpectedOutput:
+          type: string
+        ErrMessage:
+          type: string
+    testrunner.ErrUnexpectedOutput:
+      type: object
+      properties:
+        Input:
+          type: string
+        ExpectedOutput:
+          type: string
+        ActualOutput:
+          type: string

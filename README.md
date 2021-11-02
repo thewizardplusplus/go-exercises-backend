@@ -54,7 +54,10 @@ Environment variables:
 
 ## API Description
 
-API description in the format of a [Postman](https://www.postman.com/) collection: [docs/postman_collection.json](docs/postman_collection.json).
+API description:
+
+- RabbitMQ API description in the [AsyncAPI](https://www.asyncapi.com/) format: [docs/async_api.yaml](docs/async_api.yaml);
+- web API description in the format of a [Postman](https://www.postman.com/) collection: [docs/postman_collection.json](docs/postman_collection.json).
 
 ## License
 
