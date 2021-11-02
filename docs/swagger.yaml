@@ -1,0 +1,519 @@
+basePath: /api/v1
+definitions:
+  entities.Credentials:
+    properties:
+      AccessToken:
+        type: string
+    type: object
+  entities.Solution:
+    properties:
+      Code:
+        type: string
+      CreatedAt:
+        type: string
+      DeletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      ID:
+        type: integer
+      IsCorrect:
+        type: boolean
+      Result:
+        items:
+          type: integer
+        type: array
+      Task:
+        $ref: '#/definitions/entities.Task'
+      TaskID:
+        type: integer
+      UpdatedAt:
+        type: string
+      User:
+        $ref: '#/definitions/entities.User'
+      UserID:
+        type: integer
+    type: object
+  entities.SolutionGroup:
+    properties:
+      Solutions:
+        items:
+          $ref: '#/definitions/entities.Solution'
+        type: array
+      TotalCount:
+        type: integer
+    type: object
+  entities.Task:
+    properties:
+      BoilerplateCode:
+        type: string
+      CreatedAt:
+        type: string
+      DeletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      Description:
+        type: string
+      ID:
+        type: integer
+      Status:
+        type: integer
+      TestCases:
+        items:
+          type: integer
+        type: array
+      Title:
+        type: string
+      UpdatedAt:
+        type: string
+      User:
+        $ref: '#/definitions/entities.User'
+      UserID:
+        type: integer
+    type: object
+  entities.TaskGroup:
+    properties:
+      Tasks:
+        items:
+          $ref: '#/definitions/entities.Task'
+        type: array
+      TotalCount:
+        type: integer
+    type: object
+  entities.User:
+    properties:
+      CreatedAt:
+        type: string
+      DeletedAt:
+        $ref: '#/definitions/gorm.DeletedAt'
+      ID:
+        type: integer
+      Password:
+        type: string
+      PasswordHash:
+        type: string
+      UpdatedAt:
+        type: string
+      Username:
+        type: string
+    type: object
+  gorm.DeletedAt:
+    properties:
+      Time:
+        type: string
+      Valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  license:
+    name: MIT
+  title: go-exercises-backend API
+  version: 1.5.2
+paths:
+  /solutions/{id}:
+    get:
+      parameters:
+      - description: solution ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Solution'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      tags:
+      - Solution
+  /solutions/format:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: solution data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Solution'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Solution'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      tags:
+      - Solution
+  /tasks/:
+    get:
+      parameters:
+      - description: page size
+        in: query
+        name: pageSize
+        required: true
+        type: integer
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.TaskGroup'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      tags:
+      - Task
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: task data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Task'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entities.Task'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      tags:
+      - Task
+  /tasks/{id}:
+    delete:
+      parameters:
+      - description: task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - text/plain
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      tags:
+      - Task
+    get:
+      parameters:
+      - description: task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.Task'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      tags:
+      - Task
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: task ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: task data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Task'
+      produces:
+      - text/plain
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      tags:
+      - Task
+  /tasks/{taskID}/solutions/:
+    get:
+      parameters:
+      - description: task ID
+        in: path
+        name: taskID
+        required: true
+        type: integer
+      - description: page size
+        in: query
+        name: pageSize
+        required: true
+        type: integer
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.SolutionGroup'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      tags:
+      - Solution
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: task ID
+        in: path
+        name: taskID
+        required: true
+        type: integer
+      - description: solution data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.Solution'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entities.Solution'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      tags:
+      - Solution
+  /tokens/:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: user data
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entities.User'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/entities.Credentials'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            type: string
+        "403":
+          description: Forbidden
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      tags:
+      - Token
+swagger: "2.0"

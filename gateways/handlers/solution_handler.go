@@ -31,6 +31,18 @@ type SolutionHandler struct {
 }
 
 // GetSolutions ...
+//   @router /tasks/{taskID}/solutions/ [GET]
+//   @param taskID path integer true "task ID"
+//   @param pageSize query integer true "page size"
+//   @param page query integer true "page"
+//   @produce json
+//   @success 200 {object} entities.SolutionGroup
+//   @failure 400 {string} string
+//   @failure 401 {string} string
+//   @failure 403 {string} string
+//   @failure 404 {string} string
+//   @failure 500 {string} string
+//   @tags Solution
 func (handler SolutionHandler) GetSolutions(
 	writer http.ResponseWriter,
 	request *http.Request,
@@ -67,6 +79,16 @@ func (handler SolutionHandler) GetSolutions(
 }
 
 // GetSolution ...
+//   @router /solutions/{id} [GET]
+//   @param id path integer true "solution ID"
+//   @produce json
+//   @success 200 {object} entities.Solution
+//   @failure 400 {string} string
+//   @failure 401 {string} string
+//   @failure 403 {string} string
+//   @failure 404 {string} string
+//   @failure 500 {string} string
+//   @tags Solution
 func (handler SolutionHandler) GetSolution(
 	writer http.ResponseWriter,
 	request *http.Request,
@@ -92,6 +114,18 @@ func (handler SolutionHandler) GetSolution(
 }
 
 // CreateSolution ...
+//   @router /tasks/{taskID}/solutions/ [POST]
+//   @param taskID path integer true "task ID"
+//   @param data body entities.Solution true "solution data"
+//   @accept json
+//   @produce json
+//   @success 201 {object} entities.Solution
+//   @failure 400 {string} string
+//   @failure 401 {string} string
+//   @failure 403 {string} string
+//   @failure 404 {string} string
+//   @failure 500 {string} string
+//   @tags Solution
 func (handler SolutionHandler) CreateSolution(
 	writer http.ResponseWriter,
 	request *http.Request,
@@ -127,6 +161,17 @@ func (handler SolutionHandler) CreateSolution(
 }
 
 // FormatSolution ...
+//   @router /solutions/format [POST]
+//   @param data body entities.Solution true "solution data"
+//   @accept json
+//   @produce json
+//   @success 200 {object} entities.Solution
+//   @failure 400 {string} string
+//   @failure 401 {string} string
+//   @failure 403 {string} string
+//   @failure 404 {string} string
+//   @failure 500 {string} string
+//   @tags Solution
 func (handler SolutionHandler) FormatSolution(
 	writer http.ResponseWriter,
 	request *http.Request,

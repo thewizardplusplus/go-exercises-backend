@@ -2,6 +2,30 @@
 
 
 [[projects]]
+  digest = "1:38beba9afeb613a2a1504b118165c1a6caea134160c969980427952c7a475f44"
+  name = "github.com/KyleBanks/depth"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "fec4dc38699e903ea7b44b2887549d2e7cd0a9f1"
+  version = "v1.2.1"
+
+[[projects]]
+  digest = "1:a2682518d905d662d984ef9959984ef87cecb777d379bfa9d9fe40e78069b3e4"
+  name = "github.com/PuerkitoBio/purell"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "44968752391892e1b0d0b821ee79e9a85fa13049"
+  version = "v1.1.1"
+
+[[projects]]
+  branch = "master"
+  digest = "1:c739832d67eb1e9cc478a19cc1a1ccd78df0397bf8a32978b759152e205f644b"
+  name = "github.com/PuerkitoBio/urlesc"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "de5bf2ad457846296e2031421a34e2568e304e35"
+
+[[projects]]
   digest = "1:9afc639ef88d907f2e87ab68cbc63117b88d0d84238fd6b08224515d00a8136a"
   name = "github.com/alecthomas/gometalinter"
   packages = ["."]
@@ -34,6 +58,14 @@
   version = "v6.5.0"
 
 [[projects]]
+  digest = "1:7cb4fdca4c251b3ef8027c90ea35f70c7b661a593b9eeae34753c65499098bb1"
+  name = "github.com/cpuguy83/go-md2man"
+  packages = ["md2man"]
+  pruneopts = "UT"
+  revision = "7762f7e404f8416dfa1d9bb6a8c192aa9acb4d19"
+  version = "v1.0.10"
+
+[[projects]]
   digest = "1:e47d51dab652d26c3fba6f8cba403f922d02757a82abdc77e90df7948daf296e"
   name = "github.com/deckarep/golang-set"
   packages = ["."]
@@ -58,6 +90,14 @@
   version = "v1.0.1"
 
 [[projects]]
+  digest = "1:2cd7915ab26ede7d95b8749e6b1f933f1c6d5398030684e6505940a10f31cfda"
+  name = "github.com/ghodss/yaml"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "0ca9ea5df5451ffdf184b4428c902747c2c11cd7"
+  version = "v1.0.0"
+
+[[projects]]
   digest = "1:3b140aa9cde608164aeb70ae814d66935e7b825f156885d0b2f8dd9f0a07bb3e"
   name = "github.com/go-gorm/datatypes"
   packages = ["."]
@@ -75,6 +115,38 @@
   pruneopts = "UT"
   revision = "cbf5cacfbfff319fd20a42367df566e0ace3d4ee"
   version = "v0.2.0"
+
+[[projects]]
+  digest = "1:513320bb979a467f87fb53c2faf5bc253d880ae82693a4e8716337df22eafed8"
+  name = "github.com/go-openapi/jsonpointer"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "2446e21cad36eee826e1c2380f0ff747074a2faa"
+  version = "v0.19.5"
+
+[[projects]]
+  digest = "1:24e7dd245844c7ee5c1b267404caa931684ca193387b29b626e3176be718b7b0"
+  name = "github.com/go-openapi/jsonreference"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "238d8d0fcc17b6ca1116240437a43b53d3bdf83d"
+  version = "v0.19.6"
+
+[[projects]]
+  digest = "1:295058b0d83a5af04a8f8503df26a5caebbd69a1f26889401b0a2c5cbba94bba"
+  name = "github.com/go-openapi/spec"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "9226cf44e1e3845cb2f2b1f1e654342282627b20"
+  version = "v0.20.4"
+
+[[projects]]
+  digest = "1:20de8257095daae4e1a2c2ed4e2d2fbeda4f5361ff1bc6f5d6525cd4951db085"
+  name = "github.com/go-openapi/swag"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "a879606f53d080fe7e9281dc00b99a744fe37425"
+  version = "v0.19.15"
 
 [[projects]]
   digest = "1:01745416ed734d0dbd8f2a25344536e399ee60319654873da12b107e9e3cb309"
@@ -156,6 +228,14 @@
   version = "v1.1.2"
 
 [[projects]]
+  digest = "1:e0b019ee3a64ce51eeb7e0097a372305ac8caf338e50adf8e4bf3b7ce928e132"
+  name = "github.com/josharian/intern"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "8e6ff32b3e7c0b018c43953085fe2ac330fe9acd"
+  version = "v1.0.0"
+
+[[projects]]
   digest = "1:6ba33f676b07a9af41146dc8350a1505e3749e7363581e8f94c9e11608720a2b"
   name = "github.com/lib/pq"
   packages = [
@@ -166,6 +246,18 @@
   pruneopts = "UT"
   revision = "072e83d238c297c71cab11154695af301010031e"
   version = "v1.10.0"
+
+[[projects]]
+  digest = "1:31f0ceca116f167499ab5b7ad57f3c2dc3d82f6dc4554dda19a8d18d696670ec"
+  name = "github.com/mailru/easyjson"
+  packages = [
+    "buffer",
+    "jlexer",
+    "jwriter",
+  ]
+  pruneopts = "UT"
+  revision = "c120ca7ced6051261161ce15e8f1542a4b2567fc"
+  version = "v0.7.7"
 
 [[projects]]
   digest = "1:7157fd3f337f20f9058789e47f3341ae5cb77081fa01c1d678af5a03afea6f3e"
@@ -197,6 +289,14 @@
   version = "v0.9.1"
 
 [[projects]]
+  digest = "1:48b588dcb2ab28036362df5a1f6cc7c68d1bdafb1e8b088eefaafb4d8dd807c5"
+  name = "github.com/russross/blackfriday"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "4c9bf9512682b995722660a4196c0013228e2049"
+  version = "v2.1.0"
+
+[[projects]]
   digest = "1:0e04dd87e4bd7a9251ffc6df4460fecc9d1199da1575483757fff9fd268b264a"
   name = "github.com/sethvargo/go-password"
   packages = ["password"]
@@ -211,6 +311,18 @@
   pruneopts = "UT"
   revision = "1c71cc93ed716f9a6f4c2ae8955c25f9176d9f19"
   version = "v1.0.0"
+
+[[projects]]
+  digest = "1:0f6e8ae645920b7fe8fc728268bcdae8877b7570e6c88787d88012fcf55e8986"
+  name = "github.com/swaggo/swag"
+  packages = [
+    ".",
+    "cmd/swag",
+    "gen",
+  ]
+  pruneopts = "UT"
+  revision = "eebe67fc31c39a02a763bcaa815baab805112cf3"
+  version = "v1.6.5"
 
 [[projects]]
   digest = "1:487897849d879c4c6b1a6147796af7a43a87ba79e15886031f4e0e2953dd90ba"
@@ -237,6 +349,14 @@
   version = "v1.2"
 
 [[projects]]
+  digest = "1:1d3ef3dd057d2eb1819e945f88cc83835296c9b7fb13ad3194c937c4e2891fee"
+  name = "github.com/urfave/cli"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "bfe2e925cfb6d44b40ad3a779165ea7e8aff9212"
+  version = "v1.22.0"
+
+[[projects]]
   branch = "master"
   digest = "1:9d5b5d543996dd584da1db1e0de1926f3e4c3a8dba0fa2f8db70f3ebee2342e0"
   name = "golang.org/x/crypto"
@@ -246,6 +366,62 @@
   ]
   pruneopts = "UT"
   revision = "0c34fe9e7dc2486962ef9867e3edb3503537209f"
+
+[[projects]]
+  branch = "master"
+  digest = "1:6bd1107fe417ce449104c2dedc302799e203cd16c9621b2f4de25b6250465ad5"
+  name = "golang.org/x/net"
+  packages = ["idna"]
+  pruneopts = "UT"
+  revision = "47ca1ff31462b4c8e280b5f2cdba5050aa61e890"
+
+[[projects]]
+  branch = "master"
+  digest = "1:af7b8aca45b9fb0ab85a1dcc16372621e2d019a57f688753d3b16f48fc87a529"
+  name = "golang.org/x/sys"
+  packages = ["execabs"]
+  pruneopts = "UT"
+  revision = "0a5406a5449cd9832275d0f9f1460f17d19301f0"
+
+[[projects]]
+  digest = "1:f8566d0bf095e64055f6a0fc1356390ecced12becd1bfac683f3a98543359557"
+  name = "golang.org/x/text"
+  packages = [
+    "collate",
+    "collate/build",
+    "internal/colltab",
+    "internal/gen",
+    "internal/language",
+    "internal/language/compact",
+    "internal/tag",
+    "internal/triegen",
+    "internal/ucd",
+    "language",
+    "secure/bidirule",
+    "transform",
+    "unicode/bidi",
+    "unicode/cldr",
+    "unicode/norm",
+    "unicode/rangetable",
+    "width",
+  ]
+  pruneopts = "UT"
+  revision = "383b2e75a7a4198c42f8f87833eefb772868a56f"
+  version = "v0.3.7"
+
+[[projects]]
+  digest = "1:030e2d88201b5c04919cc3d17c4fe960b1024fd5045fd3930add8c8d55bb8695"
+  name = "golang.org/x/tools"
+  packages = [
+    "go/ast/astutil",
+    "go/buildutil",
+    "go/internal/cgo",
+    "go/loader",
+    "internal/typeparams",
+  ]
+  pruneopts = "UT"
+  revision = "0df0ca0f43117120bd7cc900ebf765f9b799438a"
+  version = "v0.1.7"
 
 [[projects]]
   branch = "v3-unstable"
@@ -304,6 +480,7 @@
     "github.com/hashicorp/go-multierror",
     "github.com/pkg/errors",
     "github.com/sethvargo/go-password/password",
+    "github.com/swaggo/swag/cmd/swag",
     "github.com/thewizardplusplus/go-http-utils",
     "github.com/thewizardplusplus/go-rabbitmq-utils",
     "github.com/thewizardplusplus/go-sync-utils",

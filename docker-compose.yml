@@ -62,3 +62,12 @@ services:
       - 9091:80
     volumes:
       - ./docs/async-api:/usr/share/nginx/html
+
+  swagger:
+    image: swaggerapi/swagger-ui:v3.24.0
+    environment:
+      SWAGGER_JSON: /etc/go-exercises-backend/swagger.json
+    ports:
+      - 9092:8080
+    volumes:
+      - ./docs/swagger.json:/etc/go-exercises-backend/swagger.json

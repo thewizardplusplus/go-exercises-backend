@@ -21,6 +21,17 @@ type TokenHandler struct {
 }
 
 // CreateToken ...
+//   @router /tokens/ [POST]
+//   @param data body entities.User true "user data"
+//   @accept json
+//   @produce json
+//   @success 201 {object} entities.Credentials
+//   @failure 400 {string} string
+//   @failure 401 {string} string
+//   @failure 403 {string} string
+//   @failure 404 {string} string
+//   @failure 500 {string} string
+//   @tags Token
 func (handler TokenHandler) CreateToken(
 	writer http.ResponseWriter,
 	request *http.Request,

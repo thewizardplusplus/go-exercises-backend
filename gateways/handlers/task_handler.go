@@ -30,6 +30,17 @@ type TaskHandler struct {
 }
 
 // GetTasks ...
+//   @router /tasks/ [GET]
+//   @param pageSize query integer true "page size"
+//   @param page query integer true "page"
+//   @produce json
+//   @success 200 {object} entities.TaskGroup
+//   @failure 400 {string} string
+//   @failure 401 {string} string
+//   @failure 403 {string} string
+//   @failure 404 {string} string
+//   @failure 500 {string} string
+//   @tags Task
 func (handler TaskHandler) GetTasks(
 	writer http.ResponseWriter,
 	request *http.Request,
@@ -56,6 +67,16 @@ func (handler TaskHandler) GetTasks(
 }
 
 // GetTask ...
+//   @router /tasks/{id} [GET]
+//   @param id path integer true "task ID"
+//   @produce json
+//   @success 200 {object} entities.Task
+//   @failure 400 {string} string
+//   @failure 401 {string} string
+//   @failure 403 {string} string
+//   @failure 404 {string} string
+//   @failure 500 {string} string
+//   @tags Task
 func (handler TaskHandler) GetTask(
 	writer http.ResponseWriter,
 	request *http.Request,
@@ -81,6 +102,17 @@ func (handler TaskHandler) GetTask(
 }
 
 // CreateTask ...
+//   @router /tasks/ [POST]
+//   @param data body entities.Task true "task data"
+//   @accept json
+//   @produce json
+//   @success 201 {object} entities.Task
+//   @failure 400 {string} string
+//   @failure 401 {string} string
+//   @failure 403 {string} string
+//   @failure 404 {string} string
+//   @failure 500 {string} string
+//   @tags Task
 func (handler TaskHandler) CreateTask(
 	writer http.ResponseWriter,
 	request *http.Request,
@@ -106,6 +138,18 @@ func (handler TaskHandler) CreateTask(
 }
 
 // UpdateTask ...
+//   @router /tasks/{id} [PUT]
+//   @param id path integer true "task ID"
+//   @param data body entities.Task true "task data"
+//   @accept json
+//   @produce plain
+//   @success 204 {string} string
+//   @failure 400 {string} string
+//   @failure 401 {string} string
+//   @failure 403 {string} string
+//   @failure 404 {string} string
+//   @failure 500 {string} string
+//   @tags Task
 func (handler TaskHandler) UpdateTask(
 	writer http.ResponseWriter,
 	request *http.Request,
@@ -138,6 +182,16 @@ func (handler TaskHandler) UpdateTask(
 }
 
 // DeleteTask ...
+//   @router /tasks/{id} [DELETE]
+//   @param id path integer true "task ID"
+//   @produce plain
+//   @success 204 {string} string
+//   @failure 400 {string} string
+//   @failure 401 {string} string
+//   @failure 403 {string} string
+//   @failure 404 {string} string
+//   @failure 500 {string} string
+//   @tags Task
 func (handler TaskHandler) DeleteTask(
 	writer http.ResponseWriter,
 	request *http.Request,

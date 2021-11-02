@@ -33,6 +33,12 @@ func NewRouter(
 	options RouterOptions,
 	dependencies RouterDependencies,
 ) *mux.Router {
+	// @title go-exercises-backend API
+	// @version 1.5.2
+	// @license.name MIT
+	// @host localhost:8080
+	// @basePath /api/v1
+
 	rootRouter := mux.NewRouter()
 	apiRouter := rootRouter.PathPrefix("/api/v1").Subrouter()
 	apiRouterWithAuthorization := apiRouter.NewRoute().Subrouter()

@@ -16,3 +16,6 @@ vendor/
 
 # Generated AsyncAPI documentation
 docs/async-api/
+
+# Swagger documentation in the form of Go code
+docs/*.go

@@ -1,6 +1,9 @@
 required = [
   "github.com/alecthomas/gometalinter",
+  "github.com/swaggo/swag/cmd/swag",
 ]
+
+ignored = ["github.com/thewizardplusplus/go-exercises-backend/docs*"]
 
 [prune]
   go-tests = true
