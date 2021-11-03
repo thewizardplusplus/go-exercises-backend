@@ -1,400 +1,747 @@
 {
 	"info": {
 		"_postman_id": "9caf2908-8fbc-4d33-863b-742e9a75ce13",
-		"name": "go-exercises-backend",
+		"name": "go-exercises-backend API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "/api/v1/tokens/",
-			"event": [
+			"name": "tokens",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"const credentials = pm.response.json()",
-							"pm.globals.set(\"accessToken\", credentials.AccessToken)"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"Username\": \"username\",\n    \"Password\": \"password\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/v1/tokens/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"tokens",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/api/v1/tasks/",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
+					"name": "/tokens/",
+					"event": [
 						{
-							"key": "token",
-							"value": "{{accessToken}}",
-							"type": "string"
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const credentials = pm.response.json()",
+									"pm.globals.set(\"accessToken\", credentials.AccessToken)"
+								],
+								"type": "text/javascript"
+							}
 						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/v1/tasks/?pageSize=0&page=0",
-					"protocol": "http",
-					"host": [
-						"localhost"
 					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"tasks",
-						""
-					],
-					"query": [
-						{
-							"key": "pageSize",
-							"value": "0"
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Username\": \"username\",\n    \"Password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
-						{
-							"key": "page",
-							"value": "0"
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tokens/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tokens",
+								""
+							]
 						}
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "/api/v1/tasks/",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{accessToken}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"Title\": \"{{$randomLoremSentence}}\",\n    \"Description\": \"{{$randomLoremSentences}}\",\n    \"BoilerplateCode\": \"package main; func main() { var x, y int; fmt.Scan(&x, &y); fmt.Println(x + y) }\",\n    \"TestCases\": [\n        {\n            \"Input\": \"5 12\",\n            \"ExpectedOutput\": \"17\\n\"\n        },\n        {\n            \"Input\": \"23 42\",\n            \"ExpectedOutput\": \"65\\n\"\n        }\n    ]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/v1/tasks/",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"tasks",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/api/v1/tasks/{id}",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{accessToken}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/v1/tasks/23",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"tasks",
-						"23"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/api/v1/tasks/{id}",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{accessToken}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "PUT",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"Title\": \"{{$randomLoremSentence}}\",\n    \"Description\": \"{{$randomLoremSentences}}\",\n    \"BoilerplateCode\": \"package main; func main() { var x, y int; fmt.Scan(&x, &y); fmt.Println(x + y) }\",\n    \"TestCases\": [\n        {\n            \"Input\": \"5 12\",\n            \"ExpectedOutput\": \"17\\n\"\n        },\n        {\n            \"Input\": \"23 42\",\n            \"ExpectedOutput\": \"65\\n\"\n        }\n    ]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/v1/tasks/23",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"tasks",
-						"23"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/api/v1/tasks/{id}",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{accessToken}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/v1/tasks/23",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"tasks",
-						"23"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/api/v1/tasks/{taskID}/solutions/",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{accessToken}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/v1/tasks/23/solutions/?pageSize=0&page=0",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"tasks",
-						"23",
-						"solutions",
-						""
-					],
-					"query": [
-						{
-							"key": "pageSize",
-							"value": "0"
+			"name": "tasks",
+			"item": [
+				{
+					"name": "/tasks/",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
 						},
-						{
-							"key": "page",
-							"value": "0"
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tasks/?pageSize=0&page=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								""
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "0"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "/tasks/",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const task = pm.response.json()",
+									"pm.globals.set(\"taskID\", task.ID)"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Title\": \"{{$randomLoremSentence}}\",\n    \"Description\": \"{{$randomLoremSentences}}\",\n    \"BoilerplateCode\": \"package main; func main() { var x, y int; fmt.Scan(&x, &y); fmt.Println(x + y) }\",\n    \"TestCases\": [\n        {\n            \"Input\": \"5 12\",\n            \"ExpectedOutput\": \"17\\n\"\n        },\n        {\n            \"Input\": \"23 42\",\n            \"ExpectedOutput\": \"65\\n\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tasks/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/tasks/:id (specific)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tasks/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/tasks/:id (created)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tasks/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{taskID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/tasks/:id (specific)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Title\": \"{{$randomLoremSentence}}\",\n    \"Description\": \"{{$randomLoremSentences}}\",\n    \"BoilerplateCode\": \"package main; func main() { var x, y int; fmt.Scan(&x, &y); fmt.Println(x + y) }\",\n    \"TestCases\": [\n        {\n            \"Input\": \"5 12\",\n            \"ExpectedOutput\": \"17\\n\"\n        },\n        {\n            \"Input\": \"23 42\",\n            \"ExpectedOutput\": \"65\\n\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tasks/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/tasks/:id (created)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Title\": \"{{$randomLoremSentence}}\",\n    \"Description\": \"{{$randomLoremSentences}}\",\n    \"BoilerplateCode\": \"package main; func main() { var x, y int; fmt.Scan(&x, &y); fmt.Println(x + y) }\",\n    \"TestCases\": [\n        {\n            \"Input\": \"5 12\",\n            \"ExpectedOutput\": \"17\\n\"\n        },\n        {\n            \"Input\": \"23 42\",\n            \"ExpectedOutput\": \"65\\n\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tasks/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{taskID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/tasks/:id (specific)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tasks/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/tasks/:id (created)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tasks/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{taskID}}"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "/api/v1/tasks/{taskID}/solutions/",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
+			"name": "solutions",
+			"item": [
+				{
+					"name": "/tasks/:taskID/solutions/ (specific)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tasks/:taskID/solutions/?pageSize=0&page=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								":taskID",
+								"solutions",
+								""
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "0"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								}
+							],
+							"variable": [
+								{
+									"key": "taskID",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/tasks/:taskID/solutions/ (created)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tasks/:taskID/solutions/?pageSize=0&page=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								":taskID",
+								"solutions",
+								""
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "0"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								}
+							],
+							"variable": [
+								{
+									"key": "taskID",
+									"value": "{{taskID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/tasks/:taskID/solutions/ (specific)",
+					"event": [
 						{
-							"key": "token",
-							"value": "{{accessToken}}",
-							"type": "string"
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const solution = pm.response.json()",
+									"pm.globals.set(\"solutionID\", solution.ID)"
+								],
+								"type": "text/javascript"
+							}
 						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"Code\": \"package main; func main() { var x, y int; fmt.Scan(&x, &y); fmt.Println(x + y) }\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/api/v1/tasks/23/solutions/",
-					"protocol": "http",
-					"host": [
-						"localhost"
 					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"tasks",
-						"23",
-						"solutions",
-						""
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/api/v1/solutions/{id}",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Code\": \"package main; func main() { var x, y int; fmt.Scan(&x, &y); fmt.Println(x + y) }\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tasks/:taskID/solutions/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								":taskID",
+								"solutions",
+								""
+							],
+							"variable": [
+								{
+									"key": "taskID",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/tasks/:taskID/solutions/ (created)",
+					"event": [
 						{
-							"key": "token",
-							"value": "{{accessToken}}",
-							"type": "string"
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const solution = pm.response.json()",
+									"pm.globals.set(\"solutionID\", solution.ID)"
+								],
+								"type": "text/javascript"
+							}
 						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/api/v1/solutions/23",
-					"protocol": "http",
-					"host": [
-						"localhost"
 					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"solutions",
-						"23"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/api/v1/solutions/format",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{accessToken}}",
-							"type": "string"
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Code\": \"package main; func main() { var x, y int; fmt.Scan(&x, &y); fmt.Println(x + y) }\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/tasks/:taskID/solutions/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"tasks",
+								":taskID",
+								"solutions",
+								""
+							],
+							"variable": [
+								{
+									"key": "taskID",
+									"value": "{{taskID}}"
+								}
+							]
 						}
-					]
+					},
+					"response": []
 				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"Code\": \"package main; func main() { var x, y int; fmt.Scan(&x, &y); fmt.Println(x + y) }\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+				{
+					"name": "/solutions/:id (specific)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/solutions/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"solutions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "0"
+								}
+							]
 						}
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8080/api/v1/solutions/format",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"api",
-						"v1",
-						"solutions",
-						"format"
-					]
+				{
+					"name": "/solutions/:id (created)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/v1/solutions/:id",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"solutions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{solutionID}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/solutions/format",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"Code\": \"package main; func main() { var x, y int; fmt.Scan(&x, &y); fmt.Println(x + y) }\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/v1/solutions/format",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"solutions",
+								"format"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }
