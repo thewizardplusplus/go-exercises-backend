@@ -65,3 +65,7 @@ required = [
 [[constraint]]
   name = "github.com/thewizardplusplus/go-rabbitmq-utils"
   version = "1.1.3"
+
+[[constraint]]
+  name = "github.com/thewizardplusplus/go-sync-utils"
+  version = "1.2.0"
