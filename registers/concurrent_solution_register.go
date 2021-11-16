@@ -2,85 +2,62 @@ package registers
 
 import (
 	"context"
-	"sync"
 
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
+	syncutils "github.com/thewizardplusplus/go-sync-utils"
 )
+
+type solutionRegisterWrapper struct {
+	solutionRegister entities.SolutionRegister
+}
+
+func (wrapper solutionRegisterWrapper) Handle(
+	ctx context.Context,
+	data interface{},
+) {
+	wrapper.solutionRegister.RegisterSolution(data.(uint))
+}
 
 // ConcurrentSolutionRegister ...
 type ConcurrentSolutionRegister struct {
-	innerRegister entities.SolutionRegister
-
-	startMode            *startModeHolder
-	stoppingCtx          context.Context
-	stoppingCtxCanceller context.CancelFunc
-	ids                  chan uint
+	// do not use embedding to hide the Handle() method
+	concurrentHandler syncutils.ConcurrentHandler
 }
 
 // NewConcurrentSolutionRegister ...
 func NewConcurrentSolutionRegister(
 	bufferSize int,
-	innerRegister entities.SolutionRegister,
+	innerSolutionRegister entities.SolutionRegister,
 ) ConcurrentSolutionRegister {
-	startMode := &startModeHolder{}
-	stoppingCtx, stoppingCtxCanceller := context.WithCancel(context.Background())
 	return ConcurrentSolutionRegister{
-		innerRegister: innerRegister,
-
-		startMode:            startMode,
-		stoppingCtx:          stoppingCtx,
-		stoppingCtxCanceller: stoppingCtxCanceller,
-		ids:                  make(chan uint, bufferSize),
+		concurrentHandler: syncutils.NewConcurrentHandler(
+			bufferSize,
+			solutionRegisterWrapper{
+				solutionRegister: innerSolutionRegister,
+			},
+		),
 	}
 }
 
 // RegisterSolution ...
 func (register ConcurrentSolutionRegister) RegisterSolution(id uint) {
-	register.ids <- id
+	register.concurrentHandler.Handle(id)
 }
 
 // Start ...
 func (register ConcurrentSolutionRegister) Start() {
-	register.basicRun(started, func() {
-		for id := range register.ids {
-			register.innerRegister.RegisterSolution(id)
-		}
-	})
+	register.concurrentHandler.Start(context.Background())
 }
 
 // StartConcurrently ...
-func (register ConcurrentSolutionRegister) StartConcurrently(concurrency int) {
-	register.basicRun(startedConcurrently, func() {
-		var waitGroup sync.WaitGroup
-		waitGroup.Add(concurrency)
-
-		for threadID := 0; threadID < concurrency; threadID++ {
-			go func() {
-				defer waitGroup.Done()
-
-				register.Start()
-			}()
-		}
-
-		waitGroup.Wait()
-	})
+func (register ConcurrentSolutionRegister) StartConcurrently(
+	concurrencyFactor int,
+) {
+	register.concurrentHandler.
+		StartConcurrently(context.Background(), concurrencyFactor)
 }
 
 // Stop ...
 func (register ConcurrentSolutionRegister) Stop() {
-	close(register.ids)
-	<-register.stoppingCtx.Done()
-}
-
-func (register ConcurrentSolutionRegister) basicRun(
-	mode startMode,
-	runHandler func(),
-) {
-	register.startMode.setStartModeOnce(mode)
-
-	runHandler()
-
-	if register.startMode.getStartMode() == mode {
-		register.stoppingCtxCanceller()
-	}
+	register.concurrentHandler.Stop()
 }
