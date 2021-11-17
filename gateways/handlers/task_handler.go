@@ -102,7 +102,7 @@ func (handler TaskHandler) CreateTask(
 		return
 	}
 
-	httputils.WriteJSON(writer, http.StatusOK, idAsModel)
+	httputils.WriteJSON(writer, http.StatusCreated, idAsModel)
 }
 
 // UpdateTask ...
@@ -133,6 +133,8 @@ func (handler TaskHandler) UpdateTask(
 
 		return
 	}
+
+	writer.WriteHeader(http.StatusNoContent)
 }
 
 // DeleteTask ...
@@ -155,4 +157,6 @@ func (handler TaskHandler) DeleteTask(
 
 		return
 	}
+
+	writer.WriteHeader(http.StatusNoContent)
 }

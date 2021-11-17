@@ -123,7 +123,7 @@ func (handler SolutionHandler) CreateSolution(
 		return
 	}
 
-	httputils.WriteJSON(writer, http.StatusOK, idAsModel)
+	httputils.WriteJSON(writer, http.StatusCreated, idAsModel)
 }
 
 // FormatSolution ...

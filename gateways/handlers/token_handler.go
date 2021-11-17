@@ -41,5 +41,5 @@ func (handler TokenHandler) CreateToken(
 		return
 	}
 
-	httputils.WriteJSON(writer, http.StatusOK, credentials)
+	httputils.WriteJSON(writer, http.StatusCreated, credentials)
 }
