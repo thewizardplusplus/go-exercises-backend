@@ -31,8 +31,8 @@ type TaskHandler struct {
 
 // GetTasks ...
 //   @router /tasks/ [GET]
-//   @param pageSize query integer true "page size"
-//   @param page query integer true "page"
+//   @param pageSize query integer true "page size" minimum(1)
+//   @param page query integer true "page" minimum(1)
 //   @security JWTAuthorization
 //   @produce json
 //   @success 200 {object} entities.TaskGroup
@@ -69,7 +69,7 @@ func (handler TaskHandler) GetTasks(
 
 // GetTask ...
 //   @router /tasks/{id} [GET]
-//   @param id path integer true "task ID"
+//   @param id path integer true "task ID" minimum(1)
 //   @security JWTAuthorization
 //   @produce json
 //   @success 200 {object} entities.Task
@@ -142,7 +142,7 @@ func (handler TaskHandler) CreateTask(
 
 // UpdateTask ...
 //   @router /tasks/{id} [PUT]
-//   @param id path integer true "task ID"
+//   @param id path integer true "task ID" minimum(1)
 //   @param data body entities.Task true "task data"
 //   @accept json
 //   @security JWTAuthorization
@@ -187,7 +187,7 @@ func (handler TaskHandler) UpdateTask(
 
 // DeleteTask ...
 //   @router /tasks/{id} [DELETE]
-//   @param id path integer true "task ID"
+//   @param id path integer true "task ID" minimum(1)
 //   @security JWTAuthorization
 //   @produce plain
 //   @success 204 {string} string

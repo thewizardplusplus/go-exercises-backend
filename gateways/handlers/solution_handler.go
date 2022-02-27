@@ -32,9 +32,9 @@ type SolutionHandler struct {
 
 // GetSolutions ...
 //   @router /tasks/{taskID}/solutions/ [GET]
-//   @param taskID path integer true "task ID"
-//   @param pageSize query integer true "page size"
-//   @param page query integer true "page"
+//   @param taskID path integer true "task ID" minimum(1)
+//   @param pageSize query integer true "page size" minimum(1)
+//   @param page query integer true "page" minimum(1)
 //   @security JWTAuthorization
 //   @produce json
 //   @success 200 {object} entities.SolutionGroup
@@ -81,7 +81,7 @@ func (handler SolutionHandler) GetSolutions(
 
 // GetSolution ...
 //   @router /solutions/{id} [GET]
-//   @param id path integer true "solution ID"
+//   @param id path integer true "solution ID" minimum(1)
 //   @security JWTAuthorization
 //   @produce json
 //   @success 200 {object} entities.Solution
@@ -117,7 +117,7 @@ func (handler SolutionHandler) GetSolution(
 
 // CreateSolution ...
 //   @router /tasks/{taskID}/solutions/ [POST]
-//   @param taskID path integer true "task ID"
+//   @param taskID path integer true "task ID" minimum(1)
 //   @param data body entities.Solution true "solution data"
 //   @accept json
 //   @security JWTAuthorization

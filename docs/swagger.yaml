@@ -18,18 +18,18 @@ definitions:
       IsCorrect:
         type: boolean
       Result:
-        items:
-          type: integer
-        type: array
+        type: object
       Task:
         $ref: '#/definitions/entities.Task'
       TaskID:
+        minimum: 1
         type: integer
       UpdatedAt:
         type: string
       User:
         $ref: '#/definitions/entities.User'
       UserID:
+        minimum: 1
         type: integer
     type: object
   entities.SolutionGroup:
@@ -39,6 +39,7 @@ definitions:
           $ref: '#/definitions/entities.Solution'
         type: array
       TotalCount:
+        minimum: 0
         type: integer
     type: object
   entities.Task:
@@ -54,11 +55,13 @@ definitions:
       ID:
         type: integer
       Status:
+        enum:
+        - 0
+        - 1
+        - 2
         type: integer
       TestCases:
-        items:
-          type: integer
-        type: array
+        type: object
       Title:
         type: string
       UpdatedAt:
@@ -66,6 +69,7 @@ definitions:
       User:
         $ref: '#/definitions/entities.User'
       UserID:
+        minimum: 1
         type: integer
     type: object
   entities.TaskGroup:
@@ -75,6 +79,7 @@ definitions:
           $ref: '#/definitions/entities.Task'
         type: array
       TotalCount:
+        minimum: 0
         type: integer
     type: object
   entities.User:
@@ -115,6 +120,7 @@ paths:
       parameters:
       - description: solution ID
         in: path
+        minimum: 1
         name: id
         required: true
         type: integer
@@ -196,11 +202,13 @@ paths:
       parameters:
       - description: page size
         in: query
+        minimum: 1
         name: pageSize
         required: true
         type: integer
       - description: page
         in: query
+        minimum: 1
         name: page
         required: true
         type: integer
@@ -281,6 +289,7 @@ paths:
       parameters:
       - description: task ID
         in: path
+        minimum: 1
         name: id
         required: true
         type: integer
@@ -319,6 +328,7 @@ paths:
       parameters:
       - description: task ID
         in: path
+        minimum: 1
         name: id
         required: true
         type: integer
@@ -359,6 +369,7 @@ paths:
       parameters:
       - description: task ID
         in: path
+        minimum: 1
         name: id
         required: true
         type: integer
@@ -404,16 +415,19 @@ paths:
       parameters:
       - description: task ID
         in: path
+        minimum: 1
         name: taskID
         required: true
         type: integer
       - description: page size
         in: query
+        minimum: 1
         name: pageSize
         required: true
         type: integer
       - description: page
         in: query
+        minimum: 1
         name: page
         required: true
         type: integer
@@ -454,6 +468,7 @@ paths:
       parameters:
       - description: task ID
         in: path
+        minimum: 1
         name: taskID
         required: true
         type: integer

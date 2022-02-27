@@ -93,6 +93,7 @@
                 ],
                 "parameters": [
                     {
+                        "minimum": 1,
                         "type": "integer",
                         "description": "solution ID",
                         "name": "id",
@@ -155,6 +156,7 @@
                 ],
                 "parameters": [
                     {
+                        "minimum": 1,
                         "type": "integer",
                         "description": "page size",
                         "name": "pageSize",
@@ -162,6 +164,7 @@
                         "required": true
                     },
                     {
+                        "minimum": 1,
                         "type": "integer",
                         "description": "page",
                         "name": "page",
@@ -289,6 +292,7 @@
                 ],
                 "parameters": [
                     {
+                        "minimum": 1,
                         "type": "integer",
                         "description": "task ID",
                         "name": "id",
@@ -352,6 +356,7 @@
                 ],
                 "parameters": [
                     {
+                        "minimum": 1,
                         "type": "integer",
                         "description": "task ID",
                         "name": "id",
@@ -421,6 +426,7 @@
                 ],
                 "parameters": [
                     {
+                        "minimum": 1,
                         "type": "integer",
                         "description": "task ID",
                         "name": "id",
@@ -483,6 +489,7 @@
                 ],
                 "parameters": [
                     {
+                        "minimum": 1,
                         "type": "integer",
                         "description": "task ID",
                         "name": "taskID",
@@ -490,6 +497,7 @@
                         "required": true
                     },
                     {
+                        "minimum": 1,
                         "type": "integer",
                         "description": "page size",
                         "name": "pageSize",
@@ -497,6 +505,7 @@
                         "required": true
                     },
                     {
+                        "minimum": 1,
                         "type": "integer",
                         "description": "page",
                         "name": "page",
@@ -560,6 +569,7 @@
                 ],
                 "parameters": [
                     {
+                        "minimum": 1,
                         "type": "integer",
                         "description": "task ID",
                         "name": "taskID",
@@ -707,16 +717,14 @@
                     "type": "boolean"
                 },
                 "Result": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "type": "object"
                 },
                 "Task": {
                     "$ref": "#/definitions/entities.Task"
                 },
                 "TaskID": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 1
                 },
                 "UpdatedAt": {
                     "type": "string"
@@ -725,7 +733,8 @@
                     "$ref": "#/definitions/entities.User"
                 },
                 "UserID": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 1
                 }
             }
         },
@@ -739,7 +748,8 @@
                     }
                 },
                 "TotalCount": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 0
                 }
             }
         },
@@ -762,13 +772,15 @@
                     "type": "integer"
                 },
                 "Status": {
-                    "type": "integer"
+                    "type": "integer",
+                    "enum": [
+                        0,
+                        1,
+                        2
+                    ]
                 },
                 "TestCases": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
+                    "type": "object"
                 },
                 "Title": {
                     "type": "string"
@@ -780,7 +792,8 @@
                     "$ref": "#/definitions/entities.User"
                 },
                 "UserID": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 1
                 }
             }
         },
@@ -794,7 +807,8 @@
                     }
                 },
                 "TotalCount": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 0
                 }
             }
         },

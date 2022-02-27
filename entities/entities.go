@@ -15,13 +15,13 @@ import (
 type Task struct {
 	gorm.Model
 
-	UserID          uint
+	UserID          uint `minimum:"1"`
 	User            User
 	Title           string
 	Description     string
 	BoilerplateCode string
-	TestCases       datatypes.JSON
-	Status          int `gorm:"->"`
+	TestCases       datatypes.JSON `swaggertype:"object"`
+	Status          int            `gorm:"->" enums:"0,1,2"`
 }
 
 // FormatBoilerplateCode ...
@@ -38,20 +38,20 @@ func (task *Task) FormatBoilerplateCode() error {
 // TaskGroup ...
 type TaskGroup struct {
 	Tasks      []Task
-	TotalCount int64
+	TotalCount int64 `minimum:"0"`
 }
 
 // Solution ...
 type Solution struct {
 	gorm.Model
 
-	UserID    uint
+	UserID    uint `minimum:"1"`
 	User      User
-	TaskID    uint
+	TaskID    uint `minimum:"1"`
 	Task      Task
 	Code      string
 	IsCorrect bool
-	Result    datatypes.JSON
+	Result    datatypes.JSON `swaggertype:"object"`
 }
 
 // FormatCode ...
@@ -68,7 +68,7 @@ func (solution *Solution) FormatCode() error {
 // SolutionGroup ...
 type SolutionGroup struct {
 	Solutions  []Solution
-	TotalCount int64
+	TotalCount int64 `minimum:"0"`
 }
 
 // User ...
