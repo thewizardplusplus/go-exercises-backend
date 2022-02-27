@@ -145,6 +145,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - JWTAuthorization: []
       tags:
       - Solution
   /solutions/format:
@@ -185,6 +187,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - JWTAuthorization: []
       tags:
       - Solution
   /tasks/:
@@ -227,6 +231,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - JWTAuthorization: []
       tags:
       - Task
     post:
@@ -266,6 +272,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - JWTAuthorization: []
       tags:
       - Task
   /tasks/{id}:
@@ -303,6 +311,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - JWTAuthorization: []
       tags:
       - Task
     get:
@@ -339,6 +349,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - JWTAuthorization: []
       tags:
       - Task
     put:
@@ -383,6 +395,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - JWTAuthorization: []
       tags:
       - Task
   /tasks/{taskID}/solutions/:
@@ -430,6 +444,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - JWTAuthorization: []
       tags:
       - Solution
     post:
@@ -474,6 +490,8 @@ paths:
           description: Internal Server Error
           schema:
             type: string
+      security:
+      - JWTAuthorization: []
       tags:
       - Solution
   /tokens/:
@@ -516,4 +534,9 @@ paths:
             type: string
       tags:
       - Token
+securityDefinitions:
+  JWTAuthorization:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

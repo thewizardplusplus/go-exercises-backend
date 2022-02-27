@@ -38,6 +38,9 @@ func NewRouter(
 	// @license.name MIT
 	// @host localhost:8080
 	// @basePath /api/v1
+	// @securityDefinitions.apiKey JWTAuthorization
+	// @name Authorization
+	// @in header
 
 	rootRouter := mux.NewRouter()
 	apiRouter := rootRouter.PathPrefix("/api/v1").Subrouter()

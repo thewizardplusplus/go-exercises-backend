@@ -13,6 +13,11 @@
     "paths": {
         "/solutions/format": {
             "post": {
+                "security": [
+                    {
+                        "JWTAuthorization": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -75,6 +80,11 @@
         },
         "/solutions/{id}": {
             "get": {
+                "security": [
+                    {
+                        "JWTAuthorization": []
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -132,6 +142,11 @@
         },
         "/tasks/": {
             "get": {
+                "security": [
+                    {
+                        "JWTAuthorization": []
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -194,6 +209,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "JWTAuthorization": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -256,6 +276,11 @@
         },
         "/tasks/{id}": {
             "get": {
+                "security": [
+                    {
+                        "JWTAuthorization": []
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -311,6 +336,11 @@
                 }
             },
             "put": {
+                "security": [
+                    {
+                        "JWTAuthorization": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -378,6 +408,11 @@
                 }
             },
             "delete": {
+                "security": [
+                    {
+                        "JWTAuthorization": []
+                    }
+                ],
                 "produces": [
                     "text/plain"
                 ],
@@ -435,6 +470,11 @@
         },
         "/tasks/{taskID}/solutions/": {
             "get": {
+                "security": [
+                    {
+                        "JWTAuthorization": []
+                    }
+                ],
                 "produces": [
                     "application/json"
                 ],
@@ -504,6 +544,11 @@
                 }
             },
             "post": {
+                "security": [
+                    {
+                        "JWTAuthorization": []
+                    }
+                ],
                 "consumes": [
                     "application/json"
                 ],
@@ -790,6 +835,13 @@
                     "type": "boolean"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "JWTAuthorization": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }
