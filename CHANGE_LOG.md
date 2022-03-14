@@ -22,6 +22,78 @@
 
 ## [v1.0-beta](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.0-beta) (2021-03-25)
 
+Beta of the major version. Implement producing solutions via the [RabbitMQ](https://www.rabbitmq.com/) message broker; add the [wait-for-it](https://github.com/vishnubob/wait-for-it) script to the [Docker](https://www.docker.com/) image.
+
+- databases:
+  - storing data in the [PostgreSQL](https://www.postgresql.org/) database:
+    - add the `storages.CloseDB()` function;
+- interaction with queues:
+  - using the [RabbitMQ](https://www.rabbitmq.com/) message broker;
+  - common properties:
+    - automatic declaring of the used queues;
+    - passing of a message data in JSON;
+  - operations:
+    - producing solutions:
+      - concurrent producing;
+- distributing:
+  - [Docker](https://www.docker.com/) image:
+    - add the [wait-for-it](https://github.com/vishnubob/wait-for-it) script.
+
+### Features
+
+- RESTful API:
+  - models:
+    - task model:
+      - storing:
+        - title;
+        - description;
+        - boilerplate code;
+        - test cases:
+          - all test cases are represented by a single string;
+      - operations:
+        - getting all tasks;
+        - getting a single task by an ID;
+        - creating;
+        - updating by an ID;
+        - deleting by an ID;
+    - solution model:
+      - storing:
+        - task ID;
+        - code;
+      - operations:
+        - getting all solutions by a task ID;
+        - getting a single solution by an ID;
+        - creating;
+  - representing:
+    - in a JSON:
+      - payloads:
+        - of requests;
+        - of responses;
+    - as a plain text:
+      - errors;
+- server:
+  - storing settings in environment variables;
+  - supporting graceful shutdown;
+  - logging:
+    - logging requests;
+    - logging errors;
+  - panics:
+    - recovering on panics;
+    - logging of panics;
+- databases:
+  - storing data in the [PostgreSQL](https://www.postgresql.org/) database;
+- interaction with queues:
+  - using the [RabbitMQ](https://www.rabbitmq.com/) message broker;
+  - common properties:
+    - automatic declaring of the used queues;
+    - passing of a message data in JSON;
+  - operations:
+    - producing solutions:
+      - concurrent producing;
+- distributing:
+  - [Docker](https://www.docker.com/) image;
+  - [Docker Compose](https://docs.docker.com/compose/) configuration.
+
 ## [v1.0-alpha.1](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.0-alpha.1) (2021-03-24)
 
 Second alpha of the major version. Implement the solution model.
