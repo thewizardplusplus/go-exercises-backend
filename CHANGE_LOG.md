@@ -16,6 +16,10 @@
 
 ## [v1.0.2](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.0.2) (2021-03-29)
 
+Extend the [Postman](https://www.postman.com/) collection.
+
+- extend the [Postman](https://www.postman.com/) collection.
+
 ## [v1.0.1](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.0.1) (2021-03-27)
 
 Use the `datatypes.JSON` type from the `github.com/go-gorm/datatypes` package in the models; requeue the solution on failure only once.
