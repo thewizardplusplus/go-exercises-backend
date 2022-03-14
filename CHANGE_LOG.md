@@ -24,6 +24,66 @@
 
 ## [v1.0-alpha.1](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.0-alpha.1) (2021-03-24)
 
+Second alpha of the major version. Implement the solution model.
+
+- RESTful API:
+  - models:
+    - solution model:
+      - storing:
+        - task ID;
+        - code;
+      - operations:
+        - getting all solutions by a task ID;
+        - getting a single solution by an ID;
+        - creating.
+
+### Features
+
+- RESTful API:
+  - models:
+    - task model:
+      - storing:
+        - title;
+        - description;
+        - boilerplate code;
+        - test cases:
+          - all test cases are represented by a single string;
+      - operations:
+        - getting all tasks;
+        - getting a single task by an ID;
+        - creating;
+        - updating by an ID;
+        - deleting by an ID;
+    - solution model:
+      - storing:
+        - task ID;
+        - code;
+      - operations:
+        - getting all solutions by a task ID;
+        - getting a single solution by an ID;
+        - creating;
+  - representing:
+    - in a JSON:
+      - payloads:
+        - of requests;
+        - of responses;
+    - as a plain text:
+      - errors;
+- server:
+  - storing settings in environment variables;
+  - supporting graceful shutdown;
+  - logging:
+    - logging requests;
+    - logging errors;
+  - panics:
+    - recovering on panics;
+    - logging of panics;
+- databases:
+  - storing data in the [PostgreSQL](https://www.postgresql.org/) database;
+- distributing:
+  - [Docker](https://www.docker.com/) image;
+  - [Docker Compose](https://docs.docker.com/compose/) configuration.
+
 ## [v1.0-alpha](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.0-alpha) (2021-03-24)
 
 Alpha of the major version. Implement the task model, implement a server; prepare distribution via [Docker](https://www.docker.com/).
