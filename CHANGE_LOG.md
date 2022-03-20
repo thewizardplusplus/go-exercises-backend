@@ -10,6 +10,140 @@
 
 ## [v1.3](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.3) (2021-05-08)
 
+Calculate a total correctness flag based on all solutions of a requesting author; sort the tasks and solutions; process pagination for the tasks and solutions; allow a solution task author to get solutions of other authors.
+
+- RESTful API:
+  - models:
+    - task model:
+      - operations:
+        - getting all tasks:
+          - join an additional data:
+            - join an author data to the results;
+            - calculate a total correctness flag based on all solutions of a requesting author;
+          - sort the results by creation time in descending order;
+          - process pagination:
+            - implemented using an offset and a limit;
+        - getting a single task by an ID:
+          - join an additional data:
+            - join an author data to the results;
+            - calculate a total correctness flag based on all solutions of a requesting author;
+    - solution model:
+      - operations:
+        - getting all solutions by a task ID:
+          - join an author data to the results;
+          - filtered by a requesting author:
+            - allow a solution task author to get solutions of other authors;
+          - sort the results by creation time in descending order;
+          - process pagination:
+            - implemented using an offset and a limit;
+        - getting a single solution by an ID:
+          - join an author data to the results;
+          - allow a solution task author to get solutions of other authors.
+
+### Features
+
+- RESTful API:
+  - models:
+    - task model:
+      - storing:
+        - author ID;
+        - title;
+        - description;
+        - boilerplate code;
+        - test cases:
+          - all test cases are represented by a single string;
+      - operations:
+        - getting all tasks:
+          - calculate a total correctness flag based on all solutions of a requesting author;
+          - sort the results by creation time in descending order;
+          - process pagination:
+            - implemented using an offset and a limit;
+        - getting a single task by an ID:
+          - calculate a total correctness flag based on all solutions of a requesting author;
+        - creating;
+        - updating by an ID:
+          - allowed for its author only;
+        - deleting by an ID:
+          - allowed for its author only;
+    - solution model:
+      - storing:
+        - author ID;
+        - task ID;
+        - code;
+        - correctness flag;
+        - testing result:
+          - represented by a string;
+      - operations:
+        - getting all solutions by a task ID:
+          - filtered by a requesting author:
+            - allow a solution task author to get solutions of other authors;
+          - sort the results by creation time in descending order;
+          - process pagination:
+            - implemented using an offset and a limit;
+        - getting a single solution by an ID:
+          - allowed for:
+            - solution author;
+            - solution task author;
+        - creating;
+        - updating by an ID:
+          - performed by a queue consumer only (see below);
+  - representing:
+    - in a JSON:
+      - payloads:
+        - of requests;
+        - of responses;
+    - as a plain text:
+      - errors;
+- server:
+  - additional routing:
+    - serving static files;
+  - storing settings in environment variables;
+  - supporting graceful shutdown;
+  - logging:
+    - logging requests;
+    - logging errors;
+  - panics:
+    - recovering on panics;
+    - logging of panics;
+- authentication:
+  - use the Bearer authentication scheme based on [JSON Web Tokens](https://jwt.io/):
+    - store in a JWT claims:
+      - expiration time claim;
+      - user claim:
+        - contains a whole user model;
+  - generate a token signing key automatically by default;
+  - user model:
+    - storing:
+      - username (unique);
+      - password hash:
+        - generated using the [bcrypt](https://en.wikipedia.org/wiki/Bcrypt) function;
+- databases:
+  - storing data in the [PostgreSQL](https://www.postgresql.org/) database;
+- interaction with queues:
+  - using the [RabbitMQ](https://www.rabbitmq.com/) message broker;
+  - common properties:
+    - automatic declaring of the used queues;
+    - passing of a message data in JSON;
+  - operations:
+    - producing solutions:
+      - concurrent producing;
+    - consuming solution results:
+      - concurrent consuming;
+      - once requeue the solution on failure;
+- utilities:
+  - utility for managing users:
+    - commands:
+      - add a user:
+        - parameters:
+          - username;
+          - password:
+            - generate automatically by default;
+          - password hashing cost;
+          - generated password length;
+- distributing:
+  - [Docker](https://www.docker.com/) image;
+  - [Docker Compose](https://docs.docker.com/compose/) configuration.
+
 ## [v1.2](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.2) (2021-04-02)
 
 Implement serving static files.
