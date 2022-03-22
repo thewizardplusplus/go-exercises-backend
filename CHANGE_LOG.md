@@ -2,6 +2,11 @@
 
 ## [v1.5.2](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.5.2) (2022-02-27)
 
+Describe the RabbitMQ API and the web API.
+
+- describe the RabbitMQ API in the [AsyncAPI](https://www.asyncapi.com/) format;
+- describe the web API in the [Swagger](http://swagger.io/) format.
+
 ## [v1.5.1](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.5.1) (2021-11-17)
 
 Perform refactoring; improve the HTTP statuses of the responses.
