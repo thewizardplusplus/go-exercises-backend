@@ -4,6 +4,14 @@
 
 ## [v1.5.1](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.5.1) (2021-11-17)
 
+Perform refactoring; improve the HTTP statuses of the responses.
+
+- improve the HTTP statuses of the responses:
+  - in case of success;
+  - in case of an error;
+- perform refactoring:
+  - add the `usecases` package.
+
 ## [v1.5](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.5) (2021-11-17)
 
 Perform refactoring; additionally return total result count along with pagination results.
