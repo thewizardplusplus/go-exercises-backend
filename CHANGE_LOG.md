@@ -6,6 +6,30 @@
 
 ## [v1.5](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.5) (2021-11-17)
 
+Perform refactoring; additionally return total result count along with pagination results.
+
+- RESTful API:
+  - models:
+    - task model:
+      - operations:
+        - getting all tasks:
+          - process pagination:
+            - additionally return total result count;
+    - solution model:
+      - operations:
+        - getting all solutions by a task ID:
+          - process pagination:
+            - additionally return total result count;
+        - getting a single solution by an ID:
+          - join a solution task data to the results;
+- perform refactoring:
+  - update the [github.com/thewizardplusplus/go-http-utils](https://github.com/thewizardplusplus/go-http-utils) package;
+  - add the [github.com/thewizardplusplus/go-rabbitmq-utils](https://github.com/thewizardplusplus/go-rabbitmq-utils) package;
+  - add the [github.com/thewizardplusplus/go-sync-utils](https://github.com/thewizardplusplus/go-sync-utils) package;
+- utilities:
+  - utility for managing users:
+    - add to the [Docker](https://www.docker.com/) image.
+
 ## [v1.4](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.4) (2021-05-10)
 
 Format a task boilerplate code and a solution code (including automatically).
