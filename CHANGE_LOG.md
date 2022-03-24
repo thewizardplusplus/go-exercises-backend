@@ -1,5 +1,16 @@
 # Change Log
 
+## [v1.5.3](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.5.3) (2022-03-24)
+
+Describe the releases of the project.
+
+- describe for the releases of the project:
+  - features;
+  - change log;
+- utilities:
+  - utility for managing users:
+    - add the `README.md` file.
+
 ## [v1.5.2](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.5.2) (2022-02-27)
 
 Describe the RabbitMQ API and the web API.
