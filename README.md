@@ -61,6 +61,10 @@ API description:
   - in the [Swagger](http://swagger.io/) format: [docs/swagger.yaml](docs/swagger.yaml);
   - in the format of a [Postman](https://www.postman.com/) collection: [docs/postman_collection.json](docs/postman_collection.json).
 
+## Utilities
+
+- [go-exercises-manager](cmd/go-exercises-manager) &mdash; utility for managing users
+
 ## License
 
 The MIT License (MIT)
