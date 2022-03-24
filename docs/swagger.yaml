@@ -113,7 +113,7 @@ info:
   license:
     name: MIT
   title: go-exercises-backend API
-  version: 1.5.2
+  version: 1.5.3
 paths:
   /solutions/{id}:
     get:

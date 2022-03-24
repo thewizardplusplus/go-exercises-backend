@@ -6,7 +6,7 @@
         "license": {
             "name": "MIT"
         },
-        "version": "1.5.2"
+        "version": "1.5.3"
     },
     "host": "localhost:8080",
     "basePath": "/api/v1",
