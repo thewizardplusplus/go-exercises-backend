@@ -33,7 +33,8 @@ func getStatusCodeFromError(err error) int {
 		errors.Is(err, entities.ErrFailedTokenChecking) {
 		statusCode = http.StatusUnauthorized
 	}
-	if errors.Is(err, entities.ErrManagerialAccessIsDenied) {
+	if errors.Is(err, entities.ErrManagerialAccessIsDenied) ||
+		errors.Is(err, entities.ErrUserIsDisabled) {
 		statusCode = http.StatusForbidden
 	}
 	if errors.Is(err, entities.ErrNotFound) {
