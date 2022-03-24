@@ -90,6 +90,8 @@ definitions:
         $ref: '#/definitions/gorm.DeletedAt'
       ID:
         type: integer
+      IsDisabled:
+        type: boolean
       Password:
         type: string
       PasswordHash:
