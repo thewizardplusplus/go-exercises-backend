@@ -5,7 +5,6 @@ import (
 	"os"
 
 	"github.com/pkg/errors"
-	"github.com/sethvargo/go-password/password"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
 	"github.com/thewizardplusplus/go-exercises-backend/gateways/storages"
 	"golang.org/x/crypto/bcrypt"
@@ -41,18 +40,9 @@ func (command addUserCommand) Validate() error {
 func (command addUserCommand) Run(ctx commandContext) error {
 	user := entities.User{Username: command.Username, Password: command.Password}
 	if user.Password == "" {
-		password, err := password.Generate(
-			command.PasswordLength, // length
-			0,                      // number of digits
-			0,                      // number of symbols
-			false,                  // no upper case
-			true,                   // allow repeat
-		)
-		if err != nil {
+		if err := user.GeneratePassword(command.PasswordLength); err != nil {
 			return errors.Wrap(err, "unable to generate the user password")
 		}
-
-		user.Password = password
 	}
 
 	userStorage := storages.NewUserStorage(ctx.DB, command.HashingCost)

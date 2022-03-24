@@ -7,6 +7,7 @@ import (
 	"github.com/go-gorm/datatypes"
 	"github.com/hashicorp/go-multierror"
 	"github.com/pkg/errors"
+	"github.com/sethvargo/go-password/password"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -90,6 +91,23 @@ func (user User) CheckPassword(passwordHash string) error {
 		return multierror.Append(err, ErrFailedPasswordChecking)
 	}
 
+	return nil
+}
+
+// GeneratePassword ...
+func (user *User) GeneratePassword(length int) error {
+	password, err := password.Generate(
+		length, // length
+		0,      // number of digits
+		0,      // number of symbols
+		false,  // no upper case
+		true,   // allow repeat
+	)
+	if err != nil {
+		return errors.Wrap(err, "unable to generate the password")
+	}
+
+	user.Password = password
 	return nil
 }
 
