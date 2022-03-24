@@ -87,6 +87,7 @@ Back-end of the service for solving programming exercises.
       - username (unique);
       - password hash:
         - generated using the [bcrypt](https://en.wikipedia.org/wiki/Bcrypt) function;
+      - flag indicating whether the user is disabled or not;
 - databases:
   - storing data in the [PostgreSQL](https://www.postgresql.org/) database;
 - interaction with queues:
