@@ -1,7 +1,11 @@
 package main
 
 import (
+	"encoding/json"
+	"os"
+
 	"github.com/pkg/errors"
+	"github.com/thewizardplusplus/go-exercises-backend/entities"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -27,6 +31,16 @@ func (command basicUserCommand) Validate() error {
 			"length is too short (minimum: %d)",
 			minimalPasswordLength,
 		)
+	}
+
+	return nil
+}
+
+func outputUser(user entities.User) error {
+	encoder := json.NewEncoder(os.Stdout)
+	encoder.SetIndent("", "  ")
+	if err := encoder.Encode(user); err != nil {
+		return errors.Wrap(err, "unable to marshal the user")
 	}
 
 	return nil

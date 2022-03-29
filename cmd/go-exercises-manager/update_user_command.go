@@ -1,9 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-	"os"
-
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
 	"github.com/thewizardplusplus/go-exercises-backend/gateways/storages"
@@ -34,10 +31,8 @@ func (command updateUserCommand) Run(ctx commandContext) error {
 		return errors.Wrap(err, "unable to update the user")
 	}
 
-	encoder := json.NewEncoder(os.Stdout)
-	encoder.SetIndent("", "  ")
-	if err := encoder.Encode(user); err != nil {
-		return errors.Wrap(err, "unable to marshal the user")
+	if err := outputUser(user); err != nil {
+		return errors.Wrap(err, "unable to output the user")
 	}
 
 	return nil
