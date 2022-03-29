@@ -12,7 +12,7 @@ type addUserCommand struct {
 
 func (command addUserCommand) Run(ctx commandContext) error {
 	user := entities.User{Username: command.Username, Password: command.Password}
-	if user.Password == "" {
+	if command.GeneratePassword {
 		if err := user.GeneratePassword(command.PasswordLength); err != nil {
 			return errors.Wrap(err, "unable to generate the user password")
 		}

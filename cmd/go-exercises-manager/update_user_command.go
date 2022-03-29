@@ -9,9 +9,8 @@ import (
 type updateUserCommand struct {
 	basicUserCommand
 
-	NewUsername      string `kong:"short='U',help='New username.'"`
-	GeneratePassword bool   `kong:"short='g',name='generate',help='Generate the user password (only if it is empty).'"` // nolint: lll
-	Disable          bool   `kong:"short='d',name='disable',help='Disable the user.'"`                                  // nolint: lll
+	NewUsername string `kong:"short='U',help='New username.'"`
+	Disable     bool   `kong:"short='d',name='disable',help='Disable the user.'"`
 }
 
 func (command updateUserCommand) Run(ctx commandContext) error {
@@ -20,7 +19,7 @@ func (command updateUserCommand) Run(ctx commandContext) error {
 		Password:   command.Password,
 		IsDisabled: command.Disable,
 	}
-	if user.Password == "" && command.GeneratePassword {
+	if command.GeneratePassword {
 		if err := user.GeneratePassword(command.PasswordLength); err != nil {
 			return errors.Wrap(err, "unable to generate the user password")
 		}
