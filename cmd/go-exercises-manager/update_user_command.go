@@ -10,7 +10,6 @@ type updateUserCommand struct {
 	basicUserCommand
 
 	NewUsername string `kong:"short='U',help='New username.'"`
-	Disable     bool   `kong:"short='d',name='disable',help='Disable the user.'"`
 }
 
 func (command updateUserCommand) Run(ctx commandContext) error {
