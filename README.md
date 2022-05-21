@@ -107,10 +107,22 @@ Back-end of the service for solving programming exercises.
       - add a user:
         - parameters:
           - username;
-          - password:
-            - generate automatically by default;
+          - password;
           - password hashing cost;
+          - flag indicating the need to generate a password;
           - generated password length;
+          - flag indicating whether the user is disabled or not;
+      - update a user:
+        - parameters:
+          - username;
+          - new username;
+          - password;
+          - password hashing cost;
+          - flag indicating the need to generate a password;
+          - generated password length;
+          - flag indicating whether the user is disabled or not;
+          - flag indicating whether the user is enabled or not;
+        - can update the user fields individually;
 - distributing:
   - [Docker](https://www.docker.com/) image;
   - [Docker Compose](https://docs.docker.com/compose/) configuration.
