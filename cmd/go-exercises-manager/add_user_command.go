@@ -10,6 +10,18 @@ type addUserCommand struct {
 	basicUserCommand
 }
 
+func (command addUserCommand) Validate() error {
+	if err := command.basicUserCommand.Validate(); err != nil {
+		return err
+	}
+
+	if command.Password == "" && !command.GeneratePassword {
+		return errors.New("password should not be empty or should be generated")
+	}
+
+	return nil
+}
+
 func (command addUserCommand) Run(ctx commandContext) error {
 	user := entities.User{
 		Username:   command.Username,

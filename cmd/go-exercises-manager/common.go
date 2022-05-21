@@ -21,10 +21,6 @@ type basicUserCommand struct {
 }
 
 func (command basicUserCommand) Validate() error {
-	if command.Password == "" && !command.GeneratePassword {
-		return errors.New("password is required")
-	}
-
 	if command.HashingCost < bcrypt.MinCost {
 		return errors.Errorf("cost is too low (minimum: %d)", bcrypt.MinCost)
 	}
