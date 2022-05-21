@@ -38,7 +38,7 @@ func (usecase TokenUsecase) CreateToken(
 		return entities.Credentials{}, errors.Wrap(err, "unable to get the user")
 	}
 
-	if foundUser.IsDisabled {
+	if foundUser.IsDisabled != nil && *foundUser.IsDisabled {
 		return entities.Credentials{}, entities.ErrUserIsDisabled
 	}
 

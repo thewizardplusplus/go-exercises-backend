@@ -26,7 +26,7 @@ func (command addUserCommand) Run(ctx commandContext) error {
 	user := entities.User{
 		Username:   command.Username,
 		Password:   command.Password,
-		IsDisabled: command.Disable,
+		IsDisabled: &command.Disable,
 	}
 	if command.GeneratePassword {
 		if err := user.GeneratePassword(command.PasswordLength); err != nil {

@@ -79,7 +79,7 @@ type User struct {
 	Username     string `gorm:"unique"`
 	Password     string `gorm:"-"`
 	PasswordHash string
-	IsDisabled   bool
+	IsDisabled   *bool
 }
 
 // CheckPassword ...
