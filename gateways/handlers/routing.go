@@ -34,7 +34,7 @@ func NewRouter(
 	dependencies RouterDependencies,
 ) *mux.Router {
 	// @title go-exercises-backend API
-	// @version 1.7
+	// @version 1.7.1
 	// @license.name MIT
 	// @host localhost:8080
 	// @basePath /api/v1
