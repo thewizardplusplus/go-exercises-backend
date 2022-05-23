@@ -16,6 +16,7 @@ type SolutionStorage interface {
 	)
 	CountSolutions(userID uint, taskID uint) (int64, error)
 	CreateSolution(taskID uint, solution entities.Solution) (id uint, err error)
+	UpdateSolution(id uint, solution entities.Solution) error
 }
 
 // SolutionUsecase ...
@@ -101,6 +102,23 @@ func (usecase SolutionUsecase) CreateSolution(
 
 	idAsModel := entities.Solution{Model: gorm.Model{ID: id}}
 	return idAsModel, nil
+}
+
+// RegisterSolutionResult ...
+func (usecase SolutionUsecase) RegisterSolutionResult(
+	solution entities.Solution,
+) error {
+	// update only these specific fields
+	solutionUpdate := entities.Solution{
+		IsCorrect: solution.IsCorrect,
+		Result:    solution.Result,
+	}
+	err := usecase.SolutionStorage.UpdateSolution(solution.ID, solutionUpdate)
+	if err != nil {
+		return errors.Wrap(err, "unable to update the solution")
+	}
+
+	return nil
 }
 
 // FormatSolution ...

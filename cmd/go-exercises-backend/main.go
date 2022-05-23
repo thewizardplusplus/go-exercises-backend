@@ -15,6 +15,7 @@ import (
 	"github.com/thewizardplusplus/go-exercises-backend/gateways/queues"
 	"github.com/thewizardplusplus/go-exercises-backend/gateways/storages"
 	"github.com/thewizardplusplus/go-exercises-backend/registers"
+	"github.com/thewizardplusplus/go-exercises-backend/usecases"
 	httputils "github.com/thewizardplusplus/go-http-utils"
 	rabbitmqutils "github.com/thewizardplusplus/go-rabbitmq-utils"
 )
@@ -123,8 +124,8 @@ func main() {
 			MessageHandling: rabbitmqutils.TwiceMessageHandling,
 			MessageHandler: rabbitmqutils.JSONMessageHandler{
 				MessageHandler: queues.SolutionResultHandler{
-					SolutionResultRegister: registers.SolutionResultRegister{
-						SolutionUpdater: storages.NewSolutionStorage(db),
+					SolutionResultRegister: usecases.SolutionUsecase{
+						SolutionStorage: storages.NewSolutionStorage(db),
 					},
 				},
 			},
