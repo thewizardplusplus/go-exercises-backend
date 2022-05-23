@@ -16,8 +16,8 @@ type SolutionQueue struct {
 	MessagePublisher  MessagePublisher
 }
 
-// AddSolution ...
-func (queue SolutionQueue) AddSolution(solution entities.Solution) error {
+// EnqueueSolution ...
+func (queue SolutionQueue) EnqueueSolution(solution entities.Solution) error {
 	err := queue.MessagePublisher.
 		PublishMessage(queue.SolutionQueueName, "", solution)
 	if err != nil {

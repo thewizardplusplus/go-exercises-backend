@@ -105,11 +105,13 @@ func main() {
 	solutionRegister := registers.NewConcurrentSolutionRegister(
 		options.SolutionRegister.BufferSize,
 		registers.SolutionRegister{
-			TaskGetter:     storages.NewTaskStorage(db),
-			SolutionGetter: storages.NewSolutionStorage(db),
-			SolutionQueue: queues.SolutionQueue{
-				SolutionQueueName: solutionQueueName,
-				MessagePublisher:  messageBrokerClient,
+			FailableSolutionRegister: usecases.SolutionUsecase{
+				TaskGetter:      storages.NewTaskStorage(db),
+				SolutionStorage: storages.NewSolutionStorage(db),
+				SolutionQueue: queues.SolutionQueue{
+					SolutionQueueName: solutionQueueName,
+					MessagePublisher:  messageBrokerClient,
+				},
 			},
 			Logger: print.New(logger),
 		},

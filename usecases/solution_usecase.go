@@ -19,11 +19,17 @@ type SolutionStorage interface {
 	UpdateSolution(id uint, solution entities.Solution) error
 }
 
+// SolutionQueue ...
+type SolutionQueue interface {
+	EnqueueSolution(solution entities.Solution) error
+}
+
 // SolutionUsecase ...
 type SolutionUsecase struct {
 	TaskGetter       entities.TaskGetter
 	SolutionStorage  SolutionStorage
 	SolutionRegister entities.SolutionRegister
+	SolutionQueue    SolutionQueue
 }
 
 // GetSolutions ...
@@ -102,6 +108,29 @@ func (usecase SolutionUsecase) CreateSolution(
 
 	idAsModel := entities.Solution{Model: gorm.Model{ID: id}}
 	return idAsModel, nil
+}
+
+// RegisterSolution ...
+func (usecase SolutionUsecase) RegisterSolution(id uint) error {
+	solution, err := usecase.SolutionStorage.GetSolution(id)
+	if err != nil {
+		return errors.Wrap(err, "unable to get the solution")
+	}
+
+	task, err := usecase.TaskGetter.GetTask(
+		0, // user does not matter
+		solution.TaskID,
+	)
+	if err != nil {
+		return errors.Wrap(err, "unable to get the task")
+	}
+
+	solution.Task = task
+	if err := usecase.SolutionQueue.EnqueueSolution(solution); err != nil {
+		return errors.Wrap(err, "unable to enqueue the solution")
+	}
+
+	return nil
 }
 
 // RegisterSolutionResult ...
