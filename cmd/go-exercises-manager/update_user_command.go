@@ -5,6 +5,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
 	"github.com/thewizardplusplus/go-exercises-backend/gateways/storages"
+	"github.com/thewizardplusplus/go-exercises-backend/usecases"
 )
 
 type updateUserCommand struct {
@@ -31,8 +32,11 @@ func (command updateUserCommand) Run(ctx commandContext) error {
 		user.IsDisabled = pointer.ToBool(false)
 	}
 
-	userStorage := storages.NewUserStorage(ctx.DB, command.HashingCost)
-	if err := userStorage.UpdateUser(command.Username, user); err != nil {
+	userUsecase := usecases.UserUsecase{
+		HashingCost: command.HashingCost,
+		UserStorage: storages.NewUserStorage(ctx.DB),
+	}
+	if err := userUsecase.UpdateUser(command.Username, user); err != nil {
 		return errors.Wrap(err, "unable to update the user")
 	}
 

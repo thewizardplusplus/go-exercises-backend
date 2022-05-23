@@ -9,13 +9,12 @@ import (
 
 // UserStorage ...
 type UserStorage struct {
-	db          *gorm.DB
-	hashingCost int
+	db *gorm.DB
 }
 
 // NewUserStorage ...
-func NewUserStorage(db *gorm.DB, hashingCost int) UserStorage {
-	return UserStorage{db: db, hashingCost: hashingCost}
+func NewUserStorage(db *gorm.DB) UserStorage {
+	return UserStorage{db: db}
 }
 
 // GetUser ...
@@ -38,10 +37,6 @@ func (storage UserStorage) GetUser(username string) (entities.User, error) {
 // CreateUser ...
 func (storage UserStorage) CreateUser(user entities.User) error {
 	user.Model = gorm.Model{} // reset the fields that are filled in automatically
-	if err := user.HashPassword(storage.hashingCost); err != nil {
-		return err
-	}
-
 	if err := storage.db.Create(&user).Error; err != nil {
 		return err
 	}
@@ -55,14 +50,6 @@ func (storage UserStorage) UpdateUser(
 	user entities.User,
 ) error {
 	user.Model = gorm.Model{} // reset the fields that are filled in automatically
-	if user.Password != "" {
-		if err := user.HashPassword(storage.hashingCost); err != nil {
-			return err
-		}
-	} else {
-		user.PasswordHash = ""
-	}
-
 	return storage.db.
 		Model(&entities.User{}).
 		Where(&entities.User{Username: username}).

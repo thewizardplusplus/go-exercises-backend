@@ -157,7 +157,7 @@ func main() {
 		TaskStorage:      storages.NewTaskStorage(db),
 		SolutionStorage:  storages.NewSolutionStorage(db),
 		SolutionRegister: solutionRegister,
-		UserGetter:       storages.NewUserStorage(db, 0),
+		UserGetter:       storages.NewUserStorage(db),
 		Clock:            time.Now,
 		Logger:           print.New(logger),
 	})

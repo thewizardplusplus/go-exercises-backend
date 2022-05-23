@@ -4,6 +4,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/thewizardplusplus/go-exercises-backend/entities"
 	"github.com/thewizardplusplus/go-exercises-backend/gateways/storages"
+	"github.com/thewizardplusplus/go-exercises-backend/usecases"
 )
 
 type addUserCommand struct {
@@ -34,8 +35,11 @@ func (command addUserCommand) Run(ctx commandContext) error {
 		}
 	}
 
-	userStorage := storages.NewUserStorage(ctx.DB, command.HashingCost)
-	if err := userStorage.CreateUser(user); err != nil {
+	userUsecase := usecases.UserUsecase{
+		HashingCost: command.HashingCost,
+		UserStorage: storages.NewUserStorage(ctx.DB),
+	}
+	if err := userUsecase.CreateUser(user); err != nil {
 		return errors.Wrap(err, "unable to create the user")
 	}
 
