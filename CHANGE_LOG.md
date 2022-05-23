@@ -1,5 +1,14 @@
 # Change Log
 
+## [v1.7.1](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.7.1) (2022-05-23)
+
+Perform refactoring.
+
+- perform refactoring:
+  - replace the `registers.SolutionResultRegister` structure with the `usecases.SolutionUsecase.RegisterSolutionResult()` method;
+  - replace the `registers.SolutionRegister.performRegistration()` method with the `usecases.SolutionUsecase.RegisterSolution()` one;
+  - add the `usecases.UserUsecase` structure.
+
 ## [v1.7](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.7) (2022-05-21)
 
 Support for user updating in the utility for managing users.
