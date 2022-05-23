@@ -21,7 +21,6 @@ type SolutionUsecase interface {
 		entities.Solution,
 		error,
 	)
-	FormatSolution(solution entities.Solution) (entities.Solution, error)
 }
 
 // SolutionHandler ...
@@ -188,9 +187,8 @@ func (handler SolutionHandler) FormatSolution(
 		return
 	}
 
-	solution, err := handler.SolutionUsecase.FormatSolution(solution)
-	if err != nil {
-		err = errors.Wrap(err, "unable to format the solution")
+	if err := solution.FormatCode(); err != nil {
+		err = errors.Wrap(err, "unable to format the code")
 		logError(handler.Logger, writer, err, autodetectedStatusCode)
 
 		return

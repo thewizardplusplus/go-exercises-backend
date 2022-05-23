@@ -150,20 +150,6 @@ func (usecase SolutionUsecase) RegisterSolutionResult(
 	return nil
 }
 
-// FormatSolution ...
-func (usecase SolutionUsecase) FormatSolution(
-	solution entities.Solution,
-) (
-	entities.Solution,
-	error,
-) {
-	if err := solution.FormatCode(); err != nil {
-		return entities.Solution{}, errors.Wrap(err, "unable to format the code")
-	}
-
-	return solution, nil
-}
-
 func (usecase SolutionUsecase) checkAccessToSolution(
 	userID uint,
 	solutionID uint,
