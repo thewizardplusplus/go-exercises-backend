@@ -155,6 +155,28 @@ Build the project:
 $ go install ./...
 ```
 
+## Migration
+
+The necessary tables will be created automatically on service starting.
+
+Then run the manual migration to create a few example tasks (optionally):
+
+```
+$ ./tools/migrate.sh -h | --help
+$ ./tools/migrate.sh
+```
+
+Options:
+
+- `-h`, `--help` &mdash; show the help message and exit.
+
+Environment variables:
+
+- `PATH_TO_MIGRATIONS` &mdash; path to migrations (default: `./migrations`);
+- `STORAGE_ADDRESS` &mdash; [PostgreSQL](https://www.postgresql.org/) connection URI (default: `postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable`).
+
+The solutions for the example tasks: [docs/solutions](docs/solutions).
+
 ## Usage
 
 ```
