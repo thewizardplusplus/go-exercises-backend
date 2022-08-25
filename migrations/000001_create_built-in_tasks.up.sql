@@ -5,7 +5,7 @@ INSERT INTO users (created_at, updated_at, username, password_hash, is_disabled)
 -- tasks
 INSERT INTO tasks (created_at, updated_at, user_id, title, description, boilerplate_code, test_cases) VALUES
 (
-  NOW(),
+  NOW() + INTERVAL '1 minute',
   NOW(),
   CURRVAL(PG_GET_SERIAL_SEQUENCE('users', 'id')),
   'Sum of Two Numbers (Test Task)',
@@ -29,7 +29,7 @@ func main() {
   ]'
 ),
 (
-  NOW(),
+  NOW() + INTERVAL '2 minutes',
   NOW(),
   CURRVAL(PG_GET_SERIAL_SEQUENCE('users', 'id')),
   'Sum of Array',
@@ -65,7 +65,7 @@ func main() {
   ]'
 ),
 (
-  NOW(),
+  NOW() + INTERVAL '3 minutes',
   NOW(),
   CURRVAL(PG_GET_SERIAL_SEQUENCE('users', 'id')),
   'Product of Array',
@@ -104,7 +104,7 @@ func main() {
   ]'
 ),
 (
-  NOW(),
+  NOW() + INTERVAL '4 minutes',
   NOW(),
   CURRVAL(PG_GET_SERIAL_SEQUENCE('users', 'id')),
   'Minimum of Array',
@@ -139,7 +139,7 @@ func main() {
   ]'
 ),
 (
-  NOW(),
+  NOW() + INTERVAL '5 minutes',
   NOW(),
   CURRVAL(PG_GET_SERIAL_SEQUENCE('users', 'id')),
   'Maximum of Array',
@@ -174,7 +174,7 @@ func main() {
   ]'
 ),
 (
-  NOW(),
+  NOW() + INTERVAL '6 minutes',
   NOW(),
   CURRVAL(PG_GET_SERIAL_SEQUENCE('users', 'id')),
   'Index of Array Minimum',
@@ -209,7 +209,7 @@ func main() {
   ]'
 ),
 (
-  NOW(),
+  NOW() + INTERVAL '7 minutes',
   NOW(),
   CURRVAL(PG_GET_SERIAL_SEQUENCE('users', 'id')),
   'Index of Array Maximum',
@@ -244,7 +244,7 @@ func main() {
   ]'
 ),
 (
-  NOW(),
+  NOW() + INTERVAL '8 minutes',
   NOW(),
   CURRVAL(PG_GET_SERIAL_SEQUENCE('users', 'id')),
   'Search in Array',
@@ -282,7 +282,7 @@ func main() {
   ]'
 ),
 (
-  NOW(),
+  NOW() + INTERVAL '9 minutes',
   NOW(),
   CURRVAL(PG_GET_SERIAL_SEQUENCE('users', 'id')),
   'Search in Array (Last Occurrence)',
@@ -320,7 +320,7 @@ func main() {
   ]'
 ),
 (
-  NOW(),
+  NOW() + INTERVAL '10 minutes',
   NOW(),
   CURRVAL(PG_GET_SERIAL_SEQUENCE('users', 'id')),
   'Filtering of Array',
@@ -364,7 +364,7 @@ func main() {
   ]'
 ),
 (
-  NOW(),
+  NOW() + INTERVAL '11 minutes',
   NOW(),
   CURRVAL(PG_GET_SERIAL_SEQUENCE('users', 'id')),
   'Filtering of Array (In-place)',
@@ -409,7 +409,7 @@ func main() {
   ]'
 ),
 (
-  NOW(),
+  NOW() + INTERVAL '12 minutes',
   NOW(),
   CURRVAL(PG_GET_SERIAL_SEQUENCE('users', 'id')),
   'Removing of Duplicates',
@@ -449,7 +449,7 @@ func main() {
   ]'
 ),
 (
-  NOW(),
+  NOW() + INTERVAL '13 minutes',
   NOW(),
   CURRVAL(PG_GET_SERIAL_SEQUENCE('users', 'id')),
   'Removing of Duplicates (In-place)',
