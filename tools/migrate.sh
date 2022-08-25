@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 declare -r scriptPath="$(dirname "$0")"
-declare -r scriptName="$(basename "$0")"
 
 # declare and define the default parameter values
 declare -r DEFAULT_PATH_TO_MIGRATIONS="$scriptPath/../migrations"
@@ -11,8 +10,8 @@ declare -r DEFAULT_STORAGE_ADDRESS="postgres://postgres:postgres@localhost:5432/
 declare -r normalizedDefaultPathToMigrations="./$(realpath --relative-to . "$DEFAULT_PATH_TO_MIGRATIONS")"
 if (( $# > 0 )); then
   echo "Usage:"
-  echo "  $scriptName -h | --help"
-  echo "  $scriptName"
+  echo "  $0 -h | --help"
+  echo "  $0"
   echo
   echo "Options:"
   echo "  -h, --help  - show the help message and exit."
