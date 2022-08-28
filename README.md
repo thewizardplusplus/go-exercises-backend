@@ -175,6 +175,22 @@ Environment variables:
 - `PATH_TO_MIGRATIONS` &mdash; path to migrations (default: `./migrations`);
 - `STORAGE_ADDRESS` &mdash; [PostgreSQL](https://www.postgresql.org/) connection URI (default: `postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable`).
 
+The following example tasks will be created:
+
+1.  Sum of Two Numbers (Test Task)
+1.  Sum of Array
+1.  Product of Array
+1.  Minimum of Array
+1.  Maximum of Array
+1.  Index of Array Minimum
+1.  Index of Array Maximum
+1.  Search in Array
+1.  Search in Array (Last Occurrence)
+1.  Filtering of Array
+1.  Filtering of Array (In-place)
+1.  Removing of Duplicates
+1.  Removing of Duplicates (In-place)
+
 The solutions for the example tasks: [docs/\_solutions](docs/_solutions).
 
 ## Usage
