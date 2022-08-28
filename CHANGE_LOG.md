@@ -1,5 +1,14 @@
 # Change Log
 
+## [v1.7.2](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.7.2) (2022-08-28)
+
+Add a few example tasks.
+
+- example tasks:
+  - add the migration that creates a few example tasks:
+    - add the utility for applying migrations;
+  - add the solutions for the example tasks.
+
 ## [v1.7.1](https://github.com/thewizardplusplus/go-exercises-backend/tree/v1.7.1) (2022-05-23)
 
 Perform refactoring.
