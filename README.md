@@ -175,7 +175,7 @@ Environment variables:
 - `PATH_TO_MIGRATIONS` &mdash; path to migrations (default: `./migrations`);
 - `STORAGE_ADDRESS` &mdash; [PostgreSQL](https://www.postgresql.org/) connection URI (default: `postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable`).
 
-The solutions for the example tasks: [docs/solutions](docs/solutions).
+The solutions for the example tasks: [docs/\_solutions](docs/_solutions).
 
 ## Usage
 
